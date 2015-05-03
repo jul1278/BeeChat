@@ -12,6 +12,9 @@
 #include <iomanip>
 #include <pthread.h>
 
+#ifndef _UDP_CONNECTION_H
+#define _UDP_CONNECTION_H
+
 using namespace std; 
 
 // UDPConnection class
@@ -166,3 +169,6 @@ public:
 	}
 
 };
+
+// _UDP_CONNECTION
+#endif 
