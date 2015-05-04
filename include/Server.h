@@ -3,6 +3,7 @@
 #define _SERVER_H
 
 #include <vector>
+#include "User.h"
 
 // Server
 class Server
@@ -28,6 +29,8 @@ public:
     // have we recieved any messages on the chat connection? 
     
     // do we need to relay messages back to clients
+    
+    //chatConnection->SendToAllClients( newMessage ); 
     
   }
   
