@@ -8,7 +8,7 @@ class Client
 {
 private:
   
-  ChatConnection* chatConnection; 
+  ClientChatConnection* chatConnection; 
   
 public:
 
