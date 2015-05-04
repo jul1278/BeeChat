@@ -8,6 +8,8 @@ class ChatConnection
 private: 
 
 	std::queue<User> newUsers; 
+	
+	UDPConnection* udpConnection; 
 
 public:
 
