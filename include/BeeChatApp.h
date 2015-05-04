@@ -57,7 +57,7 @@ public:
     
     // check if server is running 
     if ( server->IsRunning() ) {
-      
+        
     }
     
     // check if the ui has messages
