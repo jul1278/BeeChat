@@ -6,15 +6,17 @@
 // Client
 class Client
 {
-public:
-  
 private:
+  
+  ChatConnection* chatConnection; 
+  
+public:
 
   Client();
   ~Client(); 
   
-  
-  
+  SendMessage( Message* message );
+  Message GetNewMessage(); 
 };
 
 // _CLIENT_H
