@@ -7,7 +7,9 @@ class ChatConnection
 {
 private: 
 
-	std::queue<User> newUsers; 
+	std::queue<Client> newClient; 
+	
+	std::vector<ClientAddress> clientAddresses; 
 	
 	UDPConnection* udpConnection; 
 
@@ -16,10 +18,17 @@ public:
 	ChatConnection(); 
 	~ChatConnection(); 
 	
+	// return true if there are new connected clients
+	bool NewClientConnected();
+	
 	// if there's anything on the newUsers queue, return it.
-	User GetNewUserConnection(); 
-
+	User GetLatestUserConnection(); 
 
 	Message GetLatestMessage(); 
-	void SendMessage( int userID ); 
+	
+	// send a message to a particular clientId
+	void SendMessage( int clientID, Message message ); 
+	
+	// send a message to all clients
+	void SendMessageToAllClients( Message message ); 
 };
