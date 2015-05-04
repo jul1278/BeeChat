@@ -7,6 +7,8 @@ class ChatConnection
 {
 private: 
 
+	std::queue<User> newUsers; 
+
 public:
 
 	ChatConnection(); 
@@ -14,6 +16,8 @@ public:
 
 	// what should this return; 
 	void GetLatestClientConnection(); 
+	
+	User GetNewUser(); 
 
 	Message GetLatestMessage(); 
 	void SendMessage( int userID ); 
