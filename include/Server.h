@@ -10,6 +10,8 @@ class Server
 {
 private:
   
+  const int serverPort = 6969; 
+  
   ServerChatConnection* chatConnection; 
   
   // we know about users - each user stores a clientID 
@@ -22,8 +24,32 @@ public:
   
   Server();
   ~Server(); 
-  
-  
+  //---------------------------------------------------------------------------------
+  // Name: TryStart
+  // Desc:
+  //---------------------------------------------------------------------------------
+  bool TryStart()
+  {
+    // try to start a server
+    return( chatConnection->StartServer() );
+  }
+  //---------------------------------------------------------------------------------
+  // Name: IsActive
+  // Desc:
+  //---------------------------------------------------------------------------------
+  bool IsActive()
+  {
+    // did i successfully start? 
+    return true; 
+    // else
+    
+    return false; 
+    
+  }
+  //---------------------------------------------------------------------------------
+  // Name: Run
+  // Desc:
+  //---------------------------------------------------------------------------------
   int Run() 
   {
     // have we recieved any messages on the chat connection? 
