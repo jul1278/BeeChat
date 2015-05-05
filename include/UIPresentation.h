@@ -12,6 +12,7 @@ public:
 	UIPresentation();
 	~UIPresentation(); 
 
+	void ActiveUsers( std::string activeUsers ); 
 	void PresentMessage( std::string chatMessage );
 	void PresentMessage( Message* chatMessage ); 
 };
