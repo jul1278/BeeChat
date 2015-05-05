@@ -15,7 +15,14 @@ public:
   Client();
   ~Client(); 
   
-  SendMessage( Message* message );
+  // do we need this?
+  int ConnectionStatus(); 
+  
+  // if not connected throw SendMessageException
+  int SendMessage( Message* message );
+  
+  bool IsUnreadMessages(); 
+  
   Message GetNewMessage(); 
 };
 
