@@ -1,4 +1,6 @@
 // ChatConnection.h
+#ifndef _CHAT_CONNECTION_H
+#define _CHAT_CONNECTION_H
 
 #include "MessageFactory.h"
 
@@ -32,3 +34,6 @@ public:
 	// send a message to all clients
 	void SendMessageToAllClients( Message message ); 
 };
+
+// _CHAT_CONNECTION_H
+#endif
