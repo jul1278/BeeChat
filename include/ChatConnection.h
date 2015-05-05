@@ -4,14 +4,18 @@
 
 #include "MessageFactory.h"
 
+
+
 // ChatConnection
 class ChatConnection
 {
 private: 
 
-	std::queue<Client> newClient; 
+	std::queue<int> newClientId; 
 	
-	std::vector<ClientAddress> clientAddresses; 
+	// maps clientID (integer) to a socket address
+	// we only ever expose the ID to the above classes - not the client address
+	std::map<int, ClientUDPAdress> clientAddressMap; 
 	
 	UDPConnection* udpConnection; 
 
@@ -21,11 +25,12 @@ public:
 	~ChatConnection(); 
 	
 	// return true if there are new connected clients
-	bool NewClientConnected();
+	bool IsClientConnected();
 	
 	// if there's anything on the newUsers queue, return it.
-	User GetLatestUserConnection(); 
-
+	int GetLatestClientID(); 
+	
+	bool IsUnreadMessage(); 
 	Message GetLatestMessage(); 
 	
 	// send a message to a particular clientId
