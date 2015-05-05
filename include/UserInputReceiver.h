@@ -18,6 +18,7 @@ public:
 
 	void Update();
 	
+	bool IsUnreadChatString() { return( chatStringQueue.Size() > 0 ); }
 	std::string GetLatestChatString(); 
 };
 
