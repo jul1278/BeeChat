@@ -29,21 +29,27 @@ public:
   //---------------------------------------------------------------------
   BeeChatApp( std::string username, bool userWantsToBeServer )
   {
-    
     ui = new LachlansUIThing(); 
     
     // try to start server
     // does the server need to know our username?
     server = new Server(); 
+    client = new Client(); 
     
-    if ( server->IsRunning() ) {
+    if ( client->Status() ) {
+      // display a welcome screen commands whatever
+    }
+    
+    if ( !server->IsRunning() ) {
       // we're not a server, display a message "You tried to be a server but a server already exists!" 
       ui->PostMessage( "You tried to be the server but a server is already running :(" ); 
     }
     
+
+    
     messageFactory = new MessageFactory(); 
     
-    client = new Client(); 
+    
 
   }
   //---------------------------------------------------------------------
@@ -73,9 +79,45 @@ public:
       
     }
     
+    if ( client->IsUnreadMessages()  ) {
+      Message newMessage = client->GetLatestMessage();   
+      
+      //TODO: how do we decide what to do with the message?
+      
+      // if ( newMessage is a chat message )
+      ui->PostNewMessage( newMessage ); 
+      
+      // else
+      // TODO: another class should exist to sort out 'non-chat messages'
+      //       BeeChatApp should only be responsible for delegating and coordinating the other modules
+      //       manage program state
+      this->HandleMessage( newMessage ); 
+      
+    }
+    
+    // check if there's a new active user list to display
+    if ( client->NewActiveUserList() ) {
+      
+      // get the user list
+      ui->ActiveUserList( activeUsers ); 
+    }
+    
+    
     // TODO: set quit to 1 if we're quitting  
     
     
+  }
+  //---------------------------------------------------------------------
+  // Name: ~BeeChatApp
+  // Desc:
+  //---------------------------------------------------------------------
+  void HandleMessage( Message message )
+  {
+    // handle handle handle handle handle handle handle
+    // handle handle handle handle handle handle handle
+    // handle handle handle handle handle handle handle
+    // handle handle handle handle handle handle handle
+    // handle handle handle handle handle handle handle
   }
   //---------------------------------------------------------------------
   // Name: ~BeeChatApp
