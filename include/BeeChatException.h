@@ -12,6 +12,7 @@ private:
 public:
   
   BeeChatException();
+  BeeChatException( std::string exMessage ); 
   ~BeeChatException(); 
   
   std::string Message() { return message; } 
