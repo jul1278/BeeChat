@@ -21,14 +21,30 @@
 
 using namespace std; 
 
-struct ThreadInfo
+// Client/Message DTO 
+// we don't have to delete memory this way
+struct ClientMessage
 {
+	// Constructor
+	ClientMessage( struct sockaddr_in clientSocketAddr, char* messageData )
+	{
+		message = new char[MESSAGE_LENGTH]; 
 
-	unsigned int threadId; 
-	char* messageBuffer; 
+		memcpy( (void*)this->message, (void) messageData, MESSAGE_LENGTH  ); 
+		this->address = clientSocketAddress; 
+	}
+	// Destructor
+	~ClientMessage() 
+	{
+		if ( message ) { 
+			delete message; 
+		}
 
+		if (  ) 
+	}
 
-
+	struct sockaddr_in address; 
+	char* message
 };
 
 // UDPConnection class
@@ -40,60 +56,74 @@ private:
 	int bufferSize; 
 	char* buffer; 
 
+	int clientSocket; 
+
+	struct sockaddr_in serverAddress;
+
 	// shared mutex this
 	bool stopListening = false; 
 
 	pthread_mutex_t messageQueueMutex; 
 	pthread_mutex_t listenerMutex; 
 
-	std::queue<char* message> messageQueue; 
+
+	int serverSocket;
+
+	int clientAddressLen; 
+
+	struct sockaddr_in serverAddress;
+	struct sockaddr_in clientAddress; 
+	socklen_t sockLen; 
+
+	std::queue<ClientMessage> clientMessageQueue; 
 
 	//---------------------------------------------------------------------------
 	// Name: ListenForMessage
 	// Desc:
 	//---------------------------------------------------------------------------
-	void* ListenForMessage( void* threadInfo)
+	void* ListenForMessage( void* threadId )
 	{
-
+		struct sockaddr_in clientAddress; 
 		char* messageBuffer = new char[MESSAGE_LENGTH]; 
 
 		while ( 1 ) {
+
 			// Check if we've been asked to quit
 			pthread_mutex_lock( &listenerMutex ); 
 
-				if ( stopListening ) {
-					break;  
-				}
+			if ( stopListening ) {
+				
+				break;  
+			}
 
 			pthread_mutex_unlock( &listenerMutex );
 
+			memset( (void*)messageBuffer, 0, MESSAGE_LENGTH ); 
 
-			pthread_mutex_lock( )
-
+			// don't lock until after we've received a message!
+			// socket could be a different length when it comes back? 
 			int receivedBytes = recvfrom( serverSocket, messageBuffer, MESSAGE_LENGTH, 0, (struct sockaddr*)&clientAddress, &sockLen ); 
+			
 
 			if ( receivedBytes == -1 ) {
 				// error
-				// what do we do here
-
-
+				// help help help what do i do 
 
 			} else {
 
 				pthread_mutex_lock( &messageQueueMutex ); 
 
-				char* newMessageBuffer = new char[MESSAGE_LENGTH]; 
-
-				messageQueue.push_back(newMessageBuffer); 
+				// ClientMessage makes it's own copy of the messageBuffer
+				messageQueue.push( ClientMessage(clientAddress, messageBuffer) ); 
 
 				pthread_mutex_unlock( &messageQueueMutext );
 
 			}
-
 		}
 
-		pthread_exit(0); 
+		delete messageBuffer; 
 
+		pthread_exit(0); 
 	}
 
 public:
@@ -115,13 +145,58 @@ public:
 	{
 		delete[] buffer; 
 	}
-	// StartClient
+	//-----------------------------------------------------------------------------
+	// Name: LatestMessage
+	// Desc:
+	//-----------------------------------------------------------------------------
+	void LatestMessage( struct ClientMessage* clientMessage )
+	{
+		// wait until the listener thread is done with the queue 
+		pthread_mutex_lock( &messageQueueMutex ); 
+
+		if ( !messageQueue.empty() ) {
+
+			memcpy( (void*)messageQueue, (void*)messageQueue.front(), MESSAGE_LENGTH ); 
+			messageQueue.pop(); 
+		}
+
+		pthread_mutex_unlock( &messageQueueMutex ); 
+	}
+	//-----------------------------------------------------------------------------
+	// Name: SendToClient
+	// Desc:
+	//-----------------------------------------------------------------------------
+	void SendToClient( struct ClientMessage* clientMessage )
+	{
+
+		// TODO: check if we're a legit server at the moment
+
+		// TODO: should be "sizeof(struct sockaddr)" or "sizeof(clientAddress)" ???
+		int res = sendto( serverSocket, clientMessage->message, MESSAGE_LENGTH, 0, (struct sockaddr*)clientMessage->address, sizeof(struct sockaddr) ); 
+
+		if ( res  == -1 ) {
+			// error what do  
+		} 
+	}
+	//-----------------------------------------------------------------------------
+	// Name: SendToServer
+	// Desc:
+	//-----------------------------------------------------------------------------
+	void SendToServer( char* message )
+	{
+		//TODO: are we sure a server exists? 
+
+		if ( sendto( clientSocket, message, MESSAGE_LENGTH, 0, (struct sockaddr*)&serverAddress, sizeof(struct sockaddr) ) == -1 ) {
+			std::cout << "sendto() error" << std::endl; 
+		} 
+	}
+	//-----------------------------------------------------------------------------
+	// Name: StartClient
+	// Desc:
+	//-----------------------------------------------------------------------------
 	bool StartClient(std::string userMessage)
 	{
 		std::cout << "Starting client..." << std::endl; 
-
-		int clientSocket; 
-		struct sockaddr_in serverAddress;
 
 		hostent* pHost; 
 		pHost = (hostent*) gethostbyname( (char*) "localhost" ); 
@@ -171,8 +246,11 @@ public:
 		return true; 
 
 	}
-
-	//StartServer
+	//-----------------------------------------------------------------------------
+	// Name: StartServer
+	// Desc:
+	//-----------------------------------------------------------------------------
+	// TODO: 
 	bool StartServer()
 	{
 		std::cout << "Starting server..." << std::endl; 
@@ -191,66 +269,19 @@ public:
 		serverAddress.sin_port = htons(port); 
 
 		if ( serverSocket == -1 ) {
-			std::cout << "socket() error" << std::endl; 
+			//std::cout << "socket() error" << std::endl; 
+			// error throw exception
 			return false; 
 		}
 
 		// only difference between client and server is that a server's socket is bound to a port
-		if ( bind(serverSocket, (struct sockaddr*)&serverAddress, sizeof(struct sockaddr) ) == -1) {
-			std::cout << "bind() error" << std::endl; 
+		// once this port has been bound to then you can't bind to it until it gets released
+		if ( bind(serverSocket, (struct sockaddr*)&serverAddress, sizeof(struct sockaddr) ) == -1 ) {
+			// did we error because the port has already been bound or something else
 			return false; 
 		}
 
-		int recievedBytes; 
-
-		// wait for a message
-		for(int i = 0; i < 1000; i++ ) {
-
-			std::cout << "Waiting for message..." << std::endl; 
-
-			recievedBytes = recvfrom( serverSocket, buffer, bufferSize, 0, (struct sockaddr*)&clientAddress, &sockLen ); 
-			
-			// if we got anything
-			if ( recievedBytes > 0 ) {
-
-				// 
-				std::cout << "Echo back to client." << std::endl;
-
-				// echo back to the client
-				if ( sendto( serverSocket, buffer, recievedBytes, 0, (struct sockaddr*)&clientAddress, sizeof(clientAddress) ) == -1 ) {
-					std::cout << "Error echoing to client." << std::endl; 
-				} 
-
-				char* addressBytes = new char[sizeof(struct sockaddr_in)];
-
-				memcpy( (void*)addressBytes, (void*)&clientAddress, sizeof(struct sockaddr_in) );    
-
-				// print out the hex of the client address struct
-				for ( int i = 0; i < sizeof(struct sockaddr_in); i++ ) {
-					std::cout << std::hex << (int)addressBytes[i] << " ";  
-				}
-
-				std::cout << dec << std::endl << recievedBytes << std::endl; 
-
-				// print the actual message we recieved
-				buffer[recievedBytes] = 0; 
-				std::cout << buffer << std::endl;
-
-				delete[] addressBytes; 
-
-			} else if ( recievedBytes < 0 ) {
-				std::cout << "recvfrom() error" << std::endl;
-				break; 
-			}
-
-			
-		}
-
-		std::cout << "Exiting" << std::endl; 
-
-		close( serverSocket ); 
-
-		return true; 
+		return true;
 	}
 
 };
