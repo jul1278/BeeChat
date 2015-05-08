@@ -16,16 +16,16 @@ int main( int argc, char** arg )
 		std::cout << arg[i] << std::endl; 
 	}
 
-	struct passwd *pws;
-	pws = getpwuid(geteuid());
+	// struct passwd *pws;
+	// pws = getpwuid(geteuid());
 
-	std::string userName(pws->pw_name); 
+	// std::string userName(pws->pw_name); 
 
-	std::cout << pws->pw_name << std::endl; 
-	std::cout << pws->pw_uid << std::endl; 
-	std::cout << pws->pw_gid << std::endl; 
-	std::cout << pws->pw_dir << std::endl;
-	std::cout << pws->pw_shell << std::endl; 
+	// std::cout << pws->pw_name << std::endl; 
+	// std::cout << pws->pw_uid << std::endl; 
+	// std::cout << pws->pw_gid << std::endl; 
+	// std::cout << pws->pw_dir << std::endl;
+	// std::cout << pws->pw_shell << std::endl; 
 
 
 	if ( std::string(arg[1]) == "server" ) {
@@ -34,7 +34,7 @@ int main( int argc, char** arg )
 
 		std::string message( arg[2] ); 
 
-		message = userName + " " + message; 
+		//message = userName + " " + message; 
 
 		connection.StartClient( message ); 
 	}

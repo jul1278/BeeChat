@@ -11,11 +11,25 @@
 #include <iostream>
 #include <iomanip>
 #include <pthread.h>
+#include <queue>
 
 #ifndef _UDP_CONNECTION_H
 #define _UDP_CONNECTION_H
 
+// message length is set to 512 bytes
+#define MESSAGE_LENGTH 512
+
 using namespace std; 
+
+struct ThreadInfo
+{
+
+	unsigned int threadId; 
+	char* messageBuffer; 
+
+
+
+};
 
 // UDPConnection class
 class UDPConnection
@@ -26,6 +40,62 @@ private:
 	int bufferSize; 
 	char* buffer; 
 
+	// shared mutex this
+	bool stopListening = false; 
+
+	pthread_mutex_t messageQueueMutex; 
+	pthread_mutex_t listenerMutex; 
+
+	std::queue<char* message> messageQueue; 
+
+	//---------------------------------------------------------------------------
+	// Name: ListenForMessage
+	// Desc:
+	//---------------------------------------------------------------------------
+	void* ListenForMessage( void* threadInfo)
+	{
+
+		char* messageBuffer = new char[MESSAGE_LENGTH]; 
+
+		while ( 1 ) {
+			// Check if we've been asked to quit
+			pthread_mutex_lock( &listenerMutex ); 
+
+				if ( stopListening ) {
+					break;  
+				}
+
+			pthread_mutex_unlock( &listenerMutex );
+
+
+			pthread_mutex_lock( )
+
+			int receivedBytes = recvfrom( serverSocket, messageBuffer, MESSAGE_LENGTH, 0, (struct sockaddr*)&clientAddress, &sockLen ); 
+
+			if ( receivedBytes == -1 ) {
+				// error
+				// what do we do here
+
+
+
+			} else {
+
+				pthread_mutex_lock( &messageQueueMutex ); 
+
+				char* newMessageBuffer = new char[MESSAGE_LENGTH]; 
+
+				messageQueue.push_back(newMessageBuffer); 
+
+				pthread_mutex_unlock( &messageQueueMutext );
+
+			}
+
+		}
+
+		pthread_exit(0); 
+
+	}
+
 public:
 
 	// UDPConnection
@@ -34,6 +104,12 @@ public:
 		port = 6969; 
 		bufferSize = 2048; 
 		buffer = new char[bufferSize]; 
+
+
+		pthread_mutex_init( &messageQueueMutex, NULL ); 
+		pthread_mutex_init( &listenerMutex, NULL ); 
+
+
 	}
 	~UDPConnection()
 	{
@@ -75,10 +151,12 @@ public:
 
 		std::cout << "Sent message: " << message << std::endl; 
 
-		// now wait and see if we got a message back
-		for (int i = 0; i < 100; i++) {
+		// now wait and see if we get a message back
+		for (int i = 0; i < 1000; i++) {
 			
-			int recievedBytes = recvfrom( clientSocket, buffer, bufferSize, 0, (struct sockaddr*) &serverAddress, (socklen_t*)&serverAddressLen ); 
+			int recievedBytes = recvfrom( clientSocket, buffer, bufferSize, 0, NULL, NULL ); 
+
+
 
 			if ( recievedBytes > 0 ) {
 				buffer[recievedBytes] = 0; 
@@ -103,7 +181,9 @@ public:
 
 		int clientAddressLen = 0; 
 
-		struct sockaddr_in serverAddress, clientAddress; 
+		struct sockaddr_in serverAddress;
+		struct sockaddr_in clientAddress; 
+		socklen_t sockLen; 
 
 		serverAddress.sin_family = AF_INET; 
 		
@@ -128,13 +208,18 @@ public:
 
 			std::cout << "Waiting for message..." << std::endl; 
 
-			recievedBytes = recvfrom( serverSocket, buffer, bufferSize, 0, (struct sockaddr*)&clientAddress, (socklen_t*)&clientAddressLen ); 
+			recievedBytes = recvfrom( serverSocket, buffer, bufferSize, 0, (struct sockaddr*)&clientAddress, &sockLen ); 
 			
 			// if we got anything
 			if ( recievedBytes > 0 ) {
 
+				// 
+				std::cout << "Echo back to client." << std::endl;
+
 				// echo back to the client
-				sendto( serverSocket, buffer, bufferSize, 0, (struct sockaddr*)&clientAddress, sizeof(struct sockaddr) ); 
+				if ( sendto( serverSocket, buffer, recievedBytes, 0, (struct sockaddr*)&clientAddress, sizeof(clientAddress) ) == -1 ) {
+					std::cout << "Error echoing to client." << std::endl; 
+				} 
 
 				char* addressBytes = new char[sizeof(struct sockaddr_in)];
 
