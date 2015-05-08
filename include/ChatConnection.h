@@ -25,7 +25,7 @@ public:
 	~ChatConnection(); 
 	
 	// return true if there are new connected clients
-	bool IsClientConnected();
+	bool IsNewClientConnection();
 	
 	// if there's anything on the newUsers queue, return it.
 	int GetLatestClientID(); 
