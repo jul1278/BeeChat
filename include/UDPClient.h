@@ -1,6 +1,6 @@
 // UDPClient.h
-#define _UDP_CLIENT_H
 #ifndef _UDP_CLIENT_H
+#define _UDP_CLIENT_H
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -16,41 +16,43 @@
 #include <iomanip>
 #include <pthread.h>
 #include <queue>
-
-
-const int PORT = 6969;
-const int MESSAGE_LENGTH = 512; 
+#include <cstring>
+#include "pthread.h"
+#include "ClientMessage.h"
 
 // UDPClient
 class UDPClient
 {
 private:
 
-	char* buffer; 
+	pthread_t listenerThread; 
 
 	int clientSocket; 
 
 	struct sockaddr_in serverAddress;
 
 	// shared mutex this
-	bool stopListening = false; 
+	bool stopListening; 
 
 	pthread_mutex_t messageQueueMutex; 
 	pthread_mutex_t listenerMutex; 
 
 	std::queue<ClientMessage> clientMessageQueue; 
 
-	void* ListenForMessage( void* threadId ); 
+	void ListenForMessage( void* threadId ); 
 
 public:
 
 	UDPClient();
 	~UDPClient(); 
 
+	void StartClient(); 
+	void StopClient(); 
+
 	void SendToServer( char* message ); 
 
 	bool IsUnreadMessages(); 
-	void GetLatestMessage( char* message ); 
+	void GetLatestMessage( ClientMessage* message ); 
 };
 
 // _UDP_CLIENT_H

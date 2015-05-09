@@ -1,14 +1,31 @@
 // UDPServer.h
-#define _UDP_SERVER_H
 #ifndef _UDP_SERVER_H
+#define _UDP_SERVER_H
 
-const int PORT = 6969;
-const int MESSAGE_LENGTH = 512; 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
+#include <netdb.h>
+#include <string.h>
+#include <stdlib.h>
+#include <iostream>
+#include <iomanip>
+#include <pthread.h>
+#include <queue>
+#include <cstring>
+#include "pthread.h"
+#include "ClientMessage.h"
 
 // UDPServer
 class UDPServer
 {
 private:
+
+	pthread_t listenerThread; 
 
 	struct sockaddr_in serverAddress;
 
@@ -23,17 +40,19 @@ private:
 
 	std::queue<ClientMessage> clientMessageQueue; 
 
+	void ListenForMessage( void* threadId );
+
 public:
 
 	UDPServer();
 	~UDPServer(); 
 
-	void StartServer(); 
+	bool StartServer(); 
 	void StopServer(); 
 
 	void SendToClient( ClientMessage* clientMessage ); 
 
-	bool IsNewMessage(); 
+	bool IsUnreadMessages(); 
 	void GetLatestMessage( ClientMessage* receivedClientMessage ); 
 };
 

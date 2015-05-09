@@ -1,19 +1,31 @@
 // UDPClient.cpp
 #include "UDPClient.h"
 
+UDPClient* listenerClient; 
+
+void UDPListener(void* threadId)
+{
+	listenerClient->ListenForMessage(threadId); 
+}
+
 //------------------------------------------------------------------
 // Name: UDPClient
 // Desc: 
 //------------------------------------------------------------------
 UDPClient::UDPClient()
 {
+
 	hostent* pHost; 
 	pHost = (hostent*) gethostbyname( (char*) "localhost" ); 
 
 	// htonl and htons convert ints into 'network representations'
 	serverAddress.sin_family = AF_INET; 
 	serverAddress.sin_addr.s_addr = *((in_addr_t*)pHost->h_addr); 
-	serverAddress.sin_port = htons(port); 
+	serverAddress.sin_port = htons(PORT); 
+
+	// can i do this?
+	listenerClient = this; 
+
 }
 //------------------------------------------------------------------
 // Name: ~UDPClient
@@ -33,11 +45,25 @@ void UDPClient::StartClient()
 	clientSocket = socket( AF_INET, SOCK_DGRAM, 0 ); 
 
 	if ( clientSocket == -1 ) {
-		std::cout << "socket() error" << std::endl; 
-		return false; 
+		//std::cout << "socket() error" << std::endl; 
+		//return false; 
 	}
 
-	return true; 
+	// check if a thread has already started
+	stopListening = false; 
+
+
+	void (UDPClient::*Listener)(void*); 
+	Listener = &UDPClient::ListenForMessage; 
+
+	long threadId = 0; 
+	int res = pthread_create( &listenerThread, NULL, UDPListener, (void*)threadId ); 
+
+	if ( res ) {
+		// error
+	}
+
+	//return true; 
 }
 //------------------------------------------------------------------
 // Name: StopClient
@@ -45,6 +71,12 @@ void UDPClient::StartClient()
 //------------------------------------------------------------------
 void UDPClient::StopClient()
 {
+
+	pthread_mutex_lock( &listenerMutex ); 
+	stopListening = true;
+	pthread_mutex_unlock( &listenerMutex ); 
+
+	pthread_exit(NULL); 
 	// close socket
 	close( clientSocket ); 
 }
@@ -67,21 +99,30 @@ void UDPClient::SendToServer( char* message )
 //------------------------------------------------------------------
 bool UDPClient::IsUnreadMessages()
 {
-	pthread_mutex_lock( & )
+	pthread_mutex_lock( &messageQueueMutex );
+
+	if ( !clientMessageQueue.empty() ) {
+		return true;
+	} else {
+		return false; 
+	}
+
+	pthread_mutex_unlock( &messageQueueMutex ); 
 }
 //------------------------------------------------------------------
 // Name: GetLatestMessages
 // Desc: messages are always  
 //------------------------------------------------------------------
-void UDPClient::GetLatestMessages(char* message)
+void UDPClient::GetLatestMessage(ClientMessage* clientMessage)
 {
 	// wait until the listener thread is done with the queue 
 	pthread_mutex_lock( &messageQueueMutex ); 
 
-	if ( !messageQueue.empty() ) {
+	if ( !clientMessageQueue.empty() ) {
 
-		memcpy( (void*)messageQueue, (void*)messageQueue.front(), MESSAGE_LENGTH ); 
-		messageQueue.pop(); 
+		clientMessage = new ClientMessage( *clientMessageQueue.front() ); 
+
+		clientMessageQueue.pop(); 
 	}
 
 	pthread_mutex_unlock( &messageQueueMutex ); 
@@ -90,10 +131,11 @@ void UDPClient::GetLatestMessages(char* message)
 // Name: ListenForMessage
 // Desc:
 //---------------------------------------------------------------------------
-void* UDPClient::ListenForMessage( void* threadId )
+void UDPClient::ListenForMessage( void* threadId )
 {
 	struct sockaddr_in clientAddress; 
-	char* messageBuffer = new char[MESSAGE_LENGTH]; 
+	char* messageBuffer = new char[MESSAGE_LENGTH];
+	socklen_t sockLen;  
 
 	while ( 1 ) {
 
@@ -111,7 +153,7 @@ void* UDPClient::ListenForMessage( void* threadId )
 
 		// don't lock until after we've received a message!
 		// socket could be a different length when it comes back? 
-		int receivedBytes = recvfrom( serverSocket, messageBuffer, MESSAGE_LENGTH, 0, (struct sockaddr*)&clientAddress, &sockLen ); 
+		int receivedBytes = recvfrom( clientSocket, messageBuffer, MESSAGE_LENGTH, 0, (struct sockaddr*)&clientAddress, &sockLen ); 
 		
 
 		if ( receivedBytes == -1 ) {
@@ -121,11 +163,12 @@ void* UDPClient::ListenForMessage( void* threadId )
 		} else {
 
 			pthread_mutex_lock( &messageQueueMutex ); 
-
+			
 			// ClientMessage makes it's own copy of the messageBuffer
-			messageQueue.push( ClientMessage(clientAddress, messageBuffer) ); 
+			ClientMessage* clientMessage = new ClientMessage(clientAddress, messageBuffer); 
 
-			pthread_mutex_unlock( &messageQueueMutext );
+			clientMessageQueue.push( clientMessage ); 
+			pthread_mutex_unlock( &messageQueueMutex );
 
 		}
 	}

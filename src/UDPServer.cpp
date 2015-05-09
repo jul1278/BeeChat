@@ -1,5 +1,5 @@
 // UDPServer.cpp
-#include <UDPServer.h>
+#include "UDPServer.h"
 
 //------------------------------------------------------------------
 // Name: UDPServer
@@ -9,7 +9,7 @@ UDPServer::UDPServer()
 {
 	serverAddress.sin_family = AF_INET; 	
 	serverAddress.sin_addr.s_addr = INADDR_ANY; 
-	serverAddress.sin_port = htons(port); 
+	serverAddress.sin_port = htons(PORT); 
 }
 //------------------------------------------------------------------
 // Name: ~UDPServer
@@ -42,6 +42,19 @@ bool UDPServer::StartServer()
 		return false; 
 	}
 
+	// check if a thread has already started
+	stopListening = false; 
+
+	void (UDPServer::*Listener)(void*); 
+	Listener = &UDPServer::ListenForMessage; 
+
+	long threadId = 0; 
+	int res = pthread_create( &listenerThread, NULL, Listener, (void*)threadId ); 
+
+	if ( res ) {
+		// error
+	}
+
 	return true;
 }
 //------------------------------------------------------------------
@@ -49,7 +62,13 @@ bool UDPServer::StartServer()
 // Desc: 
 //------------------------------------------------------------------
 void UDPServer::StopServer()
-{
+{	
+	pthread_mutex_lock( &listenerMutex ); 
+	stopListening = true;
+	pthread_mutex_unlock( &listenerMutex ); 
+
+	pthread_exit(NULL); 
+
 	// what do
 	close(serverSocket);
 }
@@ -57,12 +76,12 @@ void UDPServer::StopServer()
 // Name: SendToClient
 // Desc: 
 //------------------------------------------------------------------
-void UDPServer::SendToClient( ClientMessage* ClientMessage )
+void UDPServer::SendToClient( ClientMessage* clientMessage )
 {
 	// TODO: check if we're a legit server at the moment
 
 	// TODO: should be "sizeof(struct sockaddr)" or "sizeof(clientAddress)" ???
-	int res = sendto( serverSocket, clientMessage->message, MESSAGE_LENGTH, 0, (struct sockaddr*)clientMessage->address, sizeof(struct sockaddr) ); 
+	int res = sendto( serverSocket, clientMessage->message, MESSAGE_LENGTH, 0, (struct sockaddr*)&clientMessage->address, sizeof(struct sockaddr) ); 
 
 	if ( res  == -1 ) {
 		// error what do 
@@ -76,7 +95,7 @@ bool UDPServer::IsUnreadMessages()
 {
 	pthread_mutex_lock( &messageQueueMutex ); 
 
-	if ( !messageQueue.empty() ) {
+	if ( !clientMessageQueue.empty() ) {
 		return true; 
 	}
 
@@ -93,10 +112,10 @@ void UDPServer::GetLatestMessage( ClientMessage* message )
 	// wait until the listener thread is done with the queue 
 	pthread_mutex_lock( &messageQueueMutex ); 
 
-	if ( !messageQueue.empty() ) {
+	if ( !clientMessageQueue.empty() ) {
 
-		memcpy( (void*)messageQueue, (void*)messageQueue.front(), MESSAGE_LENGTH ); 
-		messageQueue.pop(); 
+		memcpy( (void*)message, (void*)&clientMessageQueue.front(), MESSAGE_LENGTH ); 
+		clientMessageQueue.pop(); 
 	}
 
 	pthread_mutex_unlock( &messageQueueMutex ); 
@@ -105,7 +124,7 @@ void UDPServer::GetLatestMessage( ClientMessage* message )
 // Name: ListenForMessage
 // Desc:
 //---------------------------------------------------------------------------
-void* UDPServer::ListenForMessage( void* threadId )
+void UDPServer::ListenForMessage( void* threadId )
 {
 	struct sockaddr_in clientAddress; 
 	char* messageBuffer = new char[MESSAGE_LENGTH]; 
@@ -139,9 +158,9 @@ void* UDPServer::ListenForMessage( void* threadId )
 			pthread_mutex_lock( &messageQueueMutex ); 
 
 			// ClientMessage makes it's own copy of the messageBuffer
-			messageQueue.push( ClientMessage(clientAddress, messageBuffer) ); 
+			clientMessageQueue.push( ClientMessage(clientAddress, messageBuffer) ); 
 
-			pthread_mutex_unlock( &messageQueueMutext );
+			pthread_mutex_unlock( &messageQueueMutex );
 
 		}
 	}
