@@ -11,6 +11,8 @@ class BeeChatApp
 {
 private:
   
+    //Hi
+    
   LachlansUIThing* ui
   
   // server object
