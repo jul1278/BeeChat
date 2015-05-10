@@ -30,7 +30,7 @@ const int MESSAGE_LENGTH = 256;
 struct ClientMessage
 {
 	struct sockaddr_in address; 
-    char message[MESSAGE_LENGTH];
+	char message[MESSAGE_LENGTH];
 };
 
 // _CLIENT_MESSAGE_H
