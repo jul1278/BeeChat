@@ -28,19 +28,18 @@ private:
 	pthread_t listenerThread; 
 
 	struct sockaddr_in serverAddress;
-
+	int serverSocket;
 	bool stopListening; 
-
-	socklen_t sockLen; 
 	
 	pthread_mutex_t messageQueueMutex; 
 	pthread_mutex_t listenerMutex; 
 
-	int serverSocket;
 
 	std::queue<ClientMessage> clientMessageQueue; 
 
 	void ListenForMessage( void* threadId );
+	
+	friend void* UDPServerListener(void*);
 
 public:
 
@@ -53,7 +52,7 @@ public:
 	void SendToClient( ClientMessage* clientMessage ); 
 
 	bool IsUnreadMessages(); 
-	void GetLatestMessage( ClientMessage* receivedClientMessage ); 
+	void GetLatestMessage( ClientMessage* receivedClientMessage );
 };
 
 // _UDP_SERVER_H

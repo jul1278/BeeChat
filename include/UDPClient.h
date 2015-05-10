@@ -41,6 +41,8 @@ private:
 
 	void ListenForMessage( void* threadId ); 
 
+	friend void* UDPClientListener( void* ); 
+
 public:
 
 	UDPClient();
@@ -52,7 +54,7 @@ public:
 	void SendToServer( char* message ); 
 
 	bool IsUnreadMessages(); 
-	void GetLatestMessage( ClientMessage* message ); 
+	void GetLatestMessage( ClientMessage* message );
 };
 
 // _UDP_CLIENT_H

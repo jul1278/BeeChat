@@ -21,44 +21,16 @@
 
 
 const int PORT = 6969;
-const int MESSAGE_LENGTH = 512; 
+const int MESSAGE_LENGTH = 256;
 
 // DTO for transferring messages and client info from the UDP layer to the chat connection
 
 // Client/Message DTO 
 // we don't have to delete memory this way
 struct ClientMessage
-{	
-	ClientMessage() 
-	{
-		message = 0; 
-	}
-	// Constructor
-	ClientMessage( const struct sockaddr_in clientSocketAddr, const char* messageData )
-	{
-		message = new char[MESSAGE_LENGTH]; 
-
-		memcpy( (void*)this->message, (void*) messageData, MESSAGE_LENGTH  ); 
-		this->address = clientSocketAddr; 
-	}
-	// Copy Constructor
-	ClientMessage( const ClientMessage& clientMessage )
-	{
-		this->address = clientMessage.address; 
-		this->message = new char[MESSAGE_LENGTH]; 
-		memcpy( (void*)this->message, (void*) clientMessage.message, MESSAGE_LENGTH  );
-	}
-
-	// Destructor
-	~ClientMessage() 
-	{
-		if ( message ) { 
-			delete message; 
-		}
-	}
-
+{
 	struct sockaddr_in address; 
-	char* message;
+    char message[MESSAGE_LENGTH];
 };
 
 // _CLIENT_MESSAGE_H
