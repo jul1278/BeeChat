@@ -2,57 +2,43 @@
 #ifndef _UDP_SERVER_H
 #define _UDP_SERVER_H
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <errno.h>
-#include <netdb.h>
-#include <string.h>
-#include <stdlib.h>
-#include <iostream>
-#include <iomanip>
-#include <pthread.h>
-#include <queue>
-#include <cstring>
-#include "pthread.h"
+#include "UDPConnection.h"
 #include "ClientMessage.h"
 
+
 // UDPServer
-class UDPServer
+class UDPServer : public UDPConnection
 {
-private:
-
-	pthread_t listenerThread; 
-
-	struct sockaddr_in serverAddress;
-	int serverSocket;
-	bool stopListening; 
-	
-	pthread_mutex_t messageQueueMutex; 
-	pthread_mutex_t listenerMutex; 
-
-
-	std::queue<ClientMessage> clientMessageQueue; 
-
-	void ListenForMessage( void* threadId );
-	
-	friend void* UDPServerListener(void*);
 
 public:
 
-	UDPServer();
-	~UDPServer(); 
+	UDPServer()
+	{
+		serverAddress.sin_family = AF_INET; 	
+		serverAddress.sin_addr.s_addr = INADDR_ANY; 
+		serverAddress.sin_port = htons(PORT); 
 
-	bool StartServer(); 
-	void StopServer(); 
+		// get socket
+		udpSocket = socket( AF_INET, SOCK_DGRAM, 0 ); 
 
-	void SendToClient( ClientMessage* clientMessage ); 
+		if ( udpSocket == -1 ) {
+			// error throw exception
+		}
 
-	bool IsUnreadMessages(); 
-	void GetLatestMessage( ClientMessage* receivedClientMessage );
+		// difference between client and server is that a server's socket is bound to a port
+		// once this port has been bound to then you can't bind to it until it gets released
+		if ( bind( udpSocket, (struct sockaddr*)&serverAddress, sizeof(struct sockaddr) ) == -1 ) {
+
+			// did we error because the port has already been bound or something else
+			std::cout << "bind() error" << std::endl; 
+		}
+
+	}
+
+	~UDPServer()
+	{
+		
+	} 
 };
 
 // _UDP_SERVER_H

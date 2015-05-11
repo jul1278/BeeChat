@@ -1,5 +1,5 @@
 // UDPServerTest.cpp
-
+#include "UDPConnection.h"
 #include "UDPServer.h"
 #include "UDPClient.h"
 #include "ClientMessage.h"
@@ -17,7 +17,7 @@ int main()
 
 	UDPServer testServer; 
 
-	testServer.StartServer(); 
+	testServer.Start(); 
 
 	while ( 1 ) {
 
@@ -26,7 +26,7 @@ int main()
 
 			ClientMessage clientMessage; 
 
-			testServer.GetLatestMessage( &clientMessage ); 
+			testServer.LatestMessage( &clientMessage ); 
 
 			std::string str = clientMessage.message; 
 

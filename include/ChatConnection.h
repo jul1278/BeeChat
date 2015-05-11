@@ -4,6 +4,8 @@
 
 #include "MessageFactory.h"
 
+#include "UDPClient.h"
+#include "UDPServer.h"
 
 
 // ChatConnection
@@ -16,7 +18,7 @@ private:
 	// maps clientID (integer) to a socket address
 	// we only ever expose the ID to the above classes - not the client address
 	std::map<int, ClientUDPAdress> clientAddressMap; 
-	
+		
 	UDPConnection* udpConnection; 
 
 public:

@@ -2,59 +2,52 @@
 #ifndef _UDP_CLIENT_H
 #define _UDP_CLIENT_H
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <errno.h>
-#include <netdb.h>
-#include <string.h>
-#include <stdlib.h>
-#include <iostream>
-#include <iomanip>
-#include <pthread.h>
-#include <queue>
-#include <cstring>
-#include "pthread.h"
+#include "UDPConnection.h"
 #include "ClientMessage.h"
 
 // UDPClient
-class UDPClient
+class UDPClient : public UDPConnection
 {
 private:
 
-	pthread_t listenerThread; 
-
-	int clientSocket; 
-
-	struct sockaddr_in serverAddress;
-
-	// shared mutex this
-	bool stopListening; 
-
-	pthread_mutex_t messageQueueMutex; 
-	pthread_mutex_t listenerMutex; 
-
-	std::queue<ClientMessage> clientMessageQueue; 
-
-	void ListenForMessage( void* threadId ); 
-
-	friend void* UDPClientListener( void* ); 
 
 public:
 
-	UDPClient();
-	~UDPClient(); 
+	UDPClient() 
+	{	
+		hostent* pHost; 
+		pHost = (hostent*) gethostbyname( (char*) "localhost" ); 
 
-	void StartClient(); 
-	void StopClient(); 
+		serverAddress.sin_addr.s_addr = *((in_addr_t*)pHost->h_addr); 
+		serverAddress.sin_family = AF_INET; 	
+		serverAddress.sin_port = htons(PORT);
 
-	void SendToServer( char* message ); 
+		// we always need to get a socket
+		//printf("Started client.\n");
+		// get a socket
+		udpSocket = socket( AF_INET, SOCK_DGRAM, 0 ); 
 
-	bool IsUnreadMessages(); 
-	void GetLatestMessage( ClientMessage* message );
+		if ( udpSocket == -1 ) {
+			std::cout << "socket() error" << std::endl;  
+		}
+
+
+	}
+	~UDPClient()
+	{
+		
+	} 
+
+	//
+	void SendToServer( char* message )
+	{
+		ClientMessage clientMessage;
+
+		memcpy( clientMessage.message, message, MESSAGE_LENGTH ); 
+
+		clientMessage.address = serverAddress;  
+		SendMessage( &clientMessage ); 
+	}
 };
 
 // _UDP_CLIENT_H

@@ -17,7 +17,7 @@ int main()
 
 	UDPClient testClient; 
 
-	testClient.StartClient(); 
+	testClient.Start(); 
 
 	char* message = new char[MESSAGE_LENGTH]; 
 	// message[0] = (97 + ( rand() % (122 - 97) )); 
@@ -42,7 +42,7 @@ int main()
 		if ( testClient.IsUnreadMessages() ) {
 			ClientMessage clientMessage; 
 
-			testClient.GetLatestMessage( &clientMessage ); 
+			testClient.LatestMessage( &clientMessage ); 
 
 			std::string str = clientMessage.message; 
 
