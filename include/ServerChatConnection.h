@@ -19,7 +19,7 @@ private:
   std::queue<Users> newUserQueue; 
   
   // at the lower level we're sending messages to clients through UDP
-  std::vector<ClientAddress> client; 
+  std::map<ClientAddress, ClientID> client; 
   
   // 
   UDPServer* udpServer; 
