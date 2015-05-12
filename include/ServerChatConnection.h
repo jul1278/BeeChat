@@ -4,6 +4,7 @@
 #define _SERVER_CHAT_CONNECTION_H
 
 #include "BeeChatException.h"
+#include "UDPServer.h"
 // probably need other stuff
 
 class ServerChatConnection : public ChatConnection
@@ -11,7 +12,8 @@ class ServerChatConnection : public ChatConnection
 
 private:
   
-  std::vector<User> user; 
+  // at the lower level we're sending messages to clients through UDP
+  std::vector<ClientAddress> client; 
   
   // 
   UDPServer* udpServer; 
@@ -38,9 +40,10 @@ public:
   }
 
   // send a message to someone
-  void SendMessage( Message* message ); 
-
-  
+  void SendMessage( Message* message )
+  {
+    
+  }
 }; 
 
 #endif
