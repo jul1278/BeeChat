@@ -21,7 +21,12 @@ public:
   // if not connected throw SendMessageException
   int SendMessage( Message* message );
   
-  bool IsUnreadMessages(); 
+  bool IsUnreadMessages()
+  {
+    if ( chatConnection->IsUnreadMessages() ) {
+      
+    }
+  }
   
   Message GetNewMessage(); 
 };
