@@ -77,7 +77,10 @@ public:
       
     }
     
+    // client is only going to tell us about chat messages, 
+    // it will handle other messages internally
     if ( client->IsUnreadMessages()  ) {
+      
       Message newMessage = client->GetLatestMessage();   
       
       //TODO: how do we decide what to do with the message?
