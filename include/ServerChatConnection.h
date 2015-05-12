@@ -1,5 +1,11 @@
 // ServerChatConnection.h
 
+#ifndef _SERVER_CHAT_CONNECTION_H
+#define _SERVER_CHAT_CONNECTION_H
+
+#include "BeeChatException.h"
+// probably need other stuff
+
 class ServerChatConnection : public ChatConnection
 {
 
@@ -12,8 +18,15 @@ private:
   
 public: 
   
-  ServerChatConnection();
+  ServerChatConnection()
+  {
+    // TODO: put try catch around here?
+    this->udpServer = new UDPServer;   
+
+  }
   ~ServerChatConnection(); 
+  
+  
   
   // 
   void Run()
@@ -24,5 +37,10 @@ public:
     // or if it's a new client that wants to join the server
   }
 
+  // send a message to someone
+  void SendMessage( Message* message ); 
+
   
 }; 
+
+#endif
