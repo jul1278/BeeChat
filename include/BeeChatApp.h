@@ -38,21 +38,10 @@ public:
     server = new Server(); 
     client = new Client(); 
     
-    if ( client->Status() ) {
-      // display a welcome screen commands whatever
-    }
-    
-    if ( !server->IsRunning() ) {
-      // we're not a server, display a message "You tried to be a server but a server already exists!" 
-      ui->PostMessage( "You tried to be the server but a server is already running :(" ); 
-    }
-    
+    ui->PresentInfoScreen(); 
 
-    
     messageFactory = new MessageFactory(); 
     
-    
-
   }
   //---------------------------------------------------------------------
   // Name: Run
@@ -63,20 +52,27 @@ public:
     
     int quit = 0; 
     
-    // check if server is running 
-    if ( server->IsRunning() ) {
-        
+    // if the user wants to quit
+    if ( ui->UserIsQuitting() ) {
+      // tell the server that we are quitting
+      client->Disconnect(); 
+      
+      server->Disconnect();
+      
+      return 0; 
     }
     
-    // check if the ui has messages
+    // has the usertyped anything in? 
     if ( ui->NewMessages() ) {
       
-      // get string from ui
+      // 1. get the string from the UI
       std::string newMessage = ui->GetLatestMessage(); 
       
-      // turn the string into a message struct
+      // turn the string into a message object
+      // some messages could be normal chat, some could be commands etc 
       Message message = MessageFactory( newMessage ); 
       
+      // send to the server
       client->SendMessage( message ); 
       
     }
@@ -131,7 +127,6 @@ public:
     delete server; 
     delete ui; 
     delete messageFactory; 
-    
   }
 
 };
