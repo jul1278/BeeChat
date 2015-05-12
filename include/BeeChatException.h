@@ -4,8 +4,10 @@
 #ifndef _BEECHAT_EXCEPTION_H
 #define _BEECHAT_EXCEPTION_H
 
+#include <exceptions>
+
 // BeeChatException
-class BeeChatException
+class BeeChatException : public exception
 {
 private:
   std::string message
