@@ -1,11 +1,15 @@
 // UDPServerTest.cpp
+#include "ClientMessage.h"
 #include "UDPConnection.h"
 #include "UDPServer.h"
 #include "UDPClient.h"
-#include "ClientMessage.h"
+
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <vector>
+
+std::vector<ClientMessage> clients; 
 
 //-------------------------------------------------------------------
 // Name:
@@ -28,12 +32,21 @@ int main()
 
 			testServer.LatestMessage( &clientMessage ); 
 
-			std::string str = clientMessage.message; 
+			std::string str = clientMessage.message;
+
+			// add the address where the message came from if we haven't got it already
+			if ( std::find( clients.begin(), clients.end(), clientMessage ) == clients.end() ) {
+				clients.push_back( clientMessage );		
+			}
 
 			printf( "%i: ", clientMessage.address);
-			printf(" %s\n", str.c_str() ); 
-		}
+			printf(" %s\n", str.c_str() ); 		
 
+			for ( int i = 0; i < clients.size(); i++ ) {
+
+				clientMessage.address = clients[i].address; 
+				testServer.SendMessage( &clientMessage );
+			}
+		}			
 	}
-
 }

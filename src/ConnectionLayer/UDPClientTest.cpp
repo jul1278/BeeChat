@@ -20,12 +20,6 @@ int main()
 	testClient.Start(); 
 
 	char* message = new char[MESSAGE_LENGTH]; 
-	// message[0] = (97 + ( rand() % (122 - 97) )); 
-	 
-
-	// printf("Sent: %s\n", message );
-	
-	// testClient.SendToServer( message );
 
 	while ( 1 ) {
 

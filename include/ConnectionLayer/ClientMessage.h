@@ -25,13 +25,21 @@ const int MESSAGE_LENGTH = 256;
 
 // DTO for transferring messages and client info from the UDP layer to the chat connection
 
+
 // Client/Message DTO 
 // we don't have to delete memory this way
 struct ClientMessage
 {
 	struct sockaddr_in address; 
 	char message[MESSAGE_LENGTH];
+
+	bool operator==(const ClientMessage& clientMessage) const
+	{
+		return ( memcmp( (void*)&address, (void*)&clientMessage.address, sizeof(sockaddr_in) ) == 0 ); 
+	}
 };
+
+
 
 // _CLIENT_MESSAGE_H
 #endif
