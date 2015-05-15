@@ -38,7 +38,7 @@ private:
 	pthread_mutex_t messageQueueMutex; 
 	pthread_mutex_t listenerThreadMutex; 
 
-	bool stopListening;
+	bool stopListening;	//is this meant to be a function?
 
 	void* ListenerThread( void* threadId ); 
 
