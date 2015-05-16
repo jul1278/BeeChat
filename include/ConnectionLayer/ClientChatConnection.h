@@ -4,8 +4,11 @@
 #define _CLIENT_CHATCONNECTION_H
 
 #include "IChatConnection.h"
+#include "UserMessage.h"
+#include "ClientMessage.h"
+#include <queue>
 
-
+// ClientChatConnection
 class ClientChatConnection : public IChatConnection
 {
 private:

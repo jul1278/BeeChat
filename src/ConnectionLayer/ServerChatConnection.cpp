@@ -1,6 +1,6 @@
 // ServerChatConnection.cpp
 
-#include "ConnectionLayer/ServerChatConnection.h"
+#include "ServerChatConnection.h"
 
 
 //-------------------------------------------------------------------

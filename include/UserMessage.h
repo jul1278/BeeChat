@@ -1,4 +1,4 @@
-de// UserMessage.h
+// UserMessage.h
 //
 // Julian Pattie
 //
@@ -10,8 +10,9 @@ de// UserMessage.h
 #define _MESSAGE_H
 
 #include "User.h"
+#include <cstring>
 
-typedef unsigned char byte
+typedef unsigned char byte;
 
 
 // ideas...
@@ -56,6 +57,19 @@ struct UserMessage
 		this->messageData = new byte[dataLength];
 		memcpy( (void*)&this->messageData, (void*)messageData, dataLength );  
 	}
+    //------------------------------------------------------------------
+    // Name: UserMessage
+    // Desc:
+    //------------------------------------------------------------------
+    UserMessage( byte* messageData, unsigned short dataLength )
+    {
+        this->messageData = new byte[dataLength];
+        memcpy( (void*)&this->messageData, (void*)messageData, dataLength );
+    }
+    //------------------------------------------------------------------
+    // Name: UserMessage
+    // Desc:
+    //------------------------------------------------------------------
 	UserMessage(){}
 	//------------------------------------------------------------------
 	// Name: UserMessage

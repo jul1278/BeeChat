@@ -17,34 +17,34 @@ class ServerChatConnection : public IChatConnection
 
 private:
 
-  // stores the name of the new users
-  std::queue<User> newUserQueue; 
+    // stores the name of the new users
+    std::queue<User> newUserQueue;
 
-  // message queue
-  std::queue<ClientMessage>
+    // message queue
+    std::queue<ClientMessage>
   
-  // at the lower level we're sending messages to clients through UDP
-  std::map<ClientID, struct sockaddr_in> clientAddressMap;
+    // at the lower level we're sending messages to clients through UDP
+    std::map<ClientID, struct sockaddr_in> clientAddressMap;
 
-  UDPServer* udpServer;  
+    UDPServer* udpServer;
     
 public: 
 
-  ServerChatConnection();
-  ~ServerChatConnection(); 
+    ServerChatConnection();
+    ~ServerChatConnection();
 
-  void Connect();
-  void Disconnect();  
+    void Connect();
+    void Disconnect();  
 
-  void Run(); 
+    void Run();
 
-  bool IsUnreadMessages(); 
-  void GetLatestMessage(UserMessage** message); 
+    bool IsUnreadMessages();
+    void GetLatestMessage(UserMessage** message);
 
-  void SendMessage(UserMessage* message); 
-  
-  bool IsNewUser(); 
-  void GetLatestUser(User* user); 
+    void SendMessage(UserMessage* message);
+ 
+    bool IsNewUser();
+    void GetLatestUser(User* user);
 }; 
 
 #endif

@@ -21,13 +21,16 @@ Client::~Client()
 // Name: Connect
 // Desc: 
 //-------------------------------------------------------------------
-void Client::Connect( std::string userName )
+void Client::Connect( std::string username )
 {
 	// Create a new message
 	// make our desired username the data of the message
 	// send
-
-	UserMessage logonMessage( NULL, NULL, username.c_str(), username.length() ); 
+    byte* data = new byte[username.length()];
+    memcpy( (void*)data, (void*)&username.c_str(), username.length() );
+    
+    
+	UserMessage logonMessage( data, username.length() );
 	chatConnection->SendMessageToServer( &logonMessage ); 
 }
 //-------------------------------------------------------------------
@@ -57,7 +60,7 @@ void Client::GetLatestMessage( UserMessage* message )
 
 		UserMessage* newMessage;  
 		chatConnection->GetLatestMessage( &newMessage );
-		userMessageQueue.push_back( *newMessage ); 
+		userMessageQueue.push( *newMessage );
 
 		// do we need to delete newMessage? or does its destructor get called when it goes out of scope?
 		delete newMessage; 
@@ -70,7 +73,7 @@ void Client::GetLatestMessage( UserMessage* message )
 		userMessageQueue.pop(); 
 	}
 
-	message = null; 
+	message = NULL;
 }
 //-------------------------------------------------------------------
 // Name: IsNewActiveUserList
