@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>F75E0A92-A5B9-4E56-B497-E63259E842E4</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>BeeChat</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>193BBF584C21076F6416D0B8E4B2C442CC5C86DF</key>
 		<string>https://github.com/jul1278/BeeChat.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>BeeChat/BeeChat.xcodeproj/project.xcworkspace</string>
+	<string>BeeChat/BeeChat.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>193BBF584C21076F6416D0B8E4B2C442CC5C86DF</key>

@@ -1,4 +1,10 @@
 // ServerChatConnection.h
+//
+// ServerChatConnection manages connection level messages from/to clients
+// while exposing application level messages to the Server class
+//
+// all the messages we recieve are from clients
+
 
 #ifndef _SERVER_CHAT_CONNECTION_H
 #define _SERVER_CHAT_CONNECTION_H

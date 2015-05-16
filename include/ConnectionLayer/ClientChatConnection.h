@@ -1,4 +1,9 @@
 // ClientChatConnection.h
+//
+// ClientChatConnection manages/responds to connection level messages from the server.
+// Application level messages are exposed to the Client owner class
+// 
+// All the messages we recieve are from the server
 
 #ifndef _CLIENT_CHATCONNECTION_H
 #define _CLIENT_CHATCONNECTION_H
@@ -26,7 +31,6 @@ public:
 
 	bool IsUnreadMessages(); 
 	void GetLatestMessage( UserMessage** message ); 
-
 
 	void SendMessage( UserMessage* message ); 
 }; 

@@ -49,7 +49,7 @@ struct UserMessage
 	// Desc: makes a deep copy of the messageData
 	//       is responsible for its memory
 	//------------------------------------------------------------------
-	UserMessage( User sender, User dest, byte* messageData, unsigned short dataLength )
+	UserMessage( User sender, User dest, byte* messageData, unsigned int dataLength )
 	{
 		this->sender = sender; 
 		this->dest = dest; 
@@ -61,7 +61,7 @@ struct UserMessage
     // Name: UserMessage
     // Desc:
     //------------------------------------------------------------------
-    UserMessage( byte* messageData, unsigned short dataLength )
+    UserMessage( byte* messageData, unsigned int dataLength )
     {
         this->messageData = new byte[dataLength];
         memcpy( (void*)&this->messageData, (void*)messageData, dataLength );
@@ -93,7 +93,7 @@ struct UserMessage
 	//
 	// Time timeSent (important? probably not)
 
-	unsigned short dataLength; 
+	unsigned int dataLength; 
 	byte* messageData; 
 
 };
