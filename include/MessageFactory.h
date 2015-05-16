@@ -3,12 +3,7 @@
 #ifndef _MESSAGE_FACTORY_H
 #define _MESSAGE_FACTORY_H
 
-// Message
-struct Message
-{
-
-
-};
+#include "UserMessage.h"
 
 // MessageFactory
 class MessageFactory
@@ -21,7 +16,7 @@ public:
 	~MessageFactory(); 
 
 	
-	Message GetMessage( std::string messageString ); 
+	UserMessage GetMessage( std::string messageString ); 
 };
 
 

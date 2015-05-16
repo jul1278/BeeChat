@@ -1,5 +1,5 @@
 // UDPConnection.h
-// threadsafe generic udp connection
+// threadsafe generic udp 
 // Julian Pattie
 #ifndef _UDP_CONNECTION_H
 #define _UDP_CONNECTION_H
@@ -23,13 +23,14 @@
 #include <pthread.h>
 #include "ClientMessage.h"
 
+  
+const int serverPort = 6969; 
+
 // UDPConnection
 class UDPConnection
 {
 		
 private:
-
- 
 
 	std::queue<ClientMessage> messageQueue; 
 

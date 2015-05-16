@@ -10,8 +10,7 @@
 class Server
 {
 private:
-  
-  const int serverPort = 6969; 
+
   
   ServerChatConnection* chatConnection; 
   
@@ -19,64 +18,19 @@ private:
   // client ID maps to a client address inside chatconnection
   std::vector<User> users; 
   
-  std::queue<Message> messageQueue; 
+  std::queue<UserMessage> messageQueue; 
   
 public:
-  
-  //---------------------------------------------------------------------------------
-  // Name: Server
-  // Desc:
-  //---------------------------------------------------------------------------------
-  Server()
-  {
-    TryStart(); 
-  }
-  //---------------------------------------------------------------------------------
-  // Name: TryStart
-  // Desc:
-  //---------------------------------------------------------------------------------
-  ~Server()
-  {
-    // TODO: tell chat connection that i'm quitting
-    
-    delete chatConnection; 
-  }
-  //---------------------------------------------------------------------------------
-  // Name: TryStart
-  // Desc:
-  //---------------------------------------------------------------------------------
-  bool TryStart()
-  {
-    // try to start a server
-    return( chatConnection->StartServer() );
-  }
-  //---------------------------------------------------------------------------------
-  // Name: IsActive
-  // Desc:
-  //---------------------------------------------------------------------------------
-  bool IsActive()
-  {
-    // did i successfully start? 
-    return true; 
-    // else
-    
-    return false; 
-    
-  }
-  //---------------------------------------------------------------------------------
-  // Name: Run
-  // Desc:
-  //---------------------------------------------------------------------------------
-  int Run() 
-  {
-    // have we recieved any messages on the chat connection? 
-    
-    // do we need to relay messages back to clients
-    
-    //chatConnection->SendToAllClients( newMessage ); 
-    
-  }
-  
+
+  Server();
+  ~Server();
+
+  bool Connect();
+  void Disconnect(); 
+  bool IsActive(); 
+
+  int Run();
+
 };
 
 

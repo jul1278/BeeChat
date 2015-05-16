@@ -19,7 +19,7 @@ private:
   Server* server; 
 
   // client object
-  Client* client
+  Client* client;
   
   MessageFactory* messageFactory; 
 
@@ -37,6 +37,8 @@ public:
     // does the server need to know our username?
     server = new Server(); 
     client = new Client(); 
+
+    client->Connect( username ); 
     
     ui->PresentInfoScreen(); 
 
@@ -70,7 +72,7 @@ public:
       
       // turn the string into a message object
       // some messages could be normal chat, some could be commands etc 
-      Message message = MessageFactory( newMessage ); 
+      UserMessage message = MessageFactory( newMessage ); 
       
       // send to the server
       client->SendMessage( message ); 
@@ -103,6 +105,9 @@ public:
       ui->ActiveUserList( activeUsers ); 
     }
     
+
+    server->Run(); 
+
     
     // TODO: set quit to 1 if we're quitting  
     

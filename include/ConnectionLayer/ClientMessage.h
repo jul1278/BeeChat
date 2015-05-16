@@ -37,6 +37,12 @@ struct ClientMessage
 	{
 		return ( memcmp( (void*)&address, (void*)&clientMessage.address, sizeof(sockaddr_in) ) == 0 ); 
 	}
+	// TODO: should this be a static function like CompareAddress() or something
+	bool operator==(const struct sockaddr_in& address) const
+	{
+		return( memcmp( (void*)&this->address, (void*)&address, sizeof(sockaddr_in) ) == 0 ); s
+	}
+
 };
 
 

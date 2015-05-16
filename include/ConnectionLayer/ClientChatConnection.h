@@ -3,21 +3,29 @@
 #ifndef _CLIENT_CHATCONNECTION_H
 #define _CLIENT_CHATCONNECTION_H
 
-class ClientChatConnection : public ChatConnection
-{
-  
+#include "IChatConnection.h"
 
-  public:
+
+class ClientChatConnection : public IChatConnection
+{
+private:
+
+	std::queue<ClientMessage> clientMessageQueue; 
+	UDPClient* udpClient; 
+
+public:
     
-    ClientChatConnection(); 
-    ~ClientChatConnection(); 
-    
-  void ConnectToServer( std::string username );
-  void Disconnect(); 
-  
-  void  SendMessageToServer( Message* message ); 
-  bool IsUnreadMessages();   
-  void GetLatestMessage( Message* message ); 
+	ClientChatConnection(); 
+	~ClientChatConnection(); 
+
+	void Connect( std::string username );
+	void Disconnect(); 
+
+	bool IsUnreadMessages(); 
+	void GetLatestMessage( UserMessage** message ); 
+
+
+	void SendMessage( UserMessage* message ); 
 }; 
 
 
