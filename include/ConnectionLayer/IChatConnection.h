@@ -22,8 +22,6 @@ public:
 		
 	virtual bool IsUnreadMessages() =0; 
 	virtual void GetLatestMessage( Message** message ) =0; 
-	
-	virtual void SendMessage( Message* message ) =0; 
 };
 
 // _CHAT_CONNECTION_H

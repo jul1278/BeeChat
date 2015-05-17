@@ -35,6 +35,9 @@ private:
 
     UDPServer* udpServer;
     
+    LogoffAddress( struct sockaddr_in address ); 
+    LogonAddress( struct sockaddr_in address ); 
+
 public: 
 
     ServerChatConnection();
@@ -46,9 +49,9 @@ public:
     void Run();
 
     bool IsUnreadMessages();
-    void GetLatestMessage(Message** message);
+    void GetLatestMessage(Message* message);
 
-    void SendMessage(Message* message);
+    void SendMessageToClient( Message* message, ClientID clientID ); 
  
     bool IsNewUser();
     void GetLatestUser(User* user);

@@ -36,48 +36,42 @@ void ServerChatConnection::Disconnect()
   udpServer->Stop(); 
 }
 //-------------------------------------------------------------------
-// Name: Run	
-// Desc: 
-//
-// 1. check our UDP connection to see if we've got any new messages
-//    get them all and store them in our message queue
-//
-// 2. check if the sender address of the message is one we already know about
-//    or if it's a new client that wants to join the server
-//
-// 3. if we've got a new client add their socket to our map and generate a ClientID
-//    store the username in a queue as well
-//-------------------------------------------------------------------
-void ServerChatConnection::Run()
-{
-    if ( udpServer->IsUnreadMessages() == true ) {
-      // get the messages
-    }
-    
-    Message = 
-
-    ClientMessage message; 
-
-
-    struct sockaddr_in address = message.address; 
-    
-    // check if latest message sockaddr_in is in the map already
-    std::map<ClientID, sockaddr_in>::const_iterator it = clientAddressMap.find(address); 
-    if ( it == clientAddressMap.end() ) {
-      // generate new ClientID
-      ClientID newID = 4954545;
-      
-      clientAddressMap.insert( std::pair<ClientID, sockaddr_in>( newID, address  )); 
-      
-    }
-    
-}
-//-------------------------------------------------------------------
 // Name: IsUnreadMessages
 // Desc: 
 //-------------------------------------------------------------------
 bool ServerChatConnection::IsUnreadMessages()
 {
+  while ( udpServer->IsUnreadMessages() ) {
+
+    ClientMessage clientMessage; 
+
+    udpServer->LatestMessage( &clientMessage ); 
+
+    Message message; 
+
+    memcpy( (void*)&message, (void*)&clientMessage.message, MESSAGE_SIZE ); 
+
+    switch ( message->messageType ) {
+
+      case LOGON_NOTIFY:
+
+        this->LogonAddress( clientMessage->address );  
+      break;
+
+      case LOGOFF_NOTIFY:
+        this->LogoffAddress( clientMessage->address ); 
+      break;  
+
+      case PING_RESPONSE:
+        // TODO: server shouldn't get these guys
+      break;
+
+    }
+
+    // server wants the message anyway
+    messageQueue.push(message); 
+  }
+
   if ( messageQueue.empty() == false ) {
     return true;
   }
@@ -87,16 +81,16 @@ bool ServerChatConnection::IsUnreadMessages()
 // Name: GetLatestMessage
 // Desc: 
 //-------------------------------------------------------------------
-void ServerChatConnection::GetLatestMessage( UserMessage** message)
+void ServerChatConnection::GetLatestMessage( Message* message)
 {
 
   // are there any unread messages in our queue, not the UDP queue
   if ( this->IsUnreadMessages() == false ) {
-    *message = NULL;
+    message = NULL;
     return;  
   } 
 
-  (*message) = new UserMessage(); 
+  (*message) = new Message(); 
 
   // refactor this into a function
   std::map<ClientID, struct sockaddr_in>::iterator it = clientAddressMap.begin(); 
@@ -125,10 +119,10 @@ void ServerChatConnection::GetLatestMessage( UserMessage** message)
 // Name: SendMessage
 // Desc: 
 //-------------------------------------------------------------------
-void ServerChatConnection::SendMessage( UserMessage* message)
+void ServerChatConnection::SendMessageToClient( Message* message, ClientID clientID )
 {
   // get the sockaddr_in from the map
-  struct sockaddr_in socketAddressDest = clientAddressMap[message->dest.clientID]; 
+  struct sockaddr_in socketAddressDest = clientAddressMap[clientID]; 
 
   ClientMessage clientMessage; 
 
@@ -139,7 +133,9 @@ void ServerChatConnection::SendMessage( UserMessage* message)
     return; 
   }
 
-  memcpy( (void*)&clientMessage.address, (void*)message->messageData, message->dataLength ); 
+
+  // DODGY FIX: sizeof(Message) instead of MESSAGE_SIZE
+  memcpy( (void*)&clientMessage.message, (void*)message, sizeof(Message) ); 
 
   udpServer->SendMessage( &clientMessage ); 
 
@@ -150,11 +146,7 @@ void ServerChatConnection::SendMessage( UserMessage* message)
 //-------------------------------------------------------------------
 bool ServerChatConnection::IsNewUser()
 {
-	if ( newUser.empty() == false ) {
-		return true; 
-	}
-
-	return true;
+  return ( newUser.empty() == false ); 
 }
 //-------------------------------------------------------------------
 // Name: GetNewestClient
@@ -162,9 +154,61 @@ bool ServerChatConnection::IsNewUser()
 //-------------------------------------------------------------------
 void ServerChatConnection::GetLatestUser( User* user )
 {
-	if ( this->IsNewClients() ) {
+	if ( this->IsNewUser() ) {
 		*user = newUser.front(); 
-
 		newUser.pop(); 
 	}
 }
+//-------------------------------------------------------------------
+// Name: IsAddressLoggedOn
+// Desc:
+//-------------------------------------------------------------------
+bool ServerChatConnection::IsAddressLoggedOn( struct sockaddr_in address ) 
+{
+    // find address in the map otherwise add it
+  std::map<ClientID, struct sockaddr_in>::iterator it; 
+
+  for (  it = clientAddressMap.begin(); it != clientAddressMap.end(); it++ ) {
+
+    if ( it->second() == address ) {
+
+      // this address is already logged on
+      return true; 
+    }
+  }
+
+  return false; 
+}
+//-------------------------------------------------------------------
+// Name: HandleLogonMessage
+// Desc: 
+//-------------------------------------------------------------------
+void ServerChatConnection::LogonAddress( struct sockaddr_in address )
+{
+  if ( this->IsAddressLoggedOn(address) == true ) {
+    return; 
+  }
+
+  ClientID clientID = clientAddressMap.size(); 
+
+  clientAddressMap.insert( std::pair<clientID, address>() ); 
+}
+//-------------------------------------------------------------------
+// Name: LogoffAddress
+// Desc: 
+//-------------------------------------------------------------------
+void ServerChatConnection::LogoffAddress( struct sockaddr_in address ) 
+{
+      // find address in the map otherwise add it
+  std::map<ClientID, struct sockaddr_in>::iterator it; 
+
+  for (  it = clientAddressMap.begin(); it != clientAddressMap.end(); it++ ) {
+
+    if ( it->second() == address ) {
+      clientAddressMap.erase(it); 
+      return; 
+    }
+  } 
+}
+
+

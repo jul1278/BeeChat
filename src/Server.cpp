@@ -71,6 +71,20 @@ int Server::Run()
 	}
 
 	// relay chat messages back to users
+	while ( outMessageQueue.empty() == false ) {
+
+		std::vector<User>::iterator usersIt; 
+
+		for ( usersIt = users.begin(); usersIt != users.end(); usersIt++ ) {
+
+			Message message = outMessageQueue.front(); 
+
+			chatConnection->SendMessageToClient( &message, usersIt->clientID ); 
+
+		}
+
+
+	}
 }
 //---------------------------------------------------------------------------------
 // Name: HandleLogon
