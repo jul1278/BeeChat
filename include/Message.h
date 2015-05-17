@@ -56,7 +56,8 @@ struct Message
 // LogonMessage
 struct LogonMessage
 {
-	char username[MAX_NUM_USERNAME_CHAR]; 
+	char username[MAX_NUM_USERNAME_CHAR];
+	ClientID clientID; // <- server use only 
 	byte usernameColor; 
 	byte textColor; 
 };

@@ -80,18 +80,25 @@ void Client::GetLatestMessage( Message* message )
 		messageQueue.push( newMessage );
 	}
 
-	// TODO: implement message types and message handling logic...
+	// TODO: may need to handle some message types here
 
 	if ( this->IsUnreadMessages() ) {
-		*message = userMessageQueue.front();
-		userMessageQueue.pop(); 
+
+		*message = messageQueue.front();
+		messageQueue.pop(); 
 
 		return; 
 	} else {
 		message = NULL; 
-	}
-
-	
+	}	
+}
+//-------------------------------------------------------------------
+// Name: IsNewMessage
+// Desc: 
+//-------------------------------------------------------------------
+bool Client::IsNewMessage()
+{
+	return( messageQueue.empty() == false ); 
 }
 //-------------------------------------------------------------------
 // Name: IsNewActiveUserList

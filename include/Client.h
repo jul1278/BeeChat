@@ -12,32 +12,24 @@ class Client
 {
 private:
   
-    std::queue<UserMessage> userMessageQueue;
-
+    std::queue<Message> messageQueue;
     ClientChatConnection* chatConnection;
-  
-
 
 public:
 
     Client();
     ~Client();
   
-    // do we need this?
-    int ConnectionStatus();
-
     void Connect( std::string userName );
     void Disconnect();
   
-    // if not connected throw SendMessageException
+    // if not connected throw SendMessageException?
     void PassMessage(Message* message);
   
     bool IsUnreadMessages();
     void GetLatestMessage(Message* message);
 
     bool IsNewActiveUserList();
-    
-    
     
     // TODO:
     void GetLatestActiveUserList();
