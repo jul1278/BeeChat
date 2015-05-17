@@ -9,14 +9,13 @@
 #ifndef _SERVER_CHAT_CONNECTION_H
 #define _SERVER_CHAT_CONNECTION_H
 
-#include "IChatConnection.h"
+#include "ConnectionLayer/UDPServer.h"
+#include "ConnectionLayer/IChatConnection.h"
 #include "BeeChatException.h"
-#include "UDPServer.h"
+
 #include "Message.h"
 #include "User.h"
-
-// probably need other stuff
-typedef unsigned int ClientID; 
+#include <map>
 
 // ServerChatConnection
 class ServerChatConnection : public IChatConnection
@@ -35,8 +34,8 @@ private:
 
     UDPServer* udpServer;
     
-    LogoffAddress( struct sockaddr_in address ); 
-    LogonAddress( struct sockaddr_in address ); 
+    ClientID LogoffAddress( struct sockaddr_in address ); 
+    void LogonAddress( struct sockaddr_in address ); 
 
 public: 
 

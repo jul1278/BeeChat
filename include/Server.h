@@ -5,6 +5,7 @@
 #include <vector>
 #include "User.h"
 #include "MessageFactory.h"
+#include "ConnectionLayer/ServerChatConnection.h"
 
 // Server
 class Server

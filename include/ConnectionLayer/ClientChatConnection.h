@@ -8,9 +8,9 @@
 #ifndef _CLIENT_CHATCONNECTION_H
 #define _CLIENT_CHATCONNECTION_H
 
-#include "IChatConnection.h"
-#include "UserMessage.h"
-#include "ClientMessage.h"
+#include "ConnectionLayer/IChatConnection.h"
+#include "Message.h"
+#include "ConnectionLayer/ClientMessage.h"
 #include <queue>
 
 // ClientChatConnection

@@ -14,7 +14,7 @@
 // Name: BeeChatApp
 // Desc:
 //---------------------------------------------------------------------
-BeeChatApp::BeeChatApp( std::string username, bool userWantsToBeServer )
+BeeChatApp::BeeChatApp( std::string username, byte usernameColor, bool userWantsToBeServer )
 {
     //ui = new LachlansUIThing();
     

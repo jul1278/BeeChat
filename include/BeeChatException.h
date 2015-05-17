@@ -4,28 +4,13 @@
 #ifndef _BEECHAT_EXCEPTION_H
 #define _BEECHAT_EXCEPTION_H
 
-#include <exceptions>
+#include <exception>
 
-// BeeChatException
-class BeeChatException : public std::exception
+//use enum for exception types? 
+//need static counts for relevant exceptions - static meaning variable persists through destructors
+//create text file error log to catch unhandled errors?
+enum ExceptionType
 {
-  private:
-    std::string Message() { return message; } 
-  
-  public:
-  {   
-    BeeChatException();
-    ~BeeChatException(); 
-    
-    enum ExceptionType( std::string exMessage ); 
-  }
-}
-
-  //use enum for exception types? 
-  //need static counts for relevant exceptions - static meaning variable persists through destructors
-  //create text file error log to catch unhandled errors?
-  enum ExceptionType
-  {
     // connection issues
       //socket not free
         //
@@ -80,13 +65,29 @@ class BeeChatException : public std::exception
           //try notifying user first?
       //  
     
-  }
+};
 
-  void ExceptionLog
-  {
-    //log exceptions to a text file on server's PC, or to a file on the server?
-  }
+// BeeChatException
+class BeeChatException // : public std::exception
+{
+private:
+  std::string message; 
+  std::string Message() { return message; } 
+
+public:
+    
+  BeeChatException();
+  ~BeeChatException(); 
+
+  ExceptionType exceptionType( std::string exMessage ) {}
 
 };
+
+
+
+void ExceptionLog()
+{
+  //log exceptions to a text file on server's PC, or to a file on the server?
+}
 
 #endif

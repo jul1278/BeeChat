@@ -1,10 +1,13 @@
+// BeeChatApp.h
+
 #ifndef _BEECHAT_APP_H
 #define _BEECHAT_APP_H
 
-#include "Client.h"
 #include "Server.h"
+#include "Client.h"
 #include "MessageFactory.h"
-#include "UI.h"
+//#include "UI.h"
+#include <string>
 
 // BeeChatApp 
 class BeeChatApp
@@ -25,7 +28,7 @@ private:
 public: 
 
     
-    BeeChatApp(std::string username);
+    BeeChatApp(std::string username, byte usernameColor, bool userWantsServer);
     ~BeeChatApp();
     
     int Run();
