@@ -1,0 +1,7 @@
+# keep these
+!**/.gitkeep
+
+# always ignore o files
+**/.o
+obj/*
+build/*
