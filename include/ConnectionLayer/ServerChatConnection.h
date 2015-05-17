@@ -52,7 +52,7 @@ public:
 
     void SendMessageToClient( Message* message, ClientID clientID ); 
  
-    bool IsNewUser();
+    bool IsNewUsers();
     void GetLatestUser(User* user);
 }; 
 

@@ -78,7 +78,7 @@ void ClientChatConnection::GetLatestMessage( Message* message )
 // Name: SendMessage
 // Desc:
 //---------------------------------------------------------------------
-void ClientChatConnection::SendMessage( Message* message )
+void ClientChatConnection::SendMessageToServer( Message* message )
 {
 	ClientMessage clientMessage; 
 	clientMessage.address = 0; // we know where the server is 

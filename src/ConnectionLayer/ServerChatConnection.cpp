@@ -149,7 +149,7 @@ void ServerChatConnection::SendMessageToClient( Message* message, ClientID clien
 // Name: IsNewClients
 // Desc: 
 //-------------------------------------------------------------------
-bool ServerChatConnection::IsNewUser()
+bool ServerChatConnection::IsNewUsers()
 {
   return ( newUser.empty() == false ); 
 }

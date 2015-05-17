@@ -7,7 +7,7 @@
 //---------------------------------------------------------------------------------
 Server::Server()
 {
-	chatConnection = new UDPChatConnection(); 
+	chatConnection = new ServerChatConnection(); 
 }
 //---------------------------------------------------------------------------------
 // Name: ~Server
@@ -21,10 +21,10 @@ Server::~Server()
 // Name: TryConnect
 // Desc:
 //---------------------------------------------------------------------------------
-bool Connect()
+bool Server::Connect()
 {
     // try to start a server
-    chatConnection->StartServer();
+    chatConnection->Connect();
 
     // FIX ME
     return( true );	
@@ -33,7 +33,7 @@ bool Connect()
 // Name: Disconnect
 // Desc:
 //---------------------------------------------------------------------------------
-void Disconnect()
+void Server::Disconnect()
 {
 	chatConnection->Disconnect(); 
 }
@@ -41,7 +41,7 @@ void Disconnect()
 // Name: IsActive
 // Desc:
 //---------------------------------------------------------------------------------
-bool IsActive()
+bool Server::IsActive()
 {
 }
 //---------------------------------------------------------------------------------
@@ -55,9 +55,9 @@ int Server::Run()
 
 		Message message; 
 
-		chatConnection->GetUnreadMessage( &message ); 
+		chatConnection->GetLatestMessage( &message ); 
 
-		switch ( message->messageType ) {
+		switch ( message.messageType ) {
 			case LOGON_NOTIFY:
 				this->HandleLogonMessage( &message ); 
 			break; 
@@ -80,7 +80,7 @@ int Server::Run()
 	// relay chat messages back to users
 	while ( outMessageQueue.empty() == false ) {
 
-		std::vector<User>::iterator usersIt; 
+		std::list<User>::iterator usersIt; 
 
 		for ( usersIt = users.begin(); usersIt != users.end(); usersIt++ ) {
 
@@ -126,12 +126,12 @@ void Server::HandleLogoffMessage(Message* message)
 
 	LogoffMessage* logoffMessage = (LogoffMessage*) message->messageData; 
 
-	std::vector<User>::iterator it; 
+	std::list<User>::iterator it; 
 
 	// might be a more stl way of doing this
-	for ( it == users.begin(); it != users.end(); it++ ) {
+	for ( it = users.begin(); it != users.end(); it++ ) {
 		if ( it->clientID == logoffMessage->clientID ) {
-			users(it).erase(); 
+			users.erase(it); 
 			break; 
 		}
 	}

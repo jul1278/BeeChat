@@ -1,7 +1,7 @@
 // UDPConnection.h
 
-#ifndef _UDP_CONNECTION_H
-#define _UDP_CONNECTION_H
+#ifndef _UDP_SERVER_H
+#define _UDP_SERVER_H
 
 #include "ConnectionLayer/UDPConnection.h"
 

@@ -20,17 +20,18 @@ public:
     Client();
     ~Client();
   
-    void Connect( std::string userName );
+    void Connect( std::string userName, byte usernameColor );
     void Disconnect();
   
     // if not connected throw SendMessageException?
     void PassMessage(Message* message);
   
-    bool IsUnreadMessages();
+    bool IsUnreadMessage();
     void GetLatestMessage(Message* message);
 
     bool IsNewActiveUserList();
-    
+
+
     // TODO:
     void GetLatestActiveUserList();
 

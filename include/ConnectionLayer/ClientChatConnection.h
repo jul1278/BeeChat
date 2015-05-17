@@ -32,7 +32,7 @@ public:
 	bool IsUnreadMessages(); 
 	void GetLatestMessage( Message* message ); 
 
-	void SendMessage( Message* message ); 
+	void SendMessageToServer( Message* message ); 
 }; 
 
 

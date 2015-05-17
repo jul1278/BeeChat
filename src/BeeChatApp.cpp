@@ -23,7 +23,7 @@ BeeChatApp::BeeChatApp( std::string username, byte usernameColor, bool userWants
     server = new Server();
     client = new Client();
     
-    client->Connect( username );
+    client->Connect( username, usernameColor );
     
     //ui->PresentInfoScreen();
     
@@ -38,7 +38,7 @@ BeeChatApp::~BeeChatApp()
 {
     delete client;
     delete server;
-    delete ui;
+    //delete ui;
     delete messageFactory;
 }
 //---------------------------------------------------------------------
@@ -58,9 +58,9 @@ int BeeChatApp::Run()
     
     // client is only going to tell us about chat messages,
     // it will handle other messages internally
-    if ( client->IsUnreadMessages()  ) {
+    if ( client->IsUnreadMessage() ) {
         
-        Message message
+        Message message; 
         
         client->GetLatestMessage( &message );
         

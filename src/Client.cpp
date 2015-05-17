@@ -22,10 +22,10 @@ Client::~Client()
 // Name: Connect
 // Desc: 
 //-------------------------------------------------------------------
-void Client::Connect( std::string username )
+void Client::Connect( std::string username, byte usernameColor )
 {
 
-	if ( username.length() > MAX_USERNAME_CHAR ) {
+	if ( username.length() > MAX_NUM_USERNAME_CHAR ) {
 
 		return; 
 	}
@@ -37,12 +37,10 @@ void Client::Connect( std::string username )
 	LogonMessage* logonMessage = (LogonMessage*) &message.messageData;
  	
 	message.messageType = LOGON_NOTIFY; 
-	message.messageData = &logonMessage; 
-
 	memcpy( (void*)&logonMessage->username, (void*)username.c_str(), username.length() ); 
 
-	logonMessage->usernameColor = 0x00; 
-
+	logonMessage->usernameColor = usernameColor; 
+	logonMessage->textColor = 0x00; 
 
 	chatConnection->SendMessageToServer( &message ); 
 }
@@ -82,7 +80,7 @@ void Client::GetLatestMessage( Message* message )
 
 	// TODO: may need to handle some message types here
 
-	if ( this->IsUnreadMessages() ) {
+	if ( this->IsUnreadMessage() ) {
 
 		*message = messageQueue.front();
 		messageQueue.pop(); 
@@ -96,7 +94,7 @@ void Client::GetLatestMessage( Message* message )
 // Name: IsNewMessage
 // Desc: 
 //-------------------------------------------------------------------
-bool Client::IsNewMessage()
+bool Client::IsUnreadMessage()
 {
 	return( messageQueue.empty() == false ); 
 }
