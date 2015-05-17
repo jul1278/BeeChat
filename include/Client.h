@@ -3,9 +3,9 @@
 #ifndef _CLIENT_H
 #define _CLIENT_H
 
-#include "UserMessage.h"
+#include "Message.h"
 #include "User.h"
-#include "ClientChatConnection.h"
+#include "ConnectionLayer/ClientChatConnection.h"
 
 // Client
 class Client

@@ -3,7 +3,7 @@
 #ifndef _MESSAGE_FACTORY_H
 #define _MESSAGE_FACTORY_H
 
-#include "UserMessage.h"
+#include "Message.h"
 
 // MessageFactory
 class MessageFactory
@@ -12,11 +12,11 @@ private:
 
 public:
 
-	MessageFactory();
-	~MessageFactory(); 
+	MessageFactory() {}
+	~MessageFactory() {} 
 
 	
-	UserMessage GetMessage( std::string messageString ); 
+	//UserMessage GetMessage( std::string messageString ); 
 };
 
 

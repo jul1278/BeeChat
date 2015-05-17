@@ -3,6 +3,7 @@
 #ifndef _MESSAGE_H
 #define _MESSAGE_H
 
+#include "User.h"
 
 typedef unsigned char MESSAGE_TYPE; 
 typedef unsigned char byte; 
@@ -10,6 +11,7 @@ typedef unsigned char byte;
 // TODO: move these #define's somewhere more appropriate
 //       also look at using an enum
 #define MAX_NUM_USERNAME_CHAR 10
+#define MAX_MESSAGE_LENGTH 128 
 
 
 #define	LOGON_NOTIFY 0x01

@@ -4,10 +4,10 @@
 
 #include "MessageFactory.h"
 #include "User.h"
-#include "UserMessage.h"
-#include "ClientMessage.h"
-#include "UDPClient.h"
-#include "UDPServer.h"
+#include "Message.h"
+#include "ConnectionLayer/ClientMessage.h"
+#include "ConnectionLayer/UDPClient.h"
+#include "ConnectionLayer/UDPServer.h"
 
 // ChatConnection
 class IChatConnection
@@ -21,7 +21,7 @@ public:
 	virtual void Disconnect() =0; 
 		
 	virtual bool IsUnreadMessages() =0; 
-	virtual void GetLatestMessage( Message** message ) =0; 
+	virtual void GetLatestMessage( Message* message ) =0; 
 };
 
 // _CHAT_CONNECTION_H
