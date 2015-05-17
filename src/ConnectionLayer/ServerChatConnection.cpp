@@ -41,6 +41,7 @@ void ServerChatConnection::Disconnect()
 //-------------------------------------------------------------------
 bool ServerChatConnection::IsUnreadMessages()
 {
+  // get all the messages from UDP
   while ( udpServer->IsUnreadMessages() ) {
 
     ClientMessage clientMessage; 
@@ -54,8 +55,12 @@ bool ServerChatConnection::IsUnreadMessages()
     switch ( message->messageType ) {
 
       case LOGON_NOTIFY:
+        ClientID clientID = this->LogonAddress( clientMessage->address );  
+        if ( clientID != 0 ) {
+          message.clientID = clientID; 
+          messageQueue.push(message); 
+        }
 
-        this->LogonAddress( clientMessage->address );  
       break;
 
       case LOGOFF_NOTIFY:
@@ -66,10 +71,11 @@ bool ServerChatConnection::IsUnreadMessages()
         // TODO: server shouldn't get these guys
       break;
 
-    }
+      case default:
+        messageQueue.push(message);
+      break; 
 
-    // server wants the message anyway
-    messageQueue.push(message); 
+    }
   }
 
   if ( messageQueue.empty() == false ) {
@@ -133,7 +139,6 @@ void ServerChatConnection::SendMessageToClient( Message* message, ClientID clien
     return; 
   }
 
-
   // DODGY FIX: sizeof(Message) instead of MESSAGE_SIZE
   memcpy( (void*)&clientMessage.message, (void*)message, sizeof(Message) ); 
 
@@ -183,15 +188,17 @@ bool ServerChatConnection::IsAddressLoggedOn( struct sockaddr_in address )
 // Name: HandleLogonMessage
 // Desc: 
 //-------------------------------------------------------------------
-void ServerChatConnection::LogonAddress( struct sockaddr_in address )
+CLientID ServerChatConnection::LogonAddress( struct sockaddr_in address )
 {
   if ( this->IsAddressLoggedOn(address) == true ) {
-    return; 
+    return 0; 
   }
 
-  ClientID clientID = clientAddressMap.size(); 
+  ClientID clientID = clientAddressMap.size() + 1; 
 
   clientAddressMap.insert( std::pair<clientID, address>() ); 
+
+  return clientID; 
 }
 //-------------------------------------------------------------------
 // Name: LogoffAddress

@@ -70,6 +70,13 @@ int Server::Run()
 		}
 	}
 
+	// add any new users
+	while ( chatConnection->IsNewUsers() ) {
+		User newUser; 
+		chatConnection->GetLatestUser( &newUser ); 
+		users.push_back( newUser ); 
+	}
+
 	// relay chat messages back to users
 	while ( outMessageQueue.empty() == false ) {
 
@@ -80,10 +87,7 @@ int Server::Run()
 			Message message = outMessageQueue.front(); 
 
 			chatConnection->SendMessageToClient( &message, usersIt->clientID ); 
-
 		}
-
-
 	}
 }
 //---------------------------------------------------------------------------------
