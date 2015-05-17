@@ -12,6 +12,7 @@ typedef unsigned char byte;
 //       also look at using an enum
 #define MAX_NUM_USERNAME_CHAR 10
 #define MAX_MESSAGE_LENGTH 128 
+#define MESSAGE_SIZE 256 
 
 
 #define	LOGON_NOTIFY 0x01

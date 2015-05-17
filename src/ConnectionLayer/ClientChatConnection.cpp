@@ -68,7 +68,8 @@ void ClientChatConnection::GetLatestMessage( Message* message )
 {
 	if ( this->IsUnreadMessages() ) {
 
-		memcpy( (void*)message->messageData, (void*)&messageQueue.front().message, MESSAGE_SIZE ); 
+		*message = messageQueue.front(); 
+		messageQueue.pop(); 
 
 	} else {
 		message = NULL; 
@@ -81,10 +82,8 @@ void ClientChatConnection::GetLatestMessage( Message* message )
 void ClientChatConnection::SendMessageToServer( Message* message )
 {
 	ClientMessage clientMessage; 
-	clientMessage.address = 0; // we know where the server is 
-	memcpy( (void*)&clientMessage.messageData, (void*)message->messageData, MESSAGE_SIZE ); 
-
-	udpClient->SendMessage( messageData ); 
+	memcpy( (void*)&clientMessage.message, (void*)&message->messageData, MESSAGE_SIZE ); 
+	udpClient->SendMessage( &clientMessage ); 
 }
 
   

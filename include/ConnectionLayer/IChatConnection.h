@@ -14,8 +14,8 @@ class IChatConnection
 {
 public:
 
-	IChatConnection(); 
-	~IChatConnection(); 
+	IChatConnection() {}
+	~IChatConnection() {}
 
 	virtual void Connect() =0;
 	virtual void Disconnect() =0; 

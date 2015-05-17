@@ -85,9 +85,9 @@ public:
 
 
 
-void ExceptionLog()
-{
-  //log exceptions to a text file on server's PC, or to a file on the server?
-}
+// void ExceptionLog()
+// {
+//   //log exceptions to a text file on server's PC, or to a file on the server?
+// }
 
 #endif

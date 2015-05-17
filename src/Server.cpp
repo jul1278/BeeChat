@@ -1,5 +1,6 @@
 // Server.cpp
 #include "Server.h"
+#include "Message.h"
 
 //---------------------------------------------------------------------------------
 // Name: Server
@@ -68,13 +69,6 @@ int Server::Run()
 				this->HandleChatMessage(&message);
 			break; 
 		}
-	}
-
-	// add any new users
-	while ( chatConnection->IsNewUsers() ) {
-		User newUser; 
-		chatConnection->GetLatestUser( &newUser ); 
-		users.push_back( newUser ); 
 	}
 
 	// relay chat messages back to users

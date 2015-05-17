@@ -23,9 +23,6 @@ class ServerChatConnection : public IChatConnection
 
 private:
 
-    // stores the name of the new users
-    std::queue<User> newUserQueue;
-
     // message queue
     std::queue<Message> messageQueue; 
   
@@ -34,8 +31,9 @@ private:
 
     UDPServer* udpServer;
     
-    ClientID LogoffAddress( struct sockaddr_in address ); 
-    void LogonAddress( struct sockaddr_in address ); 
+    void LogoffAddress( struct sockaddr_in address ); 
+    ClientID LogonAddress( struct sockaddr_in address ); 
+    bool IsAddressLoggedOn( struct sockaddr_in address ); 
 
 public: 
 
@@ -51,9 +49,6 @@ public:
     void GetLatestMessage(Message* message);
 
     void SendMessageToClient( Message* message, ClientID clientID ); 
- 
-    bool IsNewUsers();
-    void GetLatestUser(User* user);
 }; 
 
 #endif
