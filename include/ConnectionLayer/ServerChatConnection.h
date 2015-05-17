@@ -12,6 +12,7 @@
 #include "IChatConnection.h"
 #include "BeeChatException.h"
 #include "UDPServer.h"
+#include "Message.h"
 #include "User.h"
 
 // probably need other stuff
@@ -27,7 +28,7 @@ private:
     std::queue<User> newUserQueue;
 
     // message queue
-    std::queue<ClientMessage>
+    std::queue<Message> messageQueue; 
   
     // at the lower level we're sending messages to clients through UDP
     std::map<ClientID, struct sockaddr_in> clientAddressMap;
@@ -45,9 +46,9 @@ public:
     void Run();
 
     bool IsUnreadMessages();
-    void GetLatestMessage(UserMessage** message);
+    void GetLatestMessage(Message** message);
 
-    void SendMessage(UserMessage* message);
+    void SendMessage(Message* message);
  
     bool IsNewUser();
     void GetLatestUser(User* user);

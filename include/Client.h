@@ -30,10 +30,10 @@ public:
     void Disconnect();
   
     // if not connected throw SendMessageException
-    void PassMessage( UserMessage* message );
+    void PassMessage(Message* message);
   
     bool IsUnreadMessages();
-    void GetLatestMessage(UserMessage* message);
+    void GetLatestMessage(Message* message);
 
     bool IsNewActiveUserList();
     

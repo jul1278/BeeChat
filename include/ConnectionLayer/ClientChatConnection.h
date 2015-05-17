@@ -18,7 +18,7 @@ class ClientChatConnection : public IChatConnection
 {
 private:
 
-	std::queue<ClientMessage> clientMessageQueue; 
+	std::queue<Message> messageQueue; 
 	UDPClient* udpClient; 
 
 public:
@@ -30,9 +30,9 @@ public:
 	void Disconnect(); 
 
 	bool IsUnreadMessages(); 
-	void GetLatestMessage( UserMessage** message ); 
+	void GetLatestMessage( Message** message ); 
 
-	void SendMessage( UserMessage* message ); 
+	void SendMessage( Message* message ); 
 }; 
 
 

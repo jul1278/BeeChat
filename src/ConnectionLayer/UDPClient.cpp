@@ -31,7 +31,7 @@ UDPClient::UDPClient()
 //----------------------------------------------------------------------------------
 UDPClient::~UDPClient()
 {
-    
+    close( udpSocket );     
 }
 //----------------------------------------------------------------------------------
 // Name: SendToServer
@@ -39,6 +39,7 @@ UDPClient::~UDPClient()
 //----------------------------------------------------------------------------------
 void UDPClient::SendToServer( char* message )
 {
+    // package message up and send
     ClientMessage clientMessage;
     
     memcpy( clientMessage.message, message, MESSAGE_LENGTH );

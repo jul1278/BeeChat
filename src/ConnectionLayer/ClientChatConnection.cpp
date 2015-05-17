@@ -41,13 +41,18 @@ void ClientChatConnection::Disconnect()
 //---------------------------------------------------------------------
 bool ClientChatConnection::IsUnreadMessages()
 {
+	// get unread messages from UDP first
 	while ( udpClient->IsUnreadMessages() ) {
-		CLientMessage message; 
+		
+		ClientMessage clientMessage; 
+
+		Message message;
 
 		udpClient->LatestMessage( &message ); 
 
 		messageQueue.push( message ); 
 	}
+
 
 	if ( messageQueue.empty() == false ) {
 		return true;

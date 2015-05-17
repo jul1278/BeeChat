@@ -49,7 +49,6 @@ public:
 
 	// server doesn't need to know it's own address
 	struct sockaddr_in serverAddress;
-
 	int udpSocket; 
 	
 	UDPConnection(); 

@@ -11,7 +11,7 @@ class BeeChatApp
 {
 private:
     
-    LachlansUIThing* ui
+    //LachlansUIThing* ui
   
     // server object
     Server* server;
@@ -20,11 +20,12 @@ private:
     Client* client;
   
     MessageFactory* messageFactory;
-    void HandleMessage( Message message );
+
+
 public: 
 
     
-    BeeChatApp( std::string username, bool userWantsToBeServer );
+    BeeChatApp(std::string username);
     ~BeeChatApp();
     
     int Run();

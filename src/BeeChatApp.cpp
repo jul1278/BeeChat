@@ -60,7 +60,7 @@ int BeeChatApp::Run()
     // it will handle other messages internally
     if ( client->IsUnreadMessages()  ) {
         
-        UserMessage message
+        Message message
         
         client->GetLatestMessage( &message );
         
@@ -76,15 +76,4 @@ int BeeChatApp::Run()
     
     // TODO: set quit to 1 if we're quitting
 }
-//---------------------------------------------------------------------
-// Name: ~BeeChatApp
-// Desc:
-//---------------------------------------------------------------------
-void BeeChatApp::HandleMessage( Message message )
-{
-    // handle handle handle handle handle handle handle
-    // handle handle handle handle handle handle handle
-    // handle handle handle handle handle handle handle
-    // handle handle handle handle handle handle handle
-    // handle handle handle handle handle handle handle
-}
+

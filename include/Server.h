@@ -18,7 +18,7 @@ private:
   // client ID maps to a client address inside chatconnection
   std::vector<User> users; 
   
-  std::queue<UserMessage> messageQueue; 
+  std::queue<Message> messageQueue; 
   
 public:
 

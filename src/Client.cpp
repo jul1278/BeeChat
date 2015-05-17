@@ -1,5 +1,6 @@
 // Client.cpp
 #include "Client.h"
+#include "Message.h"
 
 //-------------------------------------------------------------------
 // Name: Client
@@ -23,6 +24,13 @@ Client::~Client()
 //-------------------------------------------------------------------
 void Client::Connect( std::string username )
 {
+
+	if ( username.length() > MAX_USERNAME_CHAR ) {
+
+		// throw exception "Username exceeds MAX_USERNAME_CHAR"
+		return; 
+	}
+
 	// Create a new message
 	// make our desired username the data of the message
 	// send
@@ -30,8 +38,18 @@ void Client::Connect( std::string username )
     memcpy( (void*)data, (void*)&username.c_str(), username.length() );
     
     
-	UserMessage logonMessage( data, username.length() );
-	chatConnection->SendMessageToServer( &logonMessage ); 
+	Message message; 
+	LogonMessage logonMessage;  
+ 	
+	message.messageType = LOGON_NOTIFY; 
+	message.messageData = &logonMessage; 
+
+	memcpy( (void*)&logonMessage.username, (void*)username.c_str(), username.length() ); 
+
+	logonMessage.usernameColor = 0x00; 
+
+
+	chatConnection->SendMessageToServer( &message ); 
 }
 //-------------------------------------------------------------------
 // Name: Disconnet
@@ -40,12 +58,13 @@ void Client::Connect( std::string username )
 void Client::Disconnect()
 {
 	// TODO: implement message types and send a logoff notification
+	//       we should be able to do something like message = messageFactory->ConstructMessage( LOGOFF_NOTIFY ) 
 }
 //-------------------------------------------------------------------
 // Name: PassMessage
 // Desc: ay pass me the message bro
 //-------------------------------------------------------------------
-void Client::PassMessage( UserMessage* message )
+void Client::PassMessage( Message* message )
 {
 	// TODO: implement message types and decide what to do with message
 	chatConnection->SendMessageToServer( message );   
@@ -54,7 +73,7 @@ void Client::PassMessage( UserMessage* message )
 // Name: GetLatestMessage
 // Desc: 
 //-------------------------------------------------------------------
-void Client::GetLatestMessage( UserMessage* message )
+void Client::GetLatestMessage( Message* message )
 {
 	while ( chatConnection->IsUnreadMessages() ) {
 
