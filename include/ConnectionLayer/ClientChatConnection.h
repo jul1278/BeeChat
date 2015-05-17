@@ -26,11 +26,11 @@ public:
 	ClientChatConnection(); 
 	~ClientChatConnection(); 
 
-	void Connect( std::string username );
+	void Connect();
 	void Disconnect(); 
 
 	bool IsUnreadMessages(); 
-	void GetLatestMessage( Message** message ); 
+	void GetLatestMessage( Message* message ); 
 
 	void SendMessage( Message* message ); 
 }; 

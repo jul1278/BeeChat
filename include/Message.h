@@ -3,9 +3,9 @@
 #ifndef _MESSAGE_H
 #define _MESSAGE_H
 
-#include <cstdint>
 
 typedef unsigned char MESSAGE_TYPE; 
+typedef unsigned char byte; 
 
 // TODO: move these #define's somewhere more appropriate
 //       also look at using an enum
@@ -58,7 +58,13 @@ struct LogonMessage
 {
 	char username[MAX_NUM_USERNAME_CHAR]; 
 	byte usernameColor; 
+	byte textColor; 
 };
+
+struct LogoffMessage
+{
+	ClientID clientID; 
+}; 
 
 // ChatMessage
 struct ChatMessage

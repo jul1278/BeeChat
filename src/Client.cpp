@@ -27,26 +27,21 @@ void Client::Connect( std::string username )
 
 	if ( username.length() > MAX_USERNAME_CHAR ) {
 
-		// throw exception "Username exceeds MAX_USERNAME_CHAR"
 		return; 
 	}
 
 	// Create a new message
 	// make our desired username the data of the message
-	// send
-    byte* data = new byte[username.length()];
-    memcpy( (void*)data, (void*)&username.c_str(), username.length() );
-    
-    
-	Message message; 
-	LogonMessage logonMessage;  
+	// send    
+	Message message;  
+	LogonMessage* logonMessage = (LogonMessage*) &message.messageData;
  	
 	message.messageType = LOGON_NOTIFY; 
 	message.messageData = &logonMessage; 
 
-	memcpy( (void*)&logonMessage.username, (void*)username.c_str(), username.length() ); 
+	memcpy( (void*)&logonMessage->username, (void*)username.c_str(), username.length() ); 
 
-	logonMessage.usernameColor = 0x00; 
+	logonMessage->usernameColor = 0x00; 
 
 
 	chatConnection->SendMessageToServer( &message ); 
@@ -57,6 +52,8 @@ void Client::Connect( std::string username )
 //-------------------------------------------------------------------
 void Client::Disconnect()
 {
+	chatConnection->Disconnect(); 
+
 	// TODO: implement message types and send a logoff notification
 	//       we should be able to do something like message = messageFactory->ConstructMessage( LOGOFF_NOTIFY ) 
 }
@@ -77,12 +74,10 @@ void Client::GetLatestMessage( Message* message )
 {
 	while ( chatConnection->IsUnreadMessages() ) {
 
-		UserMessage* newMessage;  
-		chatConnection->GetLatestMessage( &newMessage );
-		userMessageQueue.push( *newMessage );
+		Message newMessage; 
 
-		// do we need to delete newMessage? or does its destructor get called when it goes out of scope?
-		delete newMessage; 
+		chatConnection->GetLatestMessage( &newMessage );
+		messageQueue.push( newMessage );
 	}
 
 	// TODO: implement message types and message handling logic...
@@ -90,9 +85,13 @@ void Client::GetLatestMessage( Message* message )
 	if ( this->IsUnreadMessages() ) {
 		*message = userMessageQueue.front();
 		userMessageQueue.pop(); 
+
+		return; 
+	} else {
+		message = NULL; 
 	}
 
-	message = NULL;
+	
 }
 //-------------------------------------------------------------------
 // Name: IsNewActiveUserList

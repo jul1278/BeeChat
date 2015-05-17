@@ -23,7 +23,7 @@ ClientChatConnection::~ClientChatConnection()
 // Name: Connect
 // Desc:
 //---------------------------------------------------------------------
-void ClientChatConnection::Connect( std::string username )
+void ClientChatConnection::Connect()
 {
 	udpClient->Start(); 
 }
@@ -45,53 +45,46 @@ bool ClientChatConnection::IsUnreadMessages()
 	while ( udpClient->IsUnreadMessages() ) {
 		
 		ClientMessage clientMessage; 
-
 		Message message;
+		udpClient->LatestMessage( &clientMessage ); 
+		memcpy( (void*)&message.messageData, (void*) clientMessage.message, MESSAGE_SIZE ); 
 
-		udpClient->LatestMessage( &message ); 
+		// we dont't care about the clientID
 
 		messageQueue.push( message ); 
 	}
-
 
 	if ( messageQueue.empty() == false ) {
 		return true;
 	}
 
 	return false; 
-
 }
 //---------------------------------------------------------------------
 // Name: GetLatestMessages
 // Desc:
 //---------------------------------------------------------------------
-void ClientChatConnection::GetLatestMessages( UserMessage** message )
+void ClientChatConnection::GetLatestMessage( Message* message )
 {
 	if ( this->IsUnreadMessages() ) {
 
-		(*message) = new UserMessage(); 
-
-		(*message)->messageData = new byte[MESSAGE_SIZE]; 
-		memcpy( (void*)(*message)->messageData, (void*)&messageQueue.front().message, MESSAGE_SIZE ); 
-		(*message)->dataLength = MESSAGE_SIZE; 
+		memcpy( (void*)message->messageData, (void*)&messageQueue.front().message, MESSAGE_SIZE ); 
 
 	} else {
-		*message = NULL; 
+		message = NULL; 
 	}
 }
 //---------------------------------------------------------------------
 // Name: SendMessage
 // Desc:
 //---------------------------------------------------------------------
-void ClientChatConnection::SendMessage( UserMessage* message )
+void ClientChatConnection::SendMessage( Message* message )
 {
-	char* messageData = new char[MESSAGE_SIZE]; 
-	memcpy( (void*)messageData, (void*)message->messageData, message->dataLength ); 
+	ClientMessage clientMessage; 
+	clientMessage.address = 0; // we know where the server is 
+	memcpy( (void*)&clientMessage.messageData, (void*)message->messageData, MESSAGE_SIZE ); 
 
 	udpClient->SendMessage( messageData ); 
-
-	delete messageData; 
-
 }
 
   
