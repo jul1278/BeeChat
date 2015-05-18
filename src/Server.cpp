@@ -56,7 +56,8 @@ int Server::Run()
 	while ( chatConnection->IsUnreadMessages() == true ) {
 
 		Message message; 
-
+        memset((void*)&message, 0, sizeof(Message)); 
+        
 		chatConnection->GetLatestMessage( &message ); 
 
 		switch ( message.messageType ) {
@@ -111,10 +112,12 @@ void Server::HandleLogonMessage(Message* message)
 	users.push_back( user ); 
 
     Message alertMessage;
+    memset( (void*)&alertMessage, 0, sizeof(Message) );
+    
     alertMessage.messageType = CHAT_MESSAGE; 
     ChatMessage* chatMessage = (ChatMessage*)alertMessage.messageData;
     
-    std::string alertMessageString( user.username );
+    std::string alertMessageString(user.username);
     alertMessageString += " has logged on.";
     
     memcpy( (void*)chatMessage->messageText, (void*)alertMessageString.c_str(), alertMessageString.length() );
@@ -145,6 +148,8 @@ void Server::HandleLogoffMessage(Message* message)
 	}
 
     Message alertMessage;
+    memset( (void*)&alertMessage, 0, sizeof(Message) );
+    
     alertMessage.messageType = CHAT_MESSAGE;
     ChatMessage* chatMessage = (ChatMessage*)alertMessage.messageData;
     
