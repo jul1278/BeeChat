@@ -47,7 +47,7 @@ bool ClientChatConnection::IsUnreadMessages()
 		ClientMessage clientMessage; 
 		Message message;
 		udpClient->LatestMessage( &clientMessage ); 
-		memcpy( (void*)&message.messageData, (void*) clientMessage.message, MESSAGE_SIZE ); 
+		memcpy( (void*)&message, (void*) clientMessage.message, MESSAGE_SIZE ); 
 
 		// we dont't care about the clientID
 

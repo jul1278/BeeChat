@@ -68,7 +68,21 @@ int BeeChatApp::Run()
         
         client->GetLatestMessage( &message );
         
+        
+        
         //TODO: how do we decide what to do with the message?
+        if ( message.messageType == CHAT_MESSAGE ) {
+            
+            ChatMessage* chatMessage = (ChatMessage*) message.messageData;
+            
+            std::string chatMessageString(chatMessage->messageText);
+            
+            std::cout << this->username << " Received : " << chatMessageString << std::endl;
+            
+        } else {
+            
+        }
+        
         
         // TODO: post message to the screen if we got one
         

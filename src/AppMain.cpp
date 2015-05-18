@@ -24,11 +24,11 @@ int main( int argc, char** argv )
     
 	// try to be a server if the user wants  
 	BeeChatApp* beeChatApp = new BeeChatApp( "toby", 0x01, true );
-    //BeeChatApp* clientTest = new BeeChatApp( "test", 0x01, false );
+    BeeChatApp* clientTest = new BeeChatApp( "test", 0x01, false );
     
     
     while ( beeChatApp->Run() ) {
-        //clientTest->Run();
+        clientTest->Run();
     }
 
 	return 0;

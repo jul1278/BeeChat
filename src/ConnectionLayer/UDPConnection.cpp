@@ -66,7 +66,7 @@ bool UDPConnection::IsUnreadMessages()
 	bool queueIsEmpty = false;
 	pthread_mutex_lock( &messageQueueMutex ); 
 
-	if ( !messageQueue.empty() ) {
+	if ( messageQueue.empty() == false ) {
 		// Don't return before we've unlocked the mutex
 		queueIsEmpty = true; 
 	}

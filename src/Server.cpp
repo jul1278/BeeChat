@@ -111,6 +111,7 @@ void Server::HandleLogonMessage(Message* message)
 	users.push_back( user ); 
 
     Message alertMessage;
+    alertMessage.messageType = CHAT_MESSAGE; 
     ChatMessage* chatMessage = (ChatMessage*)alertMessage.messageData;
     
     std::string alertMessageString( user.username );
@@ -144,6 +145,7 @@ void Server::HandleLogoffMessage(Message* message)
 	}
 
     Message alertMessage;
+    alertMessage.messageType = CHAT_MESSAGE;
     ChatMessage* chatMessage = (ChatMessage*)alertMessage.messageData;
     
     std::string alertMessageString( it->username );
