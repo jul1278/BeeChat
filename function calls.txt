@@ -2,3 +2,5 @@
 Client <-> ClientChatConnection interface deals with the UserMessage struct
 
 ClientChatConnection <-> UDPChatConnection interfaces with the ClientMessage struct
+
+Lachlan says hey
