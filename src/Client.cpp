@@ -8,7 +8,8 @@
 //-------------------------------------------------------------------
 Client::Client()
 {
-	this->chatConnection = new ClientChatConnection(); 
+	this->chatConnection = new ClientChatConnection();
+    chatConnection->Connect();
 }
 //-------------------------------------------------------------------
 // Name: ~Client
@@ -24,7 +25,7 @@ Client::~Client()
 //-------------------------------------------------------------------
 void Client::Connect( std::string username, byte usernameColor )
 {
-
+    
 	if ( username.length() > MAX_NUM_USERNAME_CHAR ) {
 
 		return; 
@@ -34,7 +35,7 @@ void Client::Connect( std::string username, byte usernameColor )
 	// make our desired username the data of the message
 	// send    
 	Message message;  
-	LogonMessage* logonMessage = (LogonMessage*) &message.messageData;
+	LogonMessage* logonMessage = (LogonMessage*) message.messageData;
  	
 	message.messageType = LOGON_NOTIFY; 
 	memcpy( (void*)&logonMessage->username, (void*)username.c_str(), username.length() ); 
@@ -70,13 +71,7 @@ void Client::PassMessage( Message* message )
 //-------------------------------------------------------------------
 void Client::GetLatestMessage( Message* message )
 {
-	while ( chatConnection->IsUnreadMessages() ) {
 
-		Message newMessage; 
-
-		chatConnection->GetLatestMessage( &newMessage );
-		messageQueue.push( newMessage );
-	}
 
 	// TODO: may need to handle some message types here
 
@@ -96,6 +91,14 @@ void Client::GetLatestMessage( Message* message )
 //-------------------------------------------------------------------
 bool Client::IsUnreadMessage()
 {
+    while ( chatConnection->IsUnreadMessages() ) {
+        
+        Message newMessage;
+        
+        chatConnection->GetLatestMessage( &newMessage );
+        messageQueue.push( newMessage );
+    }
+
 	return( messageQueue.empty() == false ); 
 }
 //-------------------------------------------------------------------

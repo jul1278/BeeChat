@@ -44,6 +44,7 @@ void Server::Disconnect()
 //---------------------------------------------------------------------------------
 bool Server::IsActive()
 {
+    return false;
 }
 //---------------------------------------------------------------------------------
 // Name: Server
@@ -72,7 +73,7 @@ int Server::Run()
 	}
 
 	// relay chat messages back to users
-	while ( outMessageQueue.empty() == false ) {
+	while ( outMessageQueue.empty() != true ) {
 
 		std::list<User>::iterator usersIt; 
 
@@ -82,7 +83,11 @@ int Server::Run()
 
 			chatConnection->SendMessageToClient( &message, usersIt->clientID ); 
 		}
+        
+        outMessageQueue.pop(); 
 	}
+    
+    return 0; 
 }
 //---------------------------------------------------------------------------------
 // Name: HandleLogon
@@ -105,8 +110,16 @@ void Server::HandleLogonMessage(Message* message)
 
 	users.push_back( user ); 
 
-
-	// TODO: message alert "User has logged on."
+    Message alertMessage;
+    ChatMessage* chatMessage = (ChatMessage*)alertMessage.messageData;
+    
+    std::string alertMessageString( user.username );
+    alertMessageString += " has logged on.";
+    
+    memcpy( (void*)chatMessage->messageText, (void*)alertMessageString.c_str(), alertMessageString.length() );
+    
+	// TODO: message alert "user has logged on."
+    outMessageQueue.push( alertMessage );
 }
 //---------------------------------------------------------------------------------
 // Name: HandleLogoff
@@ -130,7 +143,16 @@ void Server::HandleLogoffMessage(Message* message)
 		}
 	}
 
-	// TODO: message alert "User has logged off."
+    Message alertMessage;
+    ChatMessage* chatMessage = (ChatMessage*)alertMessage.messageData;
+    
+    std::string alertMessageString( it->username );
+    alertMessageString += " has logged off.";
+    
+    memcpy( (void*)chatMessage->messageText, (void*)alertMessageString.c_str(), alertMessageString.length() );
+    
+    // TODO: message alert "user has logged on."
+    outMessageQueue.push( alertMessage );
 }
 //---------------------------------------------------------------------------------
 // Name: HandleChatMessage

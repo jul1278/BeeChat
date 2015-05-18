@@ -18,12 +18,15 @@ BeeChatApp::BeeChatApp( std::string username, byte usernameColor, bool userWants
 {
     //ui = new LachlansUIThing();
     
+    this->username = username;
+    
     // try to start server
     // does the server need to know our username?
     server = new Server();
     client = new Client();
     
-    client->Connect( username, usernameColor );
+    server->Connect();
+    client->Connect( this->username, usernameColor );
     
     //ui->PresentInfoScreen();
     
@@ -38,6 +41,7 @@ BeeChatApp::~BeeChatApp()
 {
     delete client;
     delete server;
+    
     //delete ui;
     delete messageFactory;
 }
@@ -48,13 +52,13 @@ BeeChatApp::~BeeChatApp()
 int BeeChatApp::Run()
 {
     
-    int quit = 0;
+    int quit = 1;
     
     // TODO: ask the UI if the user wants to quit
 
     
     // TODO: has the user typed anything in?
-
+    client->Connect( this->username, 0x01 );
     
     // client is only going to tell us about chat messages,
     // it will handle other messages internally
@@ -75,5 +79,8 @@ int BeeChatApp::Run()
     server->Run();
     
     // TODO: set quit to 1 if we're quitting
+    
+    
+    return quit;
 }
 

@@ -1,6 +1,6 @@
 // ServerChatConnection.cpp
 
-#include "ServerChatConnection.h"
+#include "ConnectionLayer/ServerChatConnection.h"
 #include "Message.h"
 
 
@@ -60,7 +60,7 @@ bool ServerChatConnection::IsUnreadMessages()
         clientID = this->LogonAddress( clientMessage.address ); 
 
         if ( clientID != 0 ) {
-          LogonMessage* logonMessage = (LogonMessage*)&message.messageData;
+          LogonMessage* logonMessage = (LogonMessage*)message.messageData;
           logonMessage->clientID = clientID; 
           messageQueue.push(message); 
         }
@@ -109,18 +109,18 @@ void ServerChatConnection::GetLatestMessage( Message* message)
 //-------------------------------------------------------------------
 void ServerChatConnection::SendMessageToClient( Message* message, ClientID clientID )
 {
-  // get the sockaddr_in from the map
-  struct sockaddr_in socketAddressDest = clientAddressMap[clientID]; 
+    // get the sockaddr_in from the map
+    struct sockaddr_in socketAddressDest = clientAddressMap[clientID];
 
-  ClientMessage clientMessage; 
+    ClientMessage clientMessage;
 
-  clientMessage.address = socketAddressDest; 
+    memset( (void*)&clientMessage, 0, sizeof(ClientMessage) );
+    clientMessage.address = socketAddressDest;
 
-  // DODGY FIX: sizeof(Message) instead of MESSAGE_SIZE
-  memcpy( (void*)&clientMessage.message, (void*)message, sizeof(Message) ); 
+    // DODGY FIX: sizeof(Message) instead of MESSAGE_SIZE
+    memcpy( (void*)&clientMessage.message, (void*)message, sizeof(Message) );
 
-  udpServer->SendMessage( &clientMessage ); 
-
+    udpServer->SendMessage( &clientMessage );
 }
 //-------------------------------------------------------------------
 // Name: IsAddressLoggedOn
@@ -129,17 +129,18 @@ void ServerChatConnection::SendMessageToClient( Message* message, ClientID clien
 bool ServerChatConnection::IsAddressLoggedOn( struct sockaddr_in address ) 
 {
     // find address in the map otherwise add it
-  std::map<ClientID, struct sockaddr_in>::iterator it; 
+    std::map<ClientID, struct sockaddr_in>::iterator it;
 
-  for (  it = clientAddressMap.begin(); it != clientAddressMap.end(); it++ ) {
+    for (  it = clientAddressMap.begin(); it != clientAddressMap.end(); it++ ) {
 
-    if ( memcmp( &it->second, &address, sizeof(struct sockaddr_in) ) == 0 ) {
-      // this address is already logged on
-      return true; 
+        if ( memcmp( &it->second, &address, sizeof(struct sockaddr_in) ) == 0 ) {
+            
+            // this address is already logged on
+            return true;
+        }
     }
-  }
 
-  return false; 
+    return false;
 }
 //-------------------------------------------------------------------
 // Name: HandleLogonMessage
@@ -147,15 +148,15 @@ bool ServerChatConnection::IsAddressLoggedOn( struct sockaddr_in address )
 //-------------------------------------------------------------------
 ClientID ServerChatConnection::LogonAddress( struct sockaddr_in address )
 {
-  if ( this->IsAddressLoggedOn(address) == true ) {
-    return 0; 
-  }
+    if ( this->IsAddressLoggedOn(address) == true ) {
+        return 0;
+    }
 
-  ClientID clientID = clientAddressMap.size() + 1; 
+    ClientID clientID = clientAddressMap.size() + 1;
 
-  clientAddressMap.insert( std::pair<ClientID, struct sockaddr_in>(clientID, address) ); 
+    clientAddressMap.insert( std::pair<ClientID, struct sockaddr_in>(clientID, address) );
 
-  return clientID; 
+    return clientID;
 }
 //-------------------------------------------------------------------
 // Name: LogoffAddress

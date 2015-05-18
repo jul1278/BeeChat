@@ -14,6 +14,8 @@ class BeeChatApp
 {
 private:
     
+    std::string username; 
+    
     //LachlansUIThing* ui
   
     // server object

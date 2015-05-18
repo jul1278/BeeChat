@@ -53,8 +53,17 @@ typedef unsigned char byte;
 struct Message
 {
 	MESSAGE_TYPE messageType; 
-	char* messageData; 
+	char messageData[MESSAGE_SIZE];
 }; 
+
+
+// if ( message.messageType == CHAT_MESSAGE ) {
+// 	ChatMessage* chatMessage = (ChatMessage*) message.messageData; 
+
+// 	std::string chatMessageString( chatMessage->messageText ); 
+
+// 	mReceived( chatMessageString ); 
+// }
 
 // LogonMessage
 struct LogonMessage
@@ -65,6 +74,7 @@ struct LogonMessage
 	byte textColor; 
 };
 
+// LogoffMessage
 struct LogoffMessage
 {
 	ClientID clientID; 
@@ -74,10 +84,9 @@ struct LogoffMessage
 struct ChatMessage
 {
 	char username[MAX_NUM_USERNAME_CHAR]; 
-	byte usernameColor;
+	byte usernameColor; 
 	byte textColor; 
 	char messageText[MAX_MESSAGE_LENGTH]; 
-
 };
 
 // _MESSAGE_H

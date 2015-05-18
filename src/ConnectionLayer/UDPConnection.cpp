@@ -1,15 +1,7 @@
 // UDPConnection.cpp
 #include "UDPConnection.h"
 
-UDPConnection* listener; 
 
-// wrapper function which is friends with UDPConnection
-// we can't pass a pointer to a member function to a thread
-void* ListenerWrapper(void* threadId)
-{	
-	listener->ListenerThread(threadId);
-    return NULL;
-}
 //----------------------------------------------------------------------
 // Name: UDPConnection
 // Desc: 
@@ -21,7 +13,7 @@ UDPConnection::UDPConnection()
 
 	stopListening = false; 
 
-	listener = this;
+	//listener = this;
 }
 //----------------------------------------------------------------------
 // Name: ~UnreadConnection
@@ -41,13 +33,15 @@ void UDPConnection::Start()
 
 	// check if a thread has already started
 	stopListening = false; 
-
-	int res = pthread_create( &listenerThread, NULL, ListenerWrapper, NULL ); 
-
-	if ( res ) {
-		// error
-		std::cout << "pthread_error()" << std::endl; 
-	}
+    
+    
+    
+    //int res = pthread_create( &listenerThread, NULL, ListenerWrapper, NULL );
+    
+    //if ( res ) {
+        // error
+     //   std::cout << "pthread_error()" << std::endl;
+    //}
 }
 //----------------------------------------------------------------------
 // Name: Stop
@@ -90,8 +84,8 @@ void UDPConnection::LatestMessage( ClientMessage* message )
 	pthread_mutex_lock( &messageQueueMutex ); 
 
 	if ( !messageQueue.empty() ) {
-
-        *message = messageQueue.front(); 
+        
+        memcpy( (void*)message, (void*)&messageQueue.front(), MESSAGE_LENGTH );
 		messageQueue.pop(); 
 	}
 
@@ -114,7 +108,7 @@ void UDPConnection::SendMessage( ClientMessage* message )
 void* UDPConnection::ListenerThread( void* threadId )
 {
 	struct sockaddr_in senderAddress; 
-	char* messageBuffer = new char[MESSAGE_LENGTH]; 
+	char messageBuffer[MESSAGE_LENGTH];
 
 	socklen_t sockLen = sizeof(senderAddress); 
 
@@ -154,7 +148,7 @@ void* UDPConnection::ListenerThread( void* threadId )
 		}
 	}
 
-	delete messageBuffer; 
+
 
 	pthread_exit(0); 
 }

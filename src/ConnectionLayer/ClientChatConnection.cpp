@@ -81,9 +81,11 @@ void ClientChatConnection::GetLatestMessage( Message* message )
 //---------------------------------------------------------------------
 void ClientChatConnection::SendMessageToServer( Message* message )
 {
-	ClientMessage clientMessage; 
-	memcpy( (void*)&clientMessage.message, (void*)&message->messageData, MESSAGE_SIZE ); 
-	udpClient->SendMessage( &clientMessage ); 
+	ClientMessage clientMessage;
+    
+    // we need to put the whole message in
+	memcpy( (void*)&clientMessage.message, (void*)message, MESSAGE_SIZE );
+	udpClient->SendToServer( clientMessage.message );
 }
 
   

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0FE7D9341B07352000FF13E9"
+               BlueprintIdentifier = "0F8DD7CE1B099F3800480AC8"
                BuildableName = "BeeChat"
                BlueprintName = "BeeChat"
                ReferencedContainer = "container:BeeChat.xcodeproj">
@@ -32,7 +32,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0FE7D9341B07352000FF13E9"
+            BlueprintIdentifier = "0F8DD7CE1B099F3800480AC8"
             BuildableName = "BeeChat"
             BlueprintName = "BeeChat"
             ReferencedContainer = "container:BeeChat.xcodeproj">
@@ -52,7 +52,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0FE7D9341B07352000FF13E9"
+            BlueprintIdentifier = "0F8DD7CE1B099F3800480AC8"
             BuildableName = "BeeChat"
             BlueprintName = "BeeChat"
             ReferencedContainer = "container:BeeChat.xcodeproj">
@@ -71,7 +71,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0FE7D9341B07352000FF13E9"
+            BlueprintIdentifier = "0F8DD7CE1B099F3800480AC8"
             BuildableName = "BeeChat"
             BlueprintName = "BeeChat"
             ReferencedContainer = "container:BeeChat.xcodeproj">

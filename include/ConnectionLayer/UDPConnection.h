@@ -29,8 +29,10 @@ const int serverPort = 6969;
 // UDPConnection
 class UDPConnection
 {
-		
-private:
+	
+// this is such a hack fix this 
+
+public:
 
 	std::queue<ClientMessage> messageQueue; 
 
@@ -43,9 +45,10 @@ private:
 
 	void* ListenerThread( void* threadId ); 
 
-	friend void* ListenerWrapper( void* threadId ); 
+	friend void* ServerListenerWrapper( void* threadId );
+    friend void* ClientListenerWrapper( void* threadId );
 
-public:
+
 
 	// server doesn't need to know it's own address
 	struct sockaddr_in serverAddress;

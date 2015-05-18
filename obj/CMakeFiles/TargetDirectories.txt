@@ -1,0 +1,1 @@
+/Users/P/Documents/GitHub/BeeChat/obj/CMakeFiles/BeeChat.dir

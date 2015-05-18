@@ -11,7 +11,9 @@ class UDPServer : public UDPConnection
 public:
 
 	UDPServer(); 
-	~UDPServer(); 
+	~UDPServer();
+    
+    void Start();
 
 }; 
 

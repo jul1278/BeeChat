@@ -79,7 +79,7 @@ public:
   BeeChatException();
   ~BeeChatException(); 
 
-  ExceptionType exceptionType( std::string exMessage ) {}
+    //ExceptionType exceptionType( std::string exMessage ) {;}
 
 };
 

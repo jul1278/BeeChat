@@ -80,6 +80,4 @@ private:
 	WINDOW *servers_win;
 };
 
-
-
 #endif

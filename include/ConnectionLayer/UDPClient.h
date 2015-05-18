@@ -12,6 +12,9 @@ public:
 
     UDPClient();
     ~UDPClient();
+    
+    void Start(); 
+    
     void SendToServer( char* message );
 };
 
