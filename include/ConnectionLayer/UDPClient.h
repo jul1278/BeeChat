@@ -2,11 +2,10 @@
 #ifndef _UDP_CLIENT_H
 #define _UDP_CLIENT_H
 
-#include "UDPConnection.h"
-#include "ClientMessage.h"
+#include "ConnectionLayer/UDPConnection.h"
 
 // UDPClient
-class UDPClient : public UDPConnection
+class UDPClient : public UDPConnection 
 {
 public:
 
@@ -20,3 +19,7 @@ public:
 
 // _UDP_CLIENT_H
 #endif
+
+
+
+

@@ -1,7 +1,7 @@
 // ClientChatConnection.cpp
 // Julian Pattie
 
-#include "ClientChatConnection.h"
+#include "ConnectionLayer/ClientChatConnection.h"
 
 //---------------------------------------------------------------------
 // Name: ClientChatConnection
@@ -44,7 +44,7 @@ bool ClientChatConnection::IsUnreadMessages()
 	// get unread messages from UDP first
 	while ( udpClient->IsUnreadMessages() ) {
 		
-		ClientMessage clientMessage; 
+		struct ClientMessage clientMessage; 
 		Message message;
 		udpClient->LatestMessage( &clientMessage ); 
 		memcpy( (void*)&message, (void*) clientMessage.message, MESSAGE_SIZE ); 
@@ -64,7 +64,7 @@ bool ClientChatConnection::IsUnreadMessages()
 // Name: GetLatestMessages
 // Desc:
 //---------------------------------------------------------------------
-void ClientChatConnection::GetLatestMessage( Message* message )
+void ClientChatConnection::GetLatestMessage( struct Message* message )
 {
 	if ( this->IsUnreadMessages() ) {
 
@@ -79,9 +79,9 @@ void ClientChatConnection::GetLatestMessage( Message* message )
 // Name: SendMessage
 // Desc:
 //---------------------------------------------------------------------
-void ClientChatConnection::SendMessageToServer( Message* message )
+void ClientChatConnection::SendMessageToServer( struct Message* message )
 {
-	ClientMessage clientMessage;
+	struct ClientMessage clientMessage;
     
     // we need to put the whole message in
 	memcpy( (void*)&clientMessage.message, (void*)message, MESSAGE_SIZE );

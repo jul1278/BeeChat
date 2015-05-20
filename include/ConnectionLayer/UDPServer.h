@@ -6,7 +6,7 @@
 #include "ConnectionLayer/UDPConnection.h"
 
 // UDPServer
-class UDPServer : public UDPConnection
+class UDPServer : public UDPConnection 
 {
 public:
 
@@ -19,3 +19,4 @@ public:
 
 // _UDP_CONNECTION_H
 #endif
+

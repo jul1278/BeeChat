@@ -9,8 +9,8 @@
 #define _CLIENT_CHATCONNECTION_H
 
 #include "ConnectionLayer/IChatConnection.h"
-#include "Message.h"
 #include "ConnectionLayer/ClientMessage.h"
+#include "ConnectionLayer/UDPClient.h"
 #include <queue>
 
 // ClientChatConnection
@@ -18,8 +18,8 @@ class ClientChatConnection : public IChatConnection
 {
 private:
 
-	std::queue<Message> messageQueue; 
-	UDPClient* udpClient; 
+	std::queue<struct Message> messageQueue; 
+	class UDPClient* udpClient; 
 
 public:
     
@@ -30,9 +30,9 @@ public:
 	void Disconnect(); 
 
 	bool IsUnreadMessages(); 
-	void GetLatestMessage( Message* message ); 
+	void GetLatestMessage( struct Message* message ); 
 
-	void SendMessageToServer( Message* message ); 
+	void SendMessageToServer( struct Message* message ); 
 }; 
 
 

@@ -19,12 +19,12 @@ private:
     //LachlansUIThing* ui
   
     // server object
-    Server* server;
+    class Server* server;
 
     // client object
-    Client* client;
+    class Client* client;
   
-    MessageFactory* messageFactory;
+    class MessageFactory* messageFactory;
 
 
 public: 

@@ -8,7 +8,7 @@
 
 #include "BeeChatApp.h"
 #include "MessageFactory.h"
-#include "server.h"
+#include "Server.h"
 
 //---------------------------------------------------------------------
 // Name: BeeChatApp
@@ -55,7 +55,7 @@ int BeeChatApp::Run()
     int quit = 1;
     
     // TODO: ask the UI if the user wants to quit
-
+    
     
     // TODO: has the user typed anything in?
     client->Connect( this->username, 0x01 );
@@ -64,7 +64,7 @@ int BeeChatApp::Run()
     // it will handle other messages internally
     if ( client->IsUnreadMessage() ) {
         
-        Message message; 
+        struct Message message; 
         
         client->GetLatestMessage( &message );
         
@@ -73,7 +73,7 @@ int BeeChatApp::Run()
         //TODO: how do we decide what to do with the message?
         if ( message.messageType == CHAT_MESSAGE ) {
             
-            ChatMessage* chatMessage = (ChatMessage*) message.messageData;
+            struct ChatMessage* chatMessage = (struct ChatMessage*) message.messageData;
             
             std::string chatMessageString(chatMessage->messageText);
             

@@ -1,7 +1,5 @@
 // Server.cpp
 #include "Server.h"
-#include "Message.h"
-
 //---------------------------------------------------------------------------------
 // Name: Server
 // Desc:
@@ -55,7 +53,7 @@ int Server::Run()
 	// check if we've recieved any messages
 	while ( chatConnection->IsUnreadMessages() == true ) {
 
-		Message message; 
+		struct Message message; 
         memset((void*)&message, 0, sizeof(Message)); 
         
 		chatConnection->GetLatestMessage( &message ); 
@@ -80,7 +78,7 @@ int Server::Run()
 
 		for ( usersIt = users.begin(); usersIt != users.end(); usersIt++ ) {
 
-			Message message = outMessageQueue.front(); 
+			struct Message message = outMessageQueue.front(); 
 
 			chatConnection->SendMessageToClient( &message, usersIt->clientID ); 
 		}
@@ -100,9 +98,9 @@ void Server::HandleLogonMessage(Message* message)
 		return; 
 	}
 
-	LogonMessage* logonMessage = (LogonMessage*) &message->messageData;
+	struct LogonMessage* logonMessage = (LogonMessage*) &message->messageData;
 
-	User user; 
+	struct User user; 
 
 	user.clientID = logonMessage->clientID; 
 	user.usernameColor = logonMessage->usernameColor; 
@@ -111,7 +109,7 @@ void Server::HandleLogonMessage(Message* message)
 
 	users.push_back( user ); 
 
-    Message alertMessage;
+    struct Message alertMessage;
     memset( (void*)&alertMessage, 0, sizeof(Message) );
     
     alertMessage.messageType = CHAT_MESSAGE; 
@@ -121,6 +119,19 @@ void Server::HandleLogonMessage(Message* message)
     alertMessageString += " has logged on.";
     
     memcpy( (void*)chatMessage->messageText, (void*)alertMessageString.c_str(), alertMessageString.length() );
+
+
+    if ( users.empty() == false ) {
+    	std::cout << "Users online: ";
+
+	    std::list<User>::iterator it; 
+
+	    for ( it = users.begin(); it != users.end(); it++ ) {
+
+	    	std::cout << it->username << ", "; 
+	    }
+	    std::cout << std::endl; 
+    }
     
 	// TODO: message alert "user has logged on."
     outMessageQueue.push( alertMessage );
@@ -129,13 +140,13 @@ void Server::HandleLogonMessage(Message* message)
 // Name: HandleLogoff
 // Desc:
 //---------------------------------------------------------------------------------
-void Server::HandleLogoffMessage(Message* message)
+void Server::HandleLogoffMessage(struct Message* message)
 {
 	if ( message->messageType != LOGOFF_NOTIFY ) {
 		return; 
 	}
 
-	LogoffMessage* logoffMessage = (LogoffMessage*) message->messageData; 
+	struct LogoffMessage* logoffMessage = (LogoffMessage*) message->messageData; 
 
 	std::list<User>::iterator it; 
 
@@ -147,7 +158,7 @@ void Server::HandleLogoffMessage(Message* message)
 		}
 	}
 
-    Message alertMessage;
+    struct Message alertMessage;
     memset( (void*)&alertMessage, 0, sizeof(Message) );
     
     alertMessage.messageType = CHAT_MESSAGE;

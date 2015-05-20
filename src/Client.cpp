@@ -1,6 +1,6 @@
 // Client.cpp
 #include "Client.h"
-#include "Message.h"
+
 
 //-------------------------------------------------------------------
 // Name: Client
@@ -34,8 +34,8 @@ void Client::Connect( std::string username, byte usernameColor )
 	// Create a new message
 	// make our desired username the data of the message
 	// send    
-	Message message;  
-	LogonMessage* logonMessage = (LogonMessage*) message.messageData;
+	struct Message message;  
+	struct LogonMessage* logonMessage = (struct LogonMessage*) message.messageData;
  	
 	message.messageType = LOGON_NOTIFY; 
 	memcpy( (void*)&logonMessage->username, (void*)username.c_str(), username.length() ); 
@@ -60,7 +60,7 @@ void Client::Disconnect()
 // Name: PassMessage
 // Desc: ay pass me the message bro
 //-------------------------------------------------------------------
-void Client::PassMessage( Message* message )
+void Client::PassMessage( struct Message* message )
 {
 	// TODO: implement message types and decide what to do with message
 	chatConnection->SendMessageToServer( message );   
@@ -69,7 +69,7 @@ void Client::PassMessage( Message* message )
 // Name: GetLatestMessage
 // Desc: 
 //-------------------------------------------------------------------
-void Client::GetLatestMessage( Message* message )
+void Client::GetLatestMessage( struct Message* message )
 {
 
 
@@ -93,7 +93,7 @@ bool Client::IsUnreadMessage()
 {
     while ( chatConnection->IsUnreadMessages() ) {
         
-        Message newMessage;
+        struct Message newMessage;
         
         chatConnection->GetLatestMessage( &newMessage );
         messageQueue.push( newMessage );

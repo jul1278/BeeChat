@@ -21,7 +21,10 @@
 #include <queue>
 #include <cstring>
 #include <pthread.h>
-#include "ClientMessage.h"
+
+
+
+#include "ConnectionLayer/ClientMessage.h"
 
   
 const int serverPort = 6969; 
@@ -34,7 +37,7 @@ class UDPConnection
 
 public:
 
-	std::queue<ClientMessage> messageQueue; 
+	std::queue<struct ClientMessage> messageQueue; 
 
 	pthread_t listenerThread; 
 
@@ -63,8 +66,8 @@ public:
 
 	bool IsUnreadMessages();
 
-	void LatestMessage( ClientMessage* message ); 
-	void SendMessage( ClientMessage* message ); 
+	void LatestMessage( struct ClientMessage* message ); 
+	void SendMessage( struct ClientMessage* message ); 
 };
 
 #endif

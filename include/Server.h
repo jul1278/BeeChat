@@ -14,18 +14,18 @@ class Server
 private:
 
   
-  ServerChatConnection* chatConnection; 
+   class ServerChatConnection* chatConnection; 
   
   // we know about users - each user stores a clientID 
   // client ID maps to a client address inside chatconnection
-  std::list<User> users; 
+  std::list<struct User> users; 
   
-  std::queue<Message> inMessageQueue;
-  std::queue<Message> outMessageQueue;  
+  std::queue<struct Message> inMessageQueue;
+  std::queue<struct Message> outMessageQueue;  
   
-  void HandleLogonMessage(Message* message); 
-  void HandleLogoffMessage(Message* message); 
-  void HandleChatMessage(Message* message);
+  void HandleLogonMessage(struct Message* message); 
+  void HandleLogoffMessage(struct Message* message); 
+  void HandleChatMessage(struct Message* message);
 
 public:
 

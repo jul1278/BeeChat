@@ -13,7 +13,7 @@
 #include "ConnectionLayer/IChatConnection.h"
 #include "BeeChatException.h"
 
-#include "Message.h"
+
 #include "User.h"
 #include <map>
 
@@ -24,12 +24,12 @@ class ServerChatConnection : public IChatConnection
 private:
 
     // message queue
-    std::queue<Message> messageQueue; 
+    std::queue<struct Message> messageQueue; 
   
     // at the lower level we're sending messages to clients through UDP
     std::map<ClientID, struct sockaddr_in> clientAddressMap;
 
-    UDPServer* udpServer;
+    class UDPServer* udpServer;
     
     void LogoffAddress( struct sockaddr_in address ); 
     ClientID LogonAddress( struct sockaddr_in address ); 
@@ -46,9 +46,9 @@ public:
     void Run();
 
     bool IsUnreadMessages();
-    void GetLatestMessage(Message* message);
+    void GetLatestMessage(struct Message* message);
 
-    void SendMessageToClient( Message* message, ClientID clientID ); 
+    void SendMessageToClient( struct Message* message, ClientID clientID ); 
 }; 
 
 #endif

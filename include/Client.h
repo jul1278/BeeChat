@@ -3,7 +3,7 @@
 #ifndef _CLIENT_H
 #define _CLIENT_H
 
-#include "Message.h"
+
 #include "User.h"
 #include "ConnectionLayer/ClientChatConnection.h"
 
@@ -12,7 +12,7 @@ class Client
 {
 private:
   
-    std::queue<Message> messageQueue;
+    std::queue<struct Message> messageQueue;
     ClientChatConnection* chatConnection;
 
 public:
