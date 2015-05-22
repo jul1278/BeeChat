@@ -1,8 +1,8 @@
 // ChatConnectionTest.cpp
 
-#include "ConnectionLayer/IChatConnection.h"
-#include "ConnectionLayer/ServerChatConnection.h"
-#include "ConnectionLayer/ClientChatConnection.h"
+#include "IChatConnection.h"
+#include "ServerChatConnection.h"
+#include "ClientChatConnection.h"
 #include <cstring>
 
 //----------------------------------------------------------------------

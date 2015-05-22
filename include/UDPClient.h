@@ -2,7 +2,7 @@
 #ifndef _UDP_CLIENT_H
 #define _UDP_CLIENT_H
 
-#include "ConnectionLayer/UDPConnection.h"
+#include "UDPConnection.h"
 
 // UDPClient
 class UDPClient : public UDPConnection 

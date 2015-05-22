@@ -5,7 +5,7 @@
 #include <list>
 #include "User.h"
 #include "MessageFactory.h"
-#include "ConnectionLayer/ServerChatConnection.h"
+#include "ServerChatConnection.h"
 
 
 // Server

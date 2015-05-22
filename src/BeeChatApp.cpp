@@ -16,10 +16,10 @@
 //---------------------------------------------------------------------
 BeeChatApp::BeeChatApp( std::string username, byte usernameColor, bool userWantsToBeServer )
 {
-    //ui = new LachlansUIThing();
     
     this->username = username;
     
+
     // try to start server
     // does the server need to know our username?
     server = new Server();
@@ -28,9 +28,11 @@ BeeChatApp::BeeChatApp( std::string username, byte usernameColor, bool userWants
     server->Connect();
     client->Connect( this->username, usernameColor );
     
+    //ui = new LachlansUIThing();
+    UserL temp(username,SADMIN);
+    messageFactory = new MessageFactory(temp);
     //ui->PresentInfoScreen();
     
-    messageFactory = new MessageFactory();
     
 }
 //---------------------------------------------------------------------
@@ -55,10 +57,24 @@ int BeeChatApp::Run()
     int quit = 1;
     
     // TODO: ask the UI if the user wants to quit
-    
+    messageFactory->userInput();
     
     // TODO: has the user typed anything in?
     client->Connect( this->username, 0x01 );
+
+    if(messageFactory->checkMessage()) {
+        std::string message_str = messageFactory->getMessage();
+
+        struct Message message;
+        message.messageType = CHAT_MESSAGE;
+        struct ChatMessage* chatMessage = (ChatMessage*) message.messageData; 
+        strcpy(chatMessage->messageText, message_str.c_str());
+        // memcpy( (void*)chatMessage->messageText, (void*)message_str.c_str(), message_str.length() );
+
+        mvwprintw(messageFactory->message_win,0,0,message_str.c_str());
+        wrefresh(messageFactory->message_win);
+        client->PassMessage(&message);
+    }
     
     // client is only going to tell us about chat messages,
     // it will handle other messages internally
@@ -77,7 +93,12 @@ int BeeChatApp::Run()
             
             std::string chatMessageString(chatMessage->messageText);
             
-            std::cout << this->username << " Received : " << chatMessageString << std::endl;
+            messageFactory->storeMessage(chatMessageString);
+
+            mvwprintw(messageFactory->message_win,1,1,chatMessage->messageText);
+            wrefresh(messageFactory->message_win);
+
+            // std::cout << this->username << " Received : " << chatMessageString << std::endl;
             
         } else {
             

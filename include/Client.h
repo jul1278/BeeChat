@@ -5,7 +5,7 @@
 
 
 #include "User.h"
-#include "ConnectionLayer/ClientChatConnection.h"
+#include "ClientChatConnection.h"
 
 // Client
 class Client

@@ -1,9 +1,9 @@
 // AppMain.cpp
 
 #include "BeeChatApp.h"
-#include "ConnectionLayer/UDPConnection.h"
-#include "ConnectionLayer/UDPServer.h"
-#include "ConnectionLayer/UDPClient.h"
+#include "UDPConnection.h"
+#include "UDPServer.h"
+#include "UDPClient.h"
 #include <string>
 
 int main( int argc, char** argv )

@@ -8,9 +8,9 @@
 #ifndef _CLIENT_CHATCONNECTION_H
 #define _CLIENT_CHATCONNECTION_H
 
-#include "ConnectionLayer/IChatConnection.h"
-#include "ConnectionLayer/ClientMessage.h"
-#include "ConnectionLayer/UDPClient.h"
+#include "IChatConnection.h"
+#include "ClientMessage.h"
+#include "UDPClient.h"
 #include <queue>
 
 // ClientChatConnection

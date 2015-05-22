@@ -17,6 +17,7 @@ private:
     std::string username; 
     
     //LachlansUIThing* ui
+    class MessageFactory* messageFactory;
   
     // server object
     class Server* server;
@@ -24,7 +25,6 @@ private:
     // client object
     class Client* client;
   
-    class MessageFactory* messageFactory;
 
 
 public: 

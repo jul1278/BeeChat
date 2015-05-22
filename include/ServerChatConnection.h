@@ -9,8 +9,8 @@
 #ifndef _SERVER_CHAT_CONNECTION_H
 #define _SERVER_CHAT_CONNECTION_H
 
-#include "ConnectionLayer/UDPServer.h"
-#include "ConnectionLayer/IChatConnection.h"
+#include "UDPServer.h"
+#include "IChatConnection.h"
 #include "BeeChatException.h"
 
 

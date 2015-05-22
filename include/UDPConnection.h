@@ -24,7 +24,7 @@
 
 
 
-#include "ConnectionLayer/ClientMessage.h"
+#include "ClientMessage.h"
 
   
 const int serverPort = 6969; 

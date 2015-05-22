@@ -3,7 +3,7 @@
 #ifndef _UDP_SERVER_H
 #define _UDP_SERVER_H
 
-#include "ConnectionLayer/UDPConnection.h"
+#include "UDPConnection.h"
 
 // UDPServer
 class UDPServer : public UDPConnection 
