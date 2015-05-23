@@ -28,7 +28,7 @@ GUI::~GUI() {
 
 }
 
-char *graphics[] = {" _____       __      ", "|_   _|     / _|     ", "  | | _ __ | |_ ___  ", "  | || '_ \\|  _/ _ \\ ", " _| || | | | || (_) |", " \\___/_| |_|_| \\___/ "};               
+const char *graphics[] = {" _____       __      ", "|_   _|     / _|     ", "  | | _ __ | |_ ___  ", "  | || '_ \\|  _/ _ \\ ", " _| || | | | || (_) |", " \\___/_| |_|_| \\___/ "};               
 
 void GUI::printAscii(WINDOW *scr, char *gaphics[], int sizey, int sizex, int starty, int startx) {
 	int ii;
@@ -182,7 +182,7 @@ void GUI::printChat() {
 		for(ii = 0; ii < NFONTCOMMANDS; ii++) {
 			int font_loc = 1;
 			int font_size = fontcommands[ii].size();
-			while(font_loc = message.find(fontcommands[ii]) != string::npos) {
+			while((font_loc = message.find(fontcommands[ii])) != string::npos) {
 				message = message.substr(font_loc+font_size);			// ERROR HERE!!!!!!!!!!!!!!
 				message_len -= font_size+1;								//+1 for escape (cant do, what if /b{rgrsgdr)
 			}
