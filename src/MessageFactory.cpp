@@ -148,6 +148,7 @@ void MessageFactory::userInput() {
 
 	string temp = "";
 
+	nodelay(message_win,1);
 	int c = wgetch(message_win);
 
 	if(c != '\n') {
