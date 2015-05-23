@@ -85,12 +85,10 @@ bool Snake::timeStep() {
 	_snake.moveSnake();
 
 	if(_food.isFood(_snake.x.front(), _snake.y.front())) {
-		_food.eatFood(_snake.x.front(), _snake.y.front());
-		_snake.growSnake();
-		_snake.growSnake();
-		_snake.growSnake();
-		_snake.growSnake();
-		_snake.growSnake();
+		int worth = _food.eatFood(_snake.x.front(), _snake.y.front());
+		for(int ii = 0; ii < worth; ii++) {
+			_snake.growSnake();
+		}
 		_blocks.spawnBlock(_snake.x[1], _snake.y[1]);
 	}
 	else if(_blocks.isBlock(_snake.x.front(), _snake.y.front())) {
@@ -102,7 +100,9 @@ bool Snake::timeStep() {
 		return 1;
 	}
 
+	_food.ageFood();
 	_food.growFood(_snake.x, _snake.y, _blocks.x, _blocks.y);
+	_food.printFood();
 	_blocks.printBlocks();
 	_snake.printSnake();
 	// growFood prints if grown
