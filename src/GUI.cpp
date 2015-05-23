@@ -99,6 +99,8 @@ void GUI::showScreen(int a) {
 
 		case CHAT:
 			printUsers();
+			wclear(*message_win);
+		    wborder(*message_win, 	'|', '|', '-','-','+','+','+','+');
 			wrefresh(*message_win);
 			printChat();
 			curs_set(1);

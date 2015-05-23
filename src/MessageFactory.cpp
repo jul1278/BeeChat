@@ -277,12 +277,13 @@ void MessageFactory::userInput() {
 
 bool MessageFactory::command(string message, int out_in) {
 	// message = message.substr(24); 		//bad to edit? maybe only give it the message part
+	Snake snakeGame;
 
 
 	// INITIALIZE VARIABLES
 	int ii, jj = 0;
 	string this_user = _user.getUser();
-	string commands[] = {"/help", "/kick", "/mute", "/unmute", "/poke", "/pm", "/exit", "/ignore", "/timeout", "/release"};
+	string commands[] = {"/help", "/kick", "/mute", "/unmute", "/poke", "/pm", "/exit", "/ignore", "/timeout", "/release", "/snake"};
 	string fontcommands[] = {"/b{", "/i{", "/u{", "/c{", "/red{", "/green{", "/yellow{", "/blue{", "/magenta{", "/cyan{", "/white{"};
 	string command_str;
 	string user_str;
@@ -628,7 +629,10 @@ bool MessageFactory::command(string message, int out_in) {
 				return 1;
 
 
-
+			case SNAKE:
+				snakeGame.run();
+				_Gooey.showScreen(CHAT);
+				return 1;
 
 
 

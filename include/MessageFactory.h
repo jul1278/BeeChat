@@ -11,6 +11,7 @@
 #include "GUI.h"
 // #include "UserL.h"
 #include "Windows.h"
+#include "Snake.h"
 #include <sstream>
 #include <iostream>
 #include <stdlib.h>
@@ -28,8 +29,9 @@
 #define IGNORE 	8
 #define TIMEOUT	9
 #define RELEASE 10
+#define SNAKE 	11
 
-#define NCOMMANDS 10
+#define NCOMMANDS 11
 
 class MessageFactory
 {
