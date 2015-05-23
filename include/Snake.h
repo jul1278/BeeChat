@@ -47,13 +47,17 @@ private:
 
 
 // TASKS:
-// add bool checklims
-// add bool checkfood
 // add score
+// print score after loss
 // food colours (snake colour is last food?)
-// grow size <- will need food queue
+// grow size (loop grow)
 
 // cant access snake.x directly
+
+
+
+
+
 
 
 
@@ -62,9 +66,6 @@ private:
 // normal
 // double score -- diff colour
 // double food  -- diff colour, flashing.
-
-
-
 
 // EXTENDED:
 // operator overload + for growth or position
