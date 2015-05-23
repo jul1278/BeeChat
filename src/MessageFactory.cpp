@@ -282,7 +282,8 @@ bool MessageFactory::command(string message, int out_in) {
 
 
 	// INITIALIZE VARIABLES
-	int ii, jj = 0;
+	ostringstream oss;
+	int ii, jj = 0, score;
 	string this_user = _user.getUser();
 	string commands[] = {"/help", "/kick", "/mute", "/unmute", "/poke", "/pm", "/exit", "/ignore", "/timeout", "/release", "/snake"};
 	string fontcommands[] = {"/b{", "/i{", "/u{", "/c{", "/red{", "/green{", "/yellow{", "/blue{", "/magenta{", "/cyan{", "/white{"};
@@ -631,8 +632,10 @@ bool MessageFactory::command(string message, int out_in) {
 
 
 			case SNAKE:
-				snakeGame.run();
+				score = snakeGame.run();
 				_Gooey.showScreen(CHAT);
+				oss << score;
+				_messageQueue.push("/green{             <SERVER> : " + user_str + " just reached a score of " + oss.str() + " on snake.}");
 				return 1;
 
 

@@ -23,13 +23,13 @@ class Snake
 public:
 	Snake();
 	~Snake();
-	void run();
+	int run();
 
 private:
 	void initSnake();				// setup screen + draw snake + draw food
 	void userInput();				// check for exit + pause + move
 
-	bool timeStep();				// move snake + check if dead + check if on food + check food spawn
+	int timeStep();				// move snake + check if dead + check if on food + check food spawn
 	void printStep();
 	void printEnd();				// print win/lose screen
 

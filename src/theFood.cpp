@@ -14,6 +14,7 @@ theFood::theFood(int *xlim, int *ylim, WINDOW **snake_scr) {
 
 	x.reserve(50);
 	y.reserve(50);
+	age.reserve(50);
 }
 
 theFood::theFood() {
@@ -51,6 +52,7 @@ void theFood::setupFood(vector<int> snake_x, vector<int> snake_y, vector<int> bl
 		else {
 			x.push_back(xrand);
 			y.push_back(yrand);
+			age.push_back(0);
 		}
 	}
 }
@@ -58,7 +60,7 @@ void theFood::setupFood(vector<int> snake_x, vector<int> snake_y, vector<int> bl
 void theFood::growFood(vector<int> snake_x, vector<int> snake_y, vector<int> block_x, vector<int> block_y) {
 	if(x.size() < MAX_FOOD) {
 		int chance = rand() % 1001;
-		if(chance < 20) {
+		if(chance < SPAWN_CHANCE) {
 			int xrand = rand() % (*x_lim-1) + 1; // 1->xlim
 			int yrand = rand() % (*y_lim-1) + 1; // 1->xlim
 			for(int ii = 0; ii < snake_x.size(); ii++) {
@@ -77,28 +79,46 @@ void theFood::growFood(vector<int> snake_x, vector<int> snake_y, vector<int> blo
 			}
 			x.push_back(xrand);
 			y.push_back(yrand);
-			printFood();
+			age.push_back(0);
+			// printFood();
 		}
 	}
 }
 
 void theFood::printFood() {
 	wattron(*snake_win, A_BOLD);
-	wattron(*snake_win, COLOR_PAIR(3));
 	for(int ii = 0; ii < x.size(); ii++) {
+		if(age[ii] < AGE_1) {
+			wattron(*snake_win, COLOR_PAIR(2));
+		}
+		else if(age[ii] < AGE_2) {
+			wattron(*snake_win, COLOR_PAIR(3));
+		}
+		else if(age[ii] < AGE_3) {
+			wattron(*snake_win, COLOR_PAIR(1));
+		}
 		mvwaddch(*snake_win, y[ii], x[ii], FOOD);
 	}
-	wattroff(*snake_win, COLOR_PAIR(3));
-	wattroff(*snake_win, A_BOLD);
+	wattrset(*snake_win, A_NORMAL);
 }
 
-void theFood::eatFood(int snake_x, int snake_y) {
+int theFood::eatFood(int snake_x, int snake_y) {
 	for(int ii = 0; ii < x.size(); ii++) {
 		if(snake_x == x[ii]) {
 			if(snake_y == y[ii]) {
+				int _age = age[ii];
 				x.erase(x.begin() + ii);
 				y.erase(y.begin() + ii);
-				return;
+				age.erase(age.begin() + ii);
+				if(age[ii] < AGE_1) {
+					return VAL_1;
+				}
+				else if(age[ii] < AGE_2) {
+					return VAL_2;
+				}
+				else if(age[ii] < AGE_3) {
+					return VAL_3;
+				}
 			}
 		}
 	}
@@ -114,4 +134,16 @@ bool theFood::isFood(int snake_x, int snake_y) {
 		}
 	}
 	return 0;
+}
+
+void theFood::ageFood() {
+	for(int ii = 0; ii < x.size(); ii++) {
+		age[ii]++;
+		if(age[ii] >= MAX_AGE) {
+			mvwaddch(*snake_win, y[ii], x[ii], ' ');
+			x.erase(x.begin() + ii);
+			y.erase(y.begin() + ii);
+			age.erase(age.begin() + ii);
+		}
+	}
 }
