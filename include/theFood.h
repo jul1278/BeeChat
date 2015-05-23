@@ -10,6 +10,7 @@
 
 #include <vector>
 #include "ncurses.h"
+#include <cstdlib>
 using std::vector;
 
 #define FOOD 'o'

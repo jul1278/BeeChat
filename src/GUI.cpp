@@ -28,9 +28,15 @@ GUI::~GUI() {
 
 }
 
-const char *graphics[] = {" _____       __      ", "|_   _|     / _|     ", "  | | _ __ | |_ ___  ", "  | || '_ \\|  _/ _ \\ ", " _| || | | | || (_) |", " \\___/_| |_|_| \\___/ "};               
 
-void GUI::printAscii(WINDOW *scr, char *graphics[], int sizey, int sizex, int starty, int startx) {
+const char *GRAPHICS[] = {" _____       __      ",
+						  "|_   _|     / _|     ", 
+						  "  | | _ __ | |_ ___  ", 
+						  "  | || '_ \\|  _/ _ \\ ", 
+						  " _| || | | | || (_) |", 
+						  " \\___/_| |_|_| \\___/ "};               
+
+void GUI::printAscii(WINDOW *scr, const char *graphics[], int sizey, int sizex, int starty, int startx) {
 	int ii;
 	for(ii = 0; ii < sizey; ii++) {
 		mvwprintw(scr, starty+ii, startx, graphics[ii]);
@@ -72,7 +78,7 @@ void GUI::showScreen(int a) {
 		case INFO:
 			int row, col;
 			getmaxyx(*info_scr,row,col);
-			printAscii(*info_scr, graphics, 6, 21, (int)(row*0.1), (col-21)/2);
+			printAscii(*info_scr, GRAPHICS, 6, 21, (int)(row*0.1), (col-21)/2);
 			mvwprintw(*info_scr, row-20,  4, "/b{TEXT}  --  bold font");
 			mvwprintw(*info_scr, row-19,  4, "/u{TEXT}  --  underlined font");
 			mvwprintw(*info_scr, row-18, 4, 	"/i{TEXT}  --  italic font (not currently implemented)");

@@ -32,7 +32,7 @@ public:
 	GUI();
 	~GUI();
 
-	void printAscii(WINDOW *scr, char *gaphics[], int sizey, int sizex, int starty, int startx);
+	void printAscii(WINDOW *scr, const char *graphics[], int sizey, int sizex, int starty, int startx);
 	void printServers(WINDOW *scr, int a);
 	void printUsers();
 	void printTimeout();
