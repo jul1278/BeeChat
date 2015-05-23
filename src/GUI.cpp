@@ -30,7 +30,7 @@ GUI::~GUI() {
 
 const char *graphics[] = {" _____       __      ", "|_   _|     / _|     ", "  | | _ __ | |_ ___  ", "  | || '_ \\|  _/ _ \\ ", " _| || | | | || (_) |", " \\___/_| |_|_| \\___/ "};               
 
-void GUI::printAscii(WINDOW *scr, char *gaphics[], int sizey, int sizex, int starty, int startx) {
+void GUI::printAscii(WINDOW *scr, char *graphics[], int sizey, int sizex, int starty, int startx) {
 	int ii;
 	for(ii = 0; ii < sizey; ii++) {
 		mvwprintw(scr, starty+ii, startx, graphics[ii]);
