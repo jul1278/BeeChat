@@ -58,7 +58,7 @@ void theFood::setupFood(vector<int> snake_x, vector<int> snake_y, vector<int> bl
 void theFood::growFood(vector<int> snake_x, vector<int> snake_y, vector<int> block_x, vector<int> block_y) {
 	if(x.size() < MAX_FOOD) {
 		int chance = rand() % 1001;
-		if(chance < 10) {
+		if(chance < 20) {
 			int xrand = rand() % (*x_lim-1) + 1; // 1->xlim
 			int yrand = rand() % (*y_lim-1) + 1; // 1->xlim
 			for(int ii = 0; ii < snake_x.size(); ii++) {

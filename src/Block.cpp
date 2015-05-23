@@ -40,8 +40,12 @@ void Block::setupBlocks(int xlim, int ylim) {
 	}
 }
 
-void Block::spawnBlock() {
-	
+void Block::spawnBlock(int snake_x, int snake_y) {
+	int chance = rand() % 1001;
+	if(chance < 100) {
+		x.push_back(snake_x);
+		y.push_back(snake_y);
+	}
 }
 
 void Block::printBlocks() {

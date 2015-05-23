@@ -46,16 +46,16 @@ void Snake::userInput() {
 	if(c == 'P') {
 		sleep(2);
 	}
-	else if(c == KEY_UP) {				//use setDir, ensure you cant reverse
+	else if(c == KEY_UP && _snake._direction != DOWN) {				//use setter (setDir), ensure you cant reverse
 		_snake._direction = UP;
 	}
-	else if(c == KEY_DOWN) {
+	else if(c == KEY_DOWN && _snake._direction != UP) {
 		_snake._direction = DOWN;
 	}
-	else if(c == KEY_LEFT) {
+	else if(c == KEY_LEFT && _snake._direction != RIGHT) {
 		_snake._direction = LEFT;
 	}
-	else if(c == KEY_RIGHT) {
+	else if(c == KEY_RIGHT && _snake._direction != LEFT) {
 		_snake._direction = RIGHT;
 	}
 }	
@@ -87,14 +87,19 @@ bool Snake::timeStep() {
 	if(_food.isFood(_snake.x.front(), _snake.y.front())) {
 		_food.eatFood(_snake.x.front(), _snake.y.front());
 		_snake.growSnake();
+		_blocks.spawnBlock(_snake.x.back(), _snake.y.back());
 	}
 	else if(_blocks.isBlock(_snake.x.front(), _snake.y.front())) {
 		printEnd();
 		return 1;
 	}
+	else if(_snake.isSnake(_snake.x.front(), _snake.y.front())) {
+		printEnd();
+		return 1;
+	}
 
 	_food.growFood(_snake.x, _snake.y, _blocks.x, _blocks.y);
-	// _blocks.spawnBlocks(_snake.x.back(), _snake.y.back());
+	_blocks.printBlocks();
 	_snake.printSnake();
 	// growFood prints if grown
 	// Blocks prints if grown

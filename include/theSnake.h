@@ -35,6 +35,7 @@ public:
 	void moveSnake();	// move and print snake
 	void growSnake();				// adds one to tail but prints next timestep; or
 	void printSnake();				// print snake
+	bool isSnake(int snake_x, int snake_y);
 
 // private:
 	WINDOW **snake_win;

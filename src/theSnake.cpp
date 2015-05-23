@@ -53,6 +53,17 @@ void theSnake::growSnake() {
 	y.push_back(y.back());
 }	
 
+bool theSnake::isSnake(int snake_x, int snake_y) {	//ignores head
+	for(int ii = 1; ii < x.size(); ii++) {
+		if(snake_x == x[ii]) {
+			if(snake_y == y[ii]) {
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
 void theSnake::printSnake() {
 	mvwaddch(*snake_win, y.front(), x.front(), HEAD);
 	for(int ii = 1; ii < x.size()-1; ii++) {

@@ -147,7 +147,7 @@ void MessageFactory::userInput() {
 	char time_char[11];
 
 	string temp = "";
-
+	curs_set(1);
 	nodelay(message_win,1);
 	int c = wgetch(message_win);
 

@@ -23,7 +23,7 @@ public:
 	Block(WINDOW **snake_scr);
 
 	void setupBlocks(int xlim, int ylim);
-	void spawnBlock();
+	void spawnBlock(int snake_x, int snake_y);
 	void printBlocks();
 	bool isBlock(int snake_x, int snake_y);
 
