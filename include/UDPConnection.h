@@ -44,7 +44,7 @@ public:
 	pthread_mutex_t messageQueueMutex; 
 	pthread_mutex_t listenerThreadMutex; 
 
-	bool stopListening;	//is this meant to be a function?
+	bool stopListening;	//flag to indicate thread stop
 
 	void* ListenerThread( void* threadId ); 
 
@@ -53,7 +53,7 @@ public:
 
 
 
-	// server doesn't need to know it's own address
+	// server doesn't need to know its own address
 	struct sockaddr_in serverAddress;
 	int udpSocket; 
 	

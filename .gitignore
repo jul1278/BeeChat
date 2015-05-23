@@ -1,3 +1,5 @@
 #ignore build files
 build/*
 obj/*
+test
+BeeChat

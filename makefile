@@ -6,11 +6,11 @@ OBJ_FILES := $(addprefix ./obj/,$(notdir $(CPP_FILES:.cpp=.o)))
 
 # Links all object files to create executable
 all: $(OBJ_FILES)
-	g++ -ansi -o test $(OBJ_FILES) -lncurses -pthread
+	g++ -ansi -o BeeChat $(OBJ_FILES) -lncurses -pthread
 
 # Compile a source file into respective object file
 # The all target will try to link each of the object files (obj/shape.o, obj/circle.o, etc...)
-# This will match this target, and the appropriate source file will be entered as part of the dependency list, which is then used as the source file for g++ 
+# This will match this target, and the appropriate source file will be entered as part of the dependency list, which is then used as the source file for g++
 # -o $@ - use target as output file
 # $< - dependencies, used as input to g++
 obj/%.o: src/%.cpp
@@ -18,7 +18,7 @@ obj/%.o: src/%.cpp
 
 clean:
 	rm ./obj/*.o
-	rm test
+	rm BeeChat
 
 
 
@@ -45,7 +45,7 @@ clean:
 
 # # Compile a source file into respective object file
 # # The all target will try to link each of the object files (obj/shape.o, obj/circle.o, etc...)
-# # This will match this target, and the appropriate source file will be entered as part of the dependency list, which is then used as the source file for g++ 
+# # This will match this target, and the appropriate source file will be entered as part of the dependency list, which is then used as the source file for g++
 # # -o $@ - use target as output file
 # # $< - dependencies, used as input to g++
 # obj/%.o: src/%.cpp

@@ -4,7 +4,7 @@
  * Block class implementation
  *
  */
-#include <random>
+#include <cstdlib>
 #include "Block.h"
 
 Block::Block(WINDOW **snake_scr) {
@@ -52,7 +52,7 @@ void Block::printBlocks() {
 	for(int ii = 0; ii < x.size(); ii++) {
 		mvwaddch(*snake_win, y[ii], x[ii], BLOCKS);
 	}
-}	
+}
 
 bool Block::isBlock(int snake_x, int snake_y) {
 	for(int ii = 0; ii < x.size(); ii++) {

@@ -5,8 +5,9 @@
 #define _BEECHAT_EXCEPTION_H
 
 #include <exception>
+#include <stdexcept>
 
-//use enum for exception types? 
+//use enum for exception types?
 //need static counts for relevant exceptions - static meaning variable persists through destructors
 //create text file error log to catch unhandled errors?
 enum ExceptionType
@@ -16,17 +17,26 @@ enum ExceptionType
         //
       //port connection refused
         //
+          //should be above 1024 (standard thing)
+  eET_invalid_port,
       //port connection termination unsuccessful
         //
       //attempt to start a second server, cannot run a second server
-        //notify user, deny connection, continue on  
+        //notify user, deny connection, continue on
       //server failed to start
-        //try again, 3 iterations then terminate connection?  
+        //try again, 3 iterations then terminate connection?
       //client failed to start
         //try again, 3 iterations then terminate connection?
       //message for new user failed to send
         //try again? 3 iterations, then terminate user connection?
-    
+      //username contains invalid chars
+  eET_invalid_username_characters,
+      //username is too long
+  eET_username_too_long,
+      //username is empty
+  eET_empty_username,
+
+
     //GUI issues
       //invalid message type
         //notify user and discard message
@@ -39,7 +49,7 @@ enum ExceptionType
         //notify user, discard message, continue
       //unrecognized input type of any kind
         //notify user, discard message, continue
-    
+
     //command issues
       //server has disconnected unexpectedly
         //notify user, terminate with countdown message
@@ -53,33 +63,61 @@ enum ExceptionType
         //notify sender (or server?), log error + message, then discard message and continue
       //command in received message is unknown
         //notify sender (or server?), log error + message, then discard message and continue
-      
+
     //server issues
       //client ping not successful, user has disconnected unexpectedly
         //terminate user from list and connection, send message to all users that clients has disconnected
-      //  
-        
+      //
+
     //unknown issues
       //unknown exception (hopefully never throw this)
         //log error location (if possible) with server and terminate everything
           //try notifying user first?
-      //  
-    
+      //
+
 };
 
 // BeeChatException
-class BeeChatException // : public std::exception
+class BeeChatException : public std::exception
 {
 private:
-  std::string message; 
-  std::string Message() { return message; } 
+  const std::string _message;
+  const ExceptionType _type;
 
 public:
-    
-  BeeChatException();
-  ~BeeChatException(); 
 
-    //ExceptionType exceptionType( std::string exMessage ) {;}
+  BeeChatException(ExceptionType type, const std::string& message) throw()
+  : _type(type),
+    _message(message)
+  {
+    //constructor
+  }
+
+
+  ~BeeChatException() throw()
+  {
+    //deconstructor
+  }
+
+//returns the message text
+  const std::string message() const throw()
+  {
+    return _message;
+  }
+
+
+  //returns exception type
+  const ExceptionType type() const throw()
+  {
+    return _type;
+  }
+
+
+  //allows messsage to be returned from standard exception catch
+  virtual const char* what() const throw()
+  {
+    return _message.c_str();
+  }
 
 };
 

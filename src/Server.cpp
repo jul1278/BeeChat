@@ -14,6 +14,7 @@ Server::Server()
 //---------------------------------------------------------------------------------
 Server::~Server()
 {
+	//TODO add code to kick users, call disconnect
 	delete chatConnection; 
 }
 //---------------------------------------------------------------------------------
@@ -34,6 +35,7 @@ bool Server::Connect()
 //---------------------------------------------------------------------------------
 void Server::Disconnect()
 {
+	//TODO add code to disconnect all users
 	chatConnection->Disconnect(); 
 }
 //---------------------------------------------------------------------------------
