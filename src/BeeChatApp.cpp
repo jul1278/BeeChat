@@ -69,10 +69,6 @@ int BeeChatApp::Run()
         message.messageType = CHAT_MESSAGE;
         struct ChatMessage* chatMessage = (ChatMessage*) message.messageData; 
         strcpy(chatMessage->messageText, message_str.c_str());
-        // memcpy( (void*)chatMessage->messageText, (void*)message_str.c_str(), message_str.length() );
-
-        mvwprintw(messageFactory->message_win,0,0,message_str.c_str());
-        wrefresh(messageFactory->message_win);
         client->PassMessage(&message);
     }
     
@@ -94,9 +90,6 @@ int BeeChatApp::Run()
             std::string chatMessageString(chatMessage->messageText);
             
             messageFactory->storeMessage(chatMessageString);
-
-            mvwprintw(messageFactory->message_win,1,1,chatMessage->messageText);
-            wrefresh(messageFactory->message_win);
 
             // std::cout << this->username << " Received : " << chatMessageString << std::endl;
             
