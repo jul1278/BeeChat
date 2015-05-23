@@ -74,3 +74,9 @@ void theSnake::printSnake() {
 	wattroff(*snake_win, COLOR_PAIR(2));
 }	
 
+void theSnake::printScore() {
+	int score = x.size() - START_LENGTH;
+	wattron(*snake_win, COLOR_PAIR(6));
+	mvwprintw(*snake_win, 1,1, "SCORE: %d", score);
+	wattroff(*snake_win, COLOR_PAIR(6));
+}

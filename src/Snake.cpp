@@ -60,14 +60,14 @@ void Snake::userInput() {
 	}
 }	
 
-void Snake::run() {
+int Snake::run() {
 	cbreak();
 	nodelay(snake_win,1);
 	while(1) {
 		userInput();
 		// int c = wgetch(snake_win);
 		if(timeStep()) {
-			break;
+			return (_snake.x.size() - START_LENGTH);
 		}
 
 		if(_snake._direction == UP || _snake._direction == DOWN) {
@@ -80,7 +80,7 @@ void Snake::run() {
 }
 
 
-bool Snake::timeStep() {
+int Snake::timeStep() {
 	// move snake + check if dead + check if on food + check food spawn
 	_snake.moveSnake();
 
@@ -104,6 +104,7 @@ bool Snake::timeStep() {
 	_food.growFood(_snake.x, _snake.y, _blocks.x, _blocks.y);
 	_food.printFood();
 	_blocks.printBlocks();
+	_snake.printScore();
 	_snake.printSnake();
 	// growFood prints if grown
 	// Blocks prints if grown
@@ -113,6 +114,56 @@ bool Snake::timeStep() {
 
 
 void Snake::printEnd() {
+	// 1,1 			 -> 1,xlim-2
+	// 2,xlim-2 	 -> ylim-2,xlim-2
+	// ylim-2,xlim-3 -> ylim-2,1
+	// ylim-3,1      -> 2,1
 
+	// 2,2 			 -> 2,xlim-3
+	// 3,xlim-3 	 -> ylim-3,xlim-3
+	// ylim-3,xlim-4 -> ylim-3,2
+	// ylim-4,2      -> 3,2
+
+	for(int loop = 0; loop < y_lim/2+1; loop++) {
+		for(int ii = 1+loop; ii < x_lim-1-loop; ii++) {
+			mvwaddch(snake_win, 1+loop, ii, BODY);
+			wrefresh(snake_win);
+			if(ii%15 == 0) {
+				usleep(100);
+			}
+		}
+		for(int ii = 2+loop; ii < y_lim-1-loop; ii++) {
+			mvwaddch(snake_win, ii, x_lim-2-loop, BODY);
+			wrefresh(snake_win);
+			if(ii%15 == 0) {
+				usleep(200);
+			}
+		}
+		for(int ii = x_lim-3-loop; ii > loop; ii--) {
+			mvwaddch(snake_win, y_lim-2-loop, ii, BODY);
+			wrefresh(snake_win);
+			if(ii%15 == 0) {
+				usleep(100);
+			}
+		}
+		for(int ii = y_lim-3-loop; ii > 1+loop; ii--) {
+			mvwaddch(snake_win, ii, 1+loop, BODY);
+			wrefresh(snake_win);
+			if(ii%15 == 0) {
+				usleep(200);
+			}
+		}
+	}
 }	
-
+		// for(int ii = 1; ii < x_lim-1; ii++) {
+		// 	mvwaddch(snake_win, 1, ii, BODY);
+		// }
+		// for(int ii = 2; ii < y_lim-1; ii++) {
+		// 	mvwaddch(snake_win, ii, x_lim-2, BODY);
+		// }
+		// for(int ii = x_lim-2; ii > 0; ii--) {
+		// 	mvwaddch(snake_win, y_lim-2, ii, BODY);
+		// }
+		// for(int ii = ylim-1; ii > 1; ii--) {
+		// 	mvwaddch(snake_win, ii, 1, BODY);
+		// }
