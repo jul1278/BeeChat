@@ -87,7 +87,7 @@ bool Snake::timeStep() {
 	if(_food.isFood(_snake.x.front(), _snake.y.front())) {
 		_food.eatFood(_snake.x.front(), _snake.y.front());
 		_snake.growSnake();
-		_blocks.spawnBlock(_snake.x.back(), _snake.y.back());
+		_blocks.spawnBlock(_snake.x[1], _snake.y[1]);
 	}
 	else if(_blocks.isBlock(_snake.x.front(), _snake.y.front())) {
 		printEnd();

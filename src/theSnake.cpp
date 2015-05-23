@@ -65,10 +65,12 @@ bool theSnake::isSnake(int snake_x, int snake_y) {	//ignores head
 }
 
 void theSnake::printSnake() {
+	wattron(*snake_win, COLOR_PAIR(2));
 	mvwaddch(*snake_win, y.front(), x.front(), HEAD);
 	for(int ii = 1; ii < x.size()-1; ii++) {
 		mvwaddch(*snake_win, y[ii], x[ii], BODY);
 	}
 	mvwaddch(*snake_win, y.back(), x.back(), TAIL);
+	wattroff(*snake_win, COLOR_PAIR(2));
 }	
 

@@ -83,9 +83,13 @@ void theFood::growFood(vector<int> snake_x, vector<int> snake_y, vector<int> blo
 }
 
 void theFood::printFood() {
+	wattron(*snake_win, A_BOLD);
+	wattron(*snake_win, COLOR_PAIR(3));
 	for(int ii = 0; ii < x.size(); ii++) {
 		mvwaddch(*snake_win, y[ii], x[ii], FOOD);
 	}
+	wattroff(*snake_win, COLOR_PAIR(3));
+	wattroff(*snake_win, A_BOLD);
 }
 
 void theFood::eatFood(int snake_x, int snake_y) {
