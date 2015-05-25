@@ -10,7 +10,29 @@ UDPConnection::UDPConnection()
 {
 	pthread_mutex_init( &messageQueueMutex, NULL ); 
 	pthread_mutex_init( &listenerThreadMutex, NULL ); 
+	
+	// Setting up sharing of resources within Threads
+	pthread_t messageQueue = pthread_self(); 			// Setting thread ID
+	pthread_attr_t ThreadAttr; 					// Initialising thread attribute
+	int policy = 0;							// Initialising policy variable
+	int max_prio = 0;						// Initialising priority variable
 
+	pthread_attr_init(&ThreadAttr);					// Initialising thread ID via address to ThreadAttr variable
+	pthread_attr_getschedpolicy(&ThreadAttr, &policy);		// Getting scheduling priority to share resource
+	max_prio = sched_get_priority_max(policy);			// Assigning priority value
+	pthread_setschedprio(messageQueue, max_prio);			// Setting the scheduled priority to messageQueue
+
+
+	pthread_t listenerThread = pthread_self();			// Setting thread ID
+	pthread_attr_t OtherThAttr; 					// Initialising thread attribute
+	int policy2 = 0;						// Initialising policy variable
+	int max_prio2 = 0;						// Initialising priority variable
+
+	pthread_attr_init(&OtherThAttr);				// Initialising thread ID via address to OtherThAttr variable
+	pthread_attr_getschedpolicy(&OtherThAttr, &policy2);		// Getting scheduling priority to share resource
+	max_prio2 = sched_get_priority_max(policy2);			// Assigning priority value
+	pthread_setschedprio(listenerThread, max_prio2);		// Setting the scheduled priority to listenerThread
+	
 	stopListening = false; 
 
 	//listener = this;
