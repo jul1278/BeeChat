@@ -19,6 +19,7 @@
 #define OUT 0
 #define IN 	1
 #define COM 3
+
 #define HELP 	1
 #define KICK 	2
 #define MUTE  	3
@@ -30,8 +31,9 @@
 #define TIMEOUT	9
 #define RELEASE 10
 #define SNAKE 	11
+#define TEST 	12
 
-#define NCOMMANDS 11
+#define NCOMMANDS 12
 
 class MessageFactory
 {
@@ -52,6 +54,7 @@ public:
 	bool command(string message, int out_in);
 
 	void dummyText();
+	void testText();
 	bool quit;
 
 private:

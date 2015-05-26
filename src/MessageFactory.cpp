@@ -40,6 +40,35 @@ void MessageFactory::dummyText() {
 	_users.push_back(UserL("Johnny", REGULAR));
 }
 
+void MessageFactory::testText() {
+	// CHECK FONTS
+	_chatlog.push_back("[05:30:12] : Feyre    : /b{Hey everyone!");    
+	_chatlog.push_back("[05:30:12] : Feyre    : /u{Hey everyone!");    
+	_chatlog.push_back("[05:30:12] : Feyre    : /c{Hey everyone!");    
+	_chatlog.push_back("[05:30:12] : Feyre    : /i{Hey everyone!");    
+	_chatlog.push_back("");    
+
+	// CHECK COLOURS
+	_chatlog.push_back("[05:30:12] : Feyre    : /red{Hey everyone!");    
+	_chatlog.push_back("[05:30:12] : Feyre    : /green{Hey everyone!");    
+	_chatlog.push_back("[05:30:12] : Feyre    : /yellow{Hey everyone!");    
+	_chatlog.push_back("[05:30:12] : Feyre    : /blue{Hey everyone!");    
+	_chatlog.push_back("[05:30:12] : Feyre    : /magenta{Hey everyone!");    
+	_chatlog.push_back("[05:30:12] : Feyre    : /cyan{Hey everyone!");    
+	_chatlog.push_back("[05:30:12] : Feyre    : /white{Hey everyone!");    
+	_chatlog.push_back("");    
+
+	// CHECK COMPLEX
+	_chatlog.push_back("[05:30:12] : Feyre    : /b{/yellow{Hey everyone!");    
+	_chatlog.push_back("[05:30:12] : Feyre    : /u{/green{Hey everyone!");    
+	_chatlog.push_back("[05:30:12] : Feyre    : /b{/u{/cyan{Hey everyone!");    
+	_chatlog.push_back("");    
+
+	// CHECK WRAPPING
+	_chatlog.push_back("[05:30:12] : Feyre    : Oh hey, here is a really long message that should wrap nicely around the screen, or at least; i would like to hope so. :)");    
+
+}
+
 
 void MessageFactory::updateUsers() {
 
@@ -288,7 +317,7 @@ bool MessageFactory::command(string message, int out_in) {
 	ostringstream oss;
 	int ii, jj = 0, score;
 	string this_user = _user.getUser();
-	string commands[] = {"/help", "/kick", "/mute", "/unmute", "/poke", "/pm", "/exit", "/ignore", "/timeout", "/release", "/snake"};
+	string commands[] = {"/help", "/kick", "/mute", "/unmute", "/poke", "/pm", "/exit", "/ignore", "/timeout", "/release", "/snake", "/test"};
 	string fontcommands[] = {"/b{", "/i{", "/u{", "/c{", "/red{", "/green{", "/yellow{", "/blue{", "/magenta{", "/cyan{", "/white{"};
 	string command_str;
 	string user_str;
@@ -347,6 +376,7 @@ bool MessageFactory::command(string message, int out_in) {
 		switch(jj) {
 
 			case HELP:
+				refresh();
 				_Gooey.showScreen(INFO);
 				wgetch(info_scr);
 				_Gooey.showScreen(CHAT);
@@ -645,7 +675,10 @@ bool MessageFactory::command(string message, int out_in) {
 				_messageQueue.push("/green{             <SERVER> : " + user_str + " just reached a score of " + oss.str() + " on snake.}");
 				return 1;
 
-
+			case TEST:
+				testText();
+				_Gooey.printChat();
+				return 1;
 
 
 			default:
