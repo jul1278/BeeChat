@@ -54,6 +54,7 @@ public:
 	void dummyText();
 
 // private:
+	bool quit;
 	GUI _Gooey;
 	Windows _Win;
 

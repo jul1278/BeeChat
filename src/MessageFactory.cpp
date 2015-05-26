@@ -11,7 +11,8 @@ using namespace std;
 MessageFactory::MessageFactory(UserL user) {
 	_chatlog.reserve(100);
 	_users.reserve(15);
-	dummyText();
+	// dummyText();
+	quit = 0;
 
 	_user = user;
 	_Win = Windows(&info_scr, &chat_win, &message_win, &users_win);
@@ -218,7 +219,9 @@ void MessageFactory::userInput() {
 		if(_user.getSwears() >= 5) {
 			//kick user (remove from other clients)
 			endwin();
-			exit(EXIT_SUCCESS);
+			// exit(EXIT_SUCCESS);
+			quit = 1;
+			return;
 		}
 		else if(_user.getSwears() >= 4) {
 			storeMessage("             <SERVER> : This is your final warning, swear again and you will be kicked.");
@@ -503,6 +506,8 @@ bool MessageFactory::command(string message, int out_in) {
 
 			case EXIT:
 				_messageQueue.push(message);
+				endwin();
+				quit = 1;
 				return 1;
 
 
@@ -675,7 +680,8 @@ bool MessageFactory::command(string message, int out_in) {
 					// show kick screen
 					// call kick function
 					endwin();
-					exit(EXIT_SUCCESS);
+					// exit(EXIT_SUCCESS);
+					quit = 1;
 					return 1;
 				}
 				storeMessage("             <SERVER> : " + user_str + " has kicked " + arg_str + ".");
@@ -730,10 +736,6 @@ bool MessageFactory::command(string message, int out_in) {
 
 
 			case EXIT:
-				if(user_str == this_user) {
-					endwin();
-					exit(EXIT_SUCCESS);
-				}
 				removeUser(arg_str);									
 				return 1;
 

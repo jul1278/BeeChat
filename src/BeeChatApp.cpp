@@ -108,7 +108,6 @@ int BeeChatApp::Run()
     
     // TODO: set quit to 1 if we're quitting
     
-    
-    return quit;
+    return !(messageFactory->quit);
 }
 
