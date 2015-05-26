@@ -16,7 +16,8 @@
 #include "theFood.h"
 #include "Block.h"
 
-#define STEP_SPEED 5
+#define STEP_VERT 50000
+#define STEP_HORI 30000
 
 class Snake
 {
@@ -29,9 +30,10 @@ private:
 	void initSnake();				// setup screen + draw snake + draw food
 	void userInput();				// check for exit + pause + move
 
-	int timeStep();				// move snake + check if dead + check if on food + check food spawn
+	int timeStep();					// move snake + check if dead + check if on food + check food spawn
 	void printStep();
 	void printEnd();				// print win/lose screen
+	void Pause();
 
 	WINDOW *snake_win;
 	theSnake _snake;
@@ -47,8 +49,6 @@ private:
 
 
 // TASKS:
-// add score
-// print score after loss
 // food colours (snake colour is last food?)
 // grow size (loop grow)
 

@@ -32,11 +32,11 @@ public:
 	theSnake(WINDOW **snake_scr);
 
 	void setupSnake(vector<int> block_x, vector<int> block_y);
-	void moveSnake();	// move and print snake
-	void growSnake();				// adds one to tail but prints next timestep; or
-	void printSnake();				// print snake
-	void printScore();
 	bool isSnake(int snake_x, int snake_y);
+	void moveSnake();		// move and print snake
+	void growSnake();		// adds one to tail but prints next timestep; or
+	void printSnake();		// print snake
+	void printScore();		// print score
 
 // private:
 	WINDOW **snake_win;

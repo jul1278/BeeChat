@@ -33,7 +33,8 @@ void Windows::setup() {
 
 void Windows::initScreen() {
 	initscr();
-	cbreak();
+	// cbreak();
+	raw();
 	noecho();
 	curs_set(0);
 	start_color();

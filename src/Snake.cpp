@@ -10,13 +10,10 @@
 Snake::Snake() {
 	srand(time(NULL));
 	getmaxyx(stdscr, y_lim, x_lim);
-	// nodelay(snake_win,1);
-	// halfdelay(1);
 
+	_blocks = Block(&snake_win);
 	_snake = theSnake(&snake_win);
 	_food = theFood(&x_lim, &y_lim, &snake_win);
-	_blocks = Block(&snake_win);
-	initSnake();
 }
 
 Snake::~Snake() {
@@ -24,12 +21,13 @@ Snake::~Snake() {
 }
 
 void Snake::initSnake() {
+	raw();
 	noecho();
 	curs_set(0);
 
 	snake_win = newwin(y_lim, x_lim, 0, 0);
-    // wborder(snake_win, 		'|', '|', '-','-','+','+','+','+');
     keypad(snake_win, TRUE);
+	nodelay(snake_win,1);
 
     _blocks.setupBlocks(x_lim, y_lim);
     _snake.setupSnake(_blocks.x, _blocks.y);
@@ -38,13 +36,12 @@ void Snake::initSnake() {
     _snake.printSnake();
     _food.printFood();
     _blocks.printBlocks();
-    // run();
 }	
 
 void Snake::userInput() {
 	int c = wgetch(snake_win);
-	if(c == 'P') {
-		sleep(2);
+	if(c == 'p') {
+		Pause();
 	}
 	else if(c == KEY_UP && _snake._direction != DOWN) {				//use setter (setDir), ensure you cant reverse
 		_snake._direction = UP;
@@ -61,20 +58,19 @@ void Snake::userInput() {
 }	
 
 int Snake::run() {
-	cbreak();
-	nodelay(snake_win,1);
+	initSnake();
 	while(1) {
 		userInput();
-		// int c = wgetch(snake_win);
+
 		if(timeStep()) {
-			return (_snake.x.size() - START_LENGTH);
+			return (_snake.x.size() - START_LENGTH);	//score
 		}
 
 		if(_snake._direction == UP || _snake._direction == DOWN) {
-			usleep(50000);
+			usleep(STEP_VERT);
 		}
 		else {
-			usleep(30000);
+			usleep(STEP_HORI);
 		}
 	}
 }
@@ -83,19 +79,21 @@ int Snake::run() {
 int Snake::timeStep() {
 	// move snake + check if dead + check if on food + check food spawn
 	_snake.moveSnake();
+	int x = _snake.x.front();
+	int y = _snake.y.front();
 
-	if(_food.isFood(_snake.x.front(), _snake.y.front())) {
-		int worth = _food.eatFood(_snake.x.front(), _snake.y.front());
+	if(_food.isFood(x, y)) {
+		int worth = _food.eatFood(x, y);
 		for(int ii = 0; ii < worth; ii++) {
 			_snake.growSnake();
 		}
 		_blocks.spawnBlock(_snake.x[1], _snake.y[1]);
 	}
-	else if(_blocks.isBlock(_snake.x.front(), _snake.y.front())) {
+	else if(_blocks.isBlock(x, y)) {
 		printEnd();
 		return 1;
 	}
-	else if(_snake.isSnake(_snake.x.front(), _snake.y.front())) {
+	else if(_snake.isSnake(x, y)) {
 		printEnd();
 		return 1;
 	}
@@ -123,7 +121,6 @@ void Snake::printEnd() {
 	// 3,xlim-3 	 -> ylim-3,xlim-3
 	// ylim-3,xlim-4 -> ylim-3,2
 	// ylim-4,2      -> 3,2
-
 	for(int loop = 0; loop < y_lim/2+1; loop++) {
 		for(int ii = 1+loop; ii < x_lim-1-loop; ii++) {
 			mvwaddch(snake_win, 1+loop, ii, BODY);
@@ -155,15 +152,7 @@ void Snake::printEnd() {
 		}
 	}
 }	
-		// for(int ii = 1; ii < x_lim-1; ii++) {
-		// 	mvwaddch(snake_win, 1, ii, BODY);
-		// }
-		// for(int ii = 2; ii < y_lim-1; ii++) {
-		// 	mvwaddch(snake_win, ii, x_lim-2, BODY);
-		// }
-		// for(int ii = x_lim-2; ii > 0; ii--) {
-		// 	mvwaddch(snake_win, y_lim-2, ii, BODY);
-		// }
-		// for(int ii = ylim-1; ii > 1; ii--) {
-		// 	mvwaddch(snake_win, ii, 1, BODY);
-		// }
+
+void Snake::Pause() {
+	while(wgetch(snake_win) != 'p');
+}

@@ -347,7 +347,9 @@ bool MessageFactory::command(string message, int out_in) {
 		switch(jj) {
 
 			case HELP:
-				//disp help screen
+				_Gooey.showScreen(INFO);
+				wgetch(info_scr);
+				_Gooey.showScreen(CHAT);
 				return 1;
 
 

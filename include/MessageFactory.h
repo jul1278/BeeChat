@@ -52,9 +52,9 @@ public:
 	bool command(string message, int out_in);
 
 	void dummyText();
-
-// private:
 	bool quit;
+
+private:
 	GUI _Gooey;
 	Windows _Win;
 
