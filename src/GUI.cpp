@@ -167,11 +167,10 @@ void GUI::showScreen(int a) {
 
 
 
-
 int offset = 0;
 
 void GUI::printChat() {
- int row, col;
+	int row, col;
 	getmaxyx(*chat_win, row, col);
 	wclear(*chat_win);
     wborder(*chat_win, 	'|', '|', '-','-','+','+','+','+');
@@ -221,7 +220,8 @@ void GUI::printChat() {
 
 
 		if(message.find("/") == string::npos) {														// if no /
-			printMessage(message, message_lines, &h_index, &attempt, &message_len, 0, 1);			// print
+			int prev_len = 0;
+			printMessage(message, message_lines, &h_index, &attempt, &message_len, &prev_len, 1);			// print
 		}
 		else {																						// if /
 			int font_loc, font_end;
@@ -257,7 +257,7 @@ void GUI::printChat() {
 
 
 				if(slash_shorter) {										// look for command
-					for(ii = 0; ii < NFONTCOMMANDS; ii++) {												 
+					for(ii = 0; ii < NFONTCOMMANDS; ii++) {	
 						int font_size = fontcommands[ii].size();
 
 						if(message.substr(font_loc,font_size).find(fontcommands[ii]) != string::npos) {	// if command,
@@ -267,13 +267,12 @@ void GUI::printChat() {
 							//print all before
 							string message_seg = message.substr(0,font_loc);
 							message_len_sofar += message_seg.size(); 
-							printMessage(message_seg, message_lines, &h_index, &attempt, &message_len_sofar, prev_len, 0);
+							printMessage(message_seg, message_lines, &h_index, &attempt, &message_len_sofar, &prev_len, 0);
 							prev_len = message_len_sofar;
 
 							//trunk message
 							// message = message.erase(0,font_loc+font_size-1);
 							message = message.substr(font_loc+font_size);
-
 							//add atr (if not added)
 							for(jj = 0; jj < current_atr.size(); jj++) {
 								if(ii == current_atr[jj]) {
@@ -337,7 +336,7 @@ void GUI::printChat() {
 
 						string message_seg = message.substr(0,font_loc+1);
 						message_len_sofar += message_seg.size(); 
-						printMessage(message_seg, message_lines, &h_index, &attempt, &message_len_sofar, prev_len, 0);
+						printMessage(message_seg, message_lines, &h_index, &attempt, &message_len_sofar, &prev_len, 0);
 						prev_len = message_len_sofar;
 						//trunk message
 						// message = message.erase(0,font_loc+font_size-1);
@@ -351,7 +350,7 @@ void GUI::printChat() {
 						//print all before
 						string message_seg = message.substr(0,font_loc);
 						message_len_sofar += message_seg.size(); 
-						printMessage(message_seg, message_lines, &h_index, &attempt, &message_len_sofar, prev_len, 0);
+						printMessage(message_seg, message_lines, &h_index, &attempt, &message_len_sofar, &prev_len, 0);
 						prev_len = message_len_sofar;
 
 						//trunk message
@@ -407,59 +406,64 @@ void GUI::printChat() {
 						//print all before
 						string message_seg = message.substr(0,font_loc+1);
 						message_len_sofar += message_seg.size(); 
-						printMessage(message_seg, message_lines, &h_index, &attempt, &message_len_sofar, prev_len, 0);
+						printMessage(message_seg, message_lines, &h_index, &attempt, &message_len_sofar, &prev_len, 0);
 						prev_len = message_len_sofar;
 
 						//trunk message
 						// message = message.erase(0,font_loc+font_size-1);
 						message = message.substr(font_loc+1);						//+1 from delim -1 from font_loc balance
-
 					}
 				}
 			}
 			string message_seg = message;
 			message_len_sofar += message_seg.size(); 
-			printMessage(message_seg, message_lines, &h_index, &attempt, &message_len_sofar, prev_len, 1);
+			if(message_seg != "") {
+				printMessage(message_seg, message_lines, &h_index, &attempt, &message_len_sofar, &prev_len, 1);
+			}
+			else {
+				h_index++;
+			}
 		}
 		wattrset(*chat_win, A_NORMAL);	// REMOVE FROM VECTOR?
 	}
 	wrefresh(*chat_win);
 }
 
-void GUI::printMessage(string message, int message_lines, int *h_index, int *attempt, int *message_len, int prev_len, int endline) {
+void GUI::printMessage(string message, int message_lines, int *h_index, int *attempt, int *message_len, int *prev_len, int endline) {
 	int row, col;
 	getmaxyx(*chat_win, row, col);
 
-
 	if((*message_len) > col-2) {
 		if(message_lines-(*attempt)<=row-2) {													//
-			mvwprintw(*chat_win,(*h_index),prev_len+1,(message.substr(0,col-4)+"..").c_str());	//
+			mvwprintw(*chat_win,(*h_index),*prev_len+1,(message.substr(0,col-4-*prev_len)+"..").c_str());	//
 			(*h_index)++;																		//
 		}																						//		tryprint+trunkate
-		message = message.substr(col-4);														//		  (*h_index),(*attempt),message, (*message_len)
+		message = message.substr(col-4-*prev_len);														//		  (*h_index),(*attempt),message, (*message_len)
 		(*message_len) -= (col-4);																//			  must be pointers
 		(*attempt)++;																			//
 		while((*message_len) > col-2-NEWLINE_OFFSET) {
 			if(message_lines-(*attempt)<=row-2) {
-				mvwprintw(*chat_win,(*h_index),NEWLINE_OFFSET+prev_len+1,(message.substr(0, col-4-NEWLINE_OFFSET)+"..").c_str());
+				mvwprintw(*chat_win,(*h_index),NEWLINE_OFFSET,(message.substr(0, col-4-NEWLINE_OFFSET-*prev_len)+"..").c_str());
 				(*h_index)++;
 			}
-			message = message.substr(col-4-NEWLINE_OFFSET);
+			message = message.substr(col-4-NEWLINE_OFFSET-*prev_len);
 			(*message_len) -= (col-4-NEWLINE_OFFSET);
 			(*attempt)++;
 		}
 		if(message_lines-(*attempt)<=row-2) {
-			mvwprintw(*chat_win,(*h_index),NEWLINE_OFFSET+prev_len+1,message.c_str());
-			(*h_index)++;
+			mvwprintw(*chat_win,(*h_index),NEWLINE_OFFSET,message.c_str());
+			// (*h_index)++;
+			(*h_index) += endline;
 		}
+		(*message_len) += NEWLINE_OFFSET-1;													
 		(*attempt)++;
 	}
 	else {
 		if(message_lines-(*attempt)<=row-2) {
-			mvwprintw(*chat_win,(*h_index),prev_len+1,message.c_str());
+			mvwprintw(*chat_win,(*h_index),*prev_len+1,message.c_str());
 			(*h_index) += endline;
 		}
-		(*attempt)++;
+		(*attempt)+= endline;
 	}
 }
 

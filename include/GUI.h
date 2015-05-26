@@ -39,7 +39,7 @@ public:
 	void showScreen(int a);
 
 	void printChat();
-	void printMessage(string message, int message_lines, int *h_index, int *attempt, int *message_len, int prev_len, int endline);
+	void printMessage(string message, int message_lines, int *h_index, int *attempt, int *message_len, int *prev_len, int endline);
 
 private:
 	UserL *_user;
