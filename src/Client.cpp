@@ -38,7 +38,8 @@ void Client::Connect( std::string username, byte usernameColor )
 	struct LogonMessage* logonMessage = (struct LogonMessage*) message.messageData;
  	
 	message.messageType = LOGON_NOTIFY; 
-	memcpy( (void*)&logonMessage->username, (void*)username.c_str(), username.length() ); 
+	strcpy(logonMessage->username, username.c_str()); 
+	// memcpy( (void*)&logonMessage->username, (void*)username.c_str(), username.length() ); 
 
 	logonMessage->usernameColor = usernameColor; 
 	logonMessage->textColor = 0x00; 
