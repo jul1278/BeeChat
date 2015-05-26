@@ -15,6 +15,7 @@ MessageFactory::MessageFactory(UserL user) {
 	quit = 0;
 
 	_user = user;
+	_users.push_back(user);
 	_Win = Windows(&info_scr, &chat_win, &message_win, &users_win);
 	_Gooey = GUI(&_user, &_users, &_chatlog, &info_scr, &chat_win, &message_win, &users_win);
 } 
