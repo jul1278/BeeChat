@@ -38,7 +38,7 @@ public:
 	void printTimeout();
 	void showScreen(int a);
 
-	void printChat();
+	void printChat(int offset = 0);
 	void printMessage(string message, int message_lines, int *h_index, int *attempt, int *message_len, int *prev_len, int endline);
 
 private:

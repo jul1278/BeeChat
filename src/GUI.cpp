@@ -167,9 +167,8 @@ void GUI::showScreen(int a) {
 
 
 
-int offset = 0;
 
-void GUI::printChat() {
+void GUI::printChat(int offset) {
 	int row, col;
 	getmaxyx(*chat_win, row, col);
 	wclear(*chat_win);
@@ -440,7 +439,8 @@ void GUI::printMessage(string message, int message_lines, int *h_index, int *att
 		}																						//		tryprint+trunkate
 		message = message.substr(col-4-*prev_len);														//		  (*h_index),(*attempt),message, (*message_len)
 		(*message_len) -= (col-4);																//			  must be pointers
-		(*attempt)++;																			//
+		(*attempt)++;
+		(*prev_len) = -1;																			//
 		while((*message_len) > col-2-NEWLINE_OFFSET) {
 			if(message_lines-(*attempt)<=row-2) {
 				mvwprintw(*chat_win,(*h_index),NEWLINE_OFFSET,(message.substr(0, col-4-NEWLINE_OFFSET-*prev_len)+"..").c_str());

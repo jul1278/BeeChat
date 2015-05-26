@@ -163,12 +163,12 @@ string MessageFactory::upperCase(string message) {
 
 
 string message_str_g ="";
+int offset = 0;
 // int offset = 0; // link with gUI
 
 void MessageFactory::userInput() {
 	if(_user.getPriviledges() == TIMEDOUT) {return;}
 
-	int offset = 0;
 
 	int row, col;
 	getmaxyx(message_win, row, col);
@@ -213,17 +213,17 @@ void MessageFactory::userInput() {
 			if(lim < 0) {lim = 0;}
 			if(offset < lim) {
 				offset++;
-				_Gooey.printChat();
+				_Gooey.printChat(offset);
 			}
 		}
 		else if(c == KEY_DOWN) {
 			if(offset > 0) {
 				offset--;
-				_Gooey.printChat();
+				_Gooey.printChat(offset);
 			}
 		}
 		else if(c == ERR) {return;}
-		else if(message_str_g.size() >= (int)(col*0.8)) {return;} 
+		// else if(message_str_g.size() >= (int)(col*0.8)) {return;} 
 		else if(!isprint(c)) {
 			storeMessage("             <SERVER> : You have entered a non printable character.");
 			wmove(message_win, row/2, (int)(col*0.1)+message_str_g.length());
