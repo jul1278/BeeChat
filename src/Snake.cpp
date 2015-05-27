@@ -38,11 +38,15 @@ void Snake::initSnake() {
     _blocks.printBlocks();
 }	
 
-void Snake::userInput() {
+bool Snake::userInput() {
 	int c = wgetch(snake_win);
 	if(c == 'p') {
-		Pause();
+		if(Pause()) {return 1;}
 	}
+	// else if(c == KEY_RESIZE) {
+	// 	wgetch(snake_win);
+	// 	return 1;
+	// }
 	else if(c == KEY_UP && _snake._direction != DOWN) {				//use setter (setDir), ensure you cant reverse
 		_snake._direction = UP;
 	}
@@ -55,12 +59,16 @@ void Snake::userInput() {
 	else if(c == KEY_RIGHT && _snake._direction != LEFT) {
 		_snake._direction = RIGHT;
 	}
+	return 0;
 }	
 
 int Snake::run() {
 	initSnake();
 	while(1) {
-		userInput();
+
+		if(userInput()) {
+			return (_snake.x.size() - START_LENGTH);
+		}
 
 		if(timeStep()) {
 			return (_snake.x.size() - START_LENGTH);	//score
@@ -76,7 +84,7 @@ int Snake::run() {
 }
 
 
-int Snake::timeStep() {
+bool Snake::timeStep() {
 	// move snake + check if dead + check if on food + check food spawn
 	_snake.moveSnake();
 	int x = _snake.x.front();
@@ -162,7 +170,7 @@ const char *PAUSE[] = {"      ____       _       _   _   ____   U _____ u ____  
 					   "    (__)__)  (__)  (__)   (__)  (__)    (__) (__)(__)_)      ",
 					   "                                                             "};
 
-void Snake::Pause() {
+bool Snake::Pause() {
 
 	// PRINT HASH
 	for(int jj = 1; jj < y_lim-1; jj++) {
@@ -198,6 +206,14 @@ void Snake::Pause() {
 	}
 
 	// WAIT
-	while(wgetch(snake_win) != 'p');
+	int c = 0;
+	while(c != 'p') {
+		c = wgetch(snake_win);
+		if(c == KEY_RESIZE) {
+			c = wgetch(snake_win);
+			return 1;
+		}
+	}
 	wclear(snake_win);
+	return 0;
 }

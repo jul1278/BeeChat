@@ -29,11 +29,11 @@ public:
 
 private:
 	void initSnake();				// setup screen + draw elements
-	void userInput();				// pause + change direction
+	bool userInput();				// pause + change direction
 
-	int timeStep();					// move snake + check if dead + check if on food + check food spawn
+	bool timeStep();				// move snake + check if dead + check if on food + check food spawn
 	void printEnd();				// print animation
-	void Pause();					// print pause screen
+	bool Pause();					// print pause screen
 
 	WINDOW *snake_win;
 	theSnake _snake;

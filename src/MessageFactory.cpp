@@ -671,6 +671,7 @@ bool MessageFactory::command(string message, int out_in) {
 
 			case SNAKE:
 				score = snakeGame.run();
+				_Win.resize();
 				_Gooey.showScreen(CHAT);
 				oss << score;
 				_messageQueue.push("/green{             <SERVER> : " + user_str + " just reached a score of " + oss.str() + " on snake.}");
