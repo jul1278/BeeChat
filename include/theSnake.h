@@ -8,8 +8,8 @@
 #ifndef _THE_SNAKE_H
 #define _THE_SNAKE_H
 
-#include <vector>
-#include "ncurses.h"
+#include <vector>			// required for: 
+#include "ncurses.h"		// required for: visuals
 using std::vector;
 
 #define START_LENGTH 5

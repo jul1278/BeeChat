@@ -24,6 +24,7 @@ using std::queue;
 #define USERS_OFFSET 3
 #define NEWLINE_OFFSET 26
 #define NFONTCOMMANDS 11
+#define MAX_HISTORY 40
 
 class GUI
 {

@@ -178,7 +178,9 @@ void GUI::printChat(int offset) {
 	string message;
 	int message_len;
 
-
+	while(_chatlog->size() > MAX_HISTORY) {
+		_chatlog->erase(_chatlog->begin());
+	}
 
 	int ii;
     int m_index;

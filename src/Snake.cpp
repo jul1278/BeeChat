@@ -153,6 +153,51 @@ void Snake::printEnd() {
 	}
 }	
 
+const char *PAUSE[] = {"      ____       _       _   _   ____   U _____ u ____       ",
+					   "    U|  _\"\\ uU  /\"\\  uU |\"|u| | / __\"| u\\| ___\"|/|  _\"\\      ",
+					   "    \\| |_) |/ \\/ _ \\/  \\| |\\| |<\\___ \\/  |  _|\" /| | | |     ",
+					   "     |  __/   / ___ \\   | |_| | u___) |  | |___ U| |_| |\\    ",
+					   "     |_|     /_/   \\_\\ <<\\___/  |____/>> |_____| |____/ u    ",
+					   "     ||>>_    \\    >>(__) )(    )(  (__)<<   >>  |||_        ",
+					   "    (__)__)  (__)  (__)   (__)  (__)    (__) (__)(__)_)      ",
+					   "                                                             "};
+
 void Snake::Pause() {
+
+	// PRINT HASH
+	for(int jj = 1; jj < y_lim-1; jj++) {
+		for(int ii = 1; ii < x_lim+jj-1; ii++) {
+			if((ii+jj)%3 == 0) {
+				mvwaddch(snake_win, jj, ii-jj, PAUSE_BRICK);
+			}
+		}
+	}
+
+
+	// PRINT ASCII
+	int sizey = 8;
+	int sizex = 61;
+	int starty = (y_lim - sizey)/2;
+	int startx = (x_lim - sizex)/2;
+	for(int ii = 0; ii < sizey; ii++) {
+		mvwprintw(snake_win, starty+ii, startx, PAUSE[ii]);
+	}
+
+	// PRIT BOX
+	startx = startx+1;
+	starty = starty-1;
+	int endx = startx-3+sizex;
+	int endy = starty+1+sizey;
+	for(int jj = starty; jj <= endy; jj++) {
+		mvwaddch(snake_win, jj, startx, PAUSE_BRICK);
+		mvwaddch(snake_win, jj, endx, PAUSE_BRICK);
+	}
+	for(int ii = startx; ii <= endx; ii++) {
+		mvwaddch(snake_win, starty, ii, PAUSE_BRICK);
+		mvwaddch(snake_win, endy, ii, PAUSE_BRICK);
+	}
+
+	// WAIT
 	while(wgetch(snake_win) != 'p');
+	wclear(snake_win);
 }

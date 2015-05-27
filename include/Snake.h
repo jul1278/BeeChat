@@ -8,32 +8,32 @@
 #ifndef _SNAKE_H
 #define _SNAKE_H
 
-#include <stdio.h>      
-#include <stdlib.h>     
-#include <time.h>
-#include <unistd.h>
-#include "theSnake.h"
-#include "theFood.h"
-#include "Block.h"
+#include <stdio.h>      // required for: 
+#include <stdlib.h>     // required for: 
+#include <time.h>		// required for: seed
+#include <unistd.h>		// required for: random
+#include "theSnake.h"	
+#include "theFood.h"	
+#include "Block.h"		
 
 #define STEP_VERT 50000
 #define STEP_HORI 30000
+#define PAUSE_BRICK 'X'
 
 class Snake
 {
 public:
 	Snake();
 	~Snake();
-	int run();
+	int run();						// setup then - user input, timestep, delay
 
 private:
-	void initSnake();				// setup screen + draw snake + draw food
-	void userInput();				// check for exit + pause + move
+	void initSnake();				// setup screen + draw elements
+	void userInput();				// pause + change direction
 
 	int timeStep();					// move snake + check if dead + check if on food + check food spawn
-	void printStep();
-	void printEnd();				// print win/lose screen
-	void Pause();
+	void printEnd();				// print animation
+	void Pause();					// print pause screen
 
 	WINDOW *snake_win;
 	theSnake _snake;
