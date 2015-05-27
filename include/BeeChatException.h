@@ -12,6 +12,18 @@
 //create text file error log to catch unhandled errors?
 enum ExceptionType
 {
+    // this is needed for testing, DO NOT THROW
+  eET_none = 0,
+
+    // Unknown/generic exception
+  eET_unknown_exception = 10000,
+
+    //unknown issues
+      //unknown exception (hopefully never throw this)
+        //log error location (if possible) with server and terminate everything
+          //try notifying user first?
+      //
+
     // connection issues
       //socket not free
         //
@@ -29,13 +41,16 @@ enum ExceptionType
         //try again, 3 iterations then terminate connection?
       //message for new user failed to send
         //try again? 3 iterations, then terminate user connection?
+
+    //Settings exceptions
+      //username is empty
+  eET_empty_username,
       //username contains invalid chars
   eET_invalid_username_characters,
       //username is too long
   eET_username_too_long,
-      //username is empty
-  eET_empty_username,
-
+      //unknown argument
+  eET_unknown_arg,
 
     //GUI issues
       //invalid message type
@@ -67,12 +82,6 @@ enum ExceptionType
     //server issues
       //client ping not successful, user has disconnected unexpectedly
         //terminate user from list and connection, send message to all users that clients has disconnected
-      //
-
-    //unknown issues
-      //unknown exception (hopefully never throw this)
-        //log error location (if possible) with server and terminate everything
-          //try notifying user first?
       //
 
 };
