@@ -5,7 +5,7 @@
  *
  */
 
-#include "Snake.h"
+#include "snake/Snake.h"
 
 Snake::Snake() {
 	srand(time(NULL));
@@ -36,7 +36,7 @@ void Snake::initSnake() {
     _snake.printSnake();
     _food.printFood();
     _blocks.printBlocks();
-}	
+}
 
 bool Snake::userInput() {
 	int c = wgetch(snake_win);
@@ -60,7 +60,7 @@ bool Snake::userInput() {
 		_snake._direction = RIGHT;
 	}
 	return 0;
-}	
+}
 
 int Snake::run() {
 	initSnake();
@@ -116,7 +116,7 @@ bool Snake::timeStep() {
 	// Blocks prints if grown
 	wrefresh(snake_win);
 	return 0;
-}	
+}
 
 
 void Snake::printEnd() {
@@ -159,7 +159,7 @@ void Snake::printEnd() {
 			}
 		}
 	}
-}	
+}
 
 const char *PAUSE[] = {"      ____       _       _   _   ____   U _____ u ____       ",
 					   "    U|  _\"\\ uU  /\"\\  uU |\"|u| | / __\"| u\\| ___\"|/|  _\"\\      ",

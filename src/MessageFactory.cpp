@@ -6,6 +6,8 @@
  */
 
 #include "MessageFactory.h"
+#include "snake/Snake.h"
+
 using namespace std;
 
 MessageFactory::MessageFactory(UserL user) {
@@ -18,21 +20,21 @@ MessageFactory::MessageFactory(UserL user) {
 	_users.push_back(user);
 	_Win = Windows(&info_scr, &chat_win, &message_win, &users_win);
 	_Gooey = GUI(&_user, &_users, &_chatlog, &info_scr, &chat_win, &message_win, &users_win);
-} 
+}
 
 MessageFactory::MessageFactory() {
 
-} 
+}
 
 MessageFactory::~MessageFactory() {
 
 }
 
 void MessageFactory::dummyText() {
-	_chatlog.push_back("[05:30:12] : Feyre    : Hey everyone!");    
-	_chatlog.push_back("[06:25:15] : Mike     : Oh hey :)");    
-	_chatlog.push_back("[05:30:52] : Tim      : Poop");    
-	_chatlog.push_back("[05:30:19] : Feyre    : Uhh, what?");    
+	_chatlog.push_back("[05:30:12] : Feyre    : Hey everyone!");
+	_chatlog.push_back("[06:25:15] : Mike     : Oh hey :)");
+	_chatlog.push_back("[05:30:52] : Tim      : Poop");
+	_chatlog.push_back("[05:30:19] : Feyre    : Uhh, what?");
 
 	_users.push_back(UserL("Feyre", SADMIN));
 	_users.push_back(UserL("Tim", REGULAR));
@@ -43,30 +45,30 @@ void MessageFactory::dummyText() {
 
 void MessageFactory::testText() {
 	// CHECK FONTS
-	_chatlog.push_back("[05:30:12] : Feyre    : /b{Hey everyone!");    
-	_chatlog.push_back("[05:30:12] : Feyre    : /u{Hey everyone!");    
-	_chatlog.push_back("[05:30:12] : Feyre    : /c{Hey everyone!");    
-	_chatlog.push_back("[05:30:12] : Feyre    : /i{Hey everyone!");    
-	_chatlog.push_back("");    
+	_chatlog.push_back("[05:30:12] : Feyre    : /b{Hey everyone!");
+	_chatlog.push_back("[05:30:12] : Feyre    : /u{Hey everyone!");
+	_chatlog.push_back("[05:30:12] : Feyre    : /c{Hey everyone!");
+	_chatlog.push_back("[05:30:12] : Feyre    : /i{Hey everyone!");
+	_chatlog.push_back("");
 
 	// CHECK COLOURS
-	_chatlog.push_back("[05:30:12] : Feyre    : /red{Hey everyone!");    
-	_chatlog.push_back("[05:30:12] : Feyre    : /green{Hey everyone!");    
-	_chatlog.push_back("[05:30:12] : Feyre    : /yellow{Hey everyone!");    
-	_chatlog.push_back("[05:30:12] : Feyre    : /blue{Hey everyone!");    
-	_chatlog.push_back("[05:30:12] : Feyre    : /magenta{Hey everyone!");    
-	_chatlog.push_back("[05:30:12] : Feyre    : /cyan{Hey everyone!");    
-	_chatlog.push_back("[05:30:12] : Feyre    : /white{Hey everyone!");    
-	_chatlog.push_back("");    
+	_chatlog.push_back("[05:30:12] : Feyre    : /red{Hey everyone!");
+	_chatlog.push_back("[05:30:12] : Feyre    : /green{Hey everyone!");
+	_chatlog.push_back("[05:30:12] : Feyre    : /yellow{Hey everyone!");
+	_chatlog.push_back("[05:30:12] : Feyre    : /blue{Hey everyone!");
+	_chatlog.push_back("[05:30:12] : Feyre    : /magenta{Hey everyone!");
+	_chatlog.push_back("[05:30:12] : Feyre    : /cyan{Hey everyone!");
+	_chatlog.push_back("[05:30:12] : Feyre    : /white{Hey everyone!");
+	_chatlog.push_back("");
 
 	// CHECK COMPLEX
-	_chatlog.push_back("[05:30:12] : Feyre    : /b{/yellow{Hey everyone!");    
-	_chatlog.push_back("[05:30:12] : Feyre    : /u{/green{Hey everyone!");    
-	_chatlog.push_back("[05:30:12] : Feyre    : /b{/u{/cyan{Hey everyone!");    
-	_chatlog.push_back("");    
+	_chatlog.push_back("[05:30:12] : Feyre    : /b{/yellow{Hey everyone!");
+	_chatlog.push_back("[05:30:12] : Feyre    : /u{/green{Hey everyone!");
+	_chatlog.push_back("[05:30:12] : Feyre    : /b{/u{/cyan{Hey everyone!");
+	_chatlog.push_back("");
 
 	// CHECK WRAPPING
-	_chatlog.push_back("[05:30:12] : Feyre    : Oh hey, here is a really long message that should wrap nicely around the screen, or at least; i would like to hope so. :)");    
+	_chatlog.push_back("[05:30:12] : Feyre    : Oh hey, here is a really long message that should wrap nicely around the screen, or at least; i would like to hope so. :)");
 
 }
 
@@ -78,21 +80,21 @@ void MessageFactory::updateUsers() {
 
 void MessageFactory::removeUser(string user) {
 	int ii;
-	for(ii = 0; ii < _users.size(); ii++) {							
+	for(ii = 0; ii < _users.size(); ii++) {
 		if(user == _users[ii].getUser()) {
 			_users.erase(_users.begin()+ii);
 			break;
-		}	
-	}	
+		}
+	}
 	if(user == "all") {
-		for(ii = 0; ii < _users.size(); ii++) {							
+		for(ii = 0; ii < _users.size(); ii++) {
 			if(_users[ii].getPriviledges() < ADMIN) {
 				_users.erase(_users.begin()+ii);
 				ii--;
 			}
-		}	
+		}
 	}
-	_Gooey.printUsers();	
+	_Gooey.printUsers();
 }
 
 
@@ -223,7 +225,7 @@ void MessageFactory::userInput() {
 			}
 		}
 		else if(c == ERR) {return;}
-		// else if(message_str_g.size() >= (int)(col*0.8)) {return;} 
+		// else if(message_str_g.size() >= (int)(col*0.8)) {return;}
 		else if(!isprint(c)) {
 			storeMessage("             <SERVER> : You have entered a non printable character.");
 			wmove(message_win, row/2, (int)(col*0.1)+message_str_g.length());
@@ -232,11 +234,11 @@ void MessageFactory::userInput() {
 			message_str_g += c;
 			waddch(message_win,c);
 			wrefresh(message_win);
-		} 
+		}
 		return;
 	}
 
-	
+
 	if(_user.getPriviledges() == 0) {
 		wclear(message_win);	//MAYBE: write own clear function that wont clear border.
 	    wborder(message_win, 	'|', '|', '-','-','+','+','+','+');
@@ -285,7 +287,7 @@ void MessageFactory::userInput() {
 		_messageQueue.push(DATA_str);
 	}
 	message_str_g = "";
-} 
+}
 
 
 
@@ -373,7 +375,7 @@ bool MessageFactory::command(string message, int out_in) {
 
 
 	// USER SENT COMMAND
-	if(out_in == OUT) {		
+	if(out_in == OUT) {
 		switch(jj) {
 
 			case HELP:
@@ -435,7 +437,7 @@ bool MessageFactory::command(string message, int out_in) {
 				else if (arg_str == this_user) {
 					storeMessage("             <SERVER> : You cannot mute yourself.");
 					return 1;
-				}	
+				}
 				else if(_user.getPriviledges() <= arg_obj.getPriviledges()) {
 					storeMessage("             <SERVER> : You cannot mute a superior or matching rank.");
 					return 1;
@@ -465,7 +467,7 @@ bool MessageFactory::command(string message, int out_in) {
 				else if (arg_str == this_user) {
 					storeMessage("             <SERVER> : You cannot unmute yourself.");
 					return 1;
-				}	
+				}
 				// else if(_user.getPriviledges() <= arg_obj.getPriviledges()) {
 				// 	storeMessage("             <SERVER> : You cannot mute a superior or matching rank.");
 				// 	return 1;
@@ -514,7 +516,7 @@ bool MessageFactory::command(string message, int out_in) {
 				else if (arg_str == this_user) {
 					storeMessage("             <SERVER> : You cannot pm yourself.");
 					return 1;
-				}	
+				}
 				// else if(_user.getPriviledges() <= arg_obj.getPriviledges()) {
 				// 	storeMessage("             <SERVER> : You cannot mute a superior or matching rank.");
 				// 	return 1;
@@ -570,7 +572,7 @@ bool MessageFactory::command(string message, int out_in) {
 				else if (arg_str == this_user) {
 					storeMessage("             <SERVER> : You cannot mute yourself.");
 					return 1;
-				}	
+				}
 				else if(_user.getPriviledges() <= arg_obj.getPriviledges()) {
 					storeMessage("             <SERVER> : You cannot mute a superior or matching rank.");
 					return 1;
@@ -611,7 +613,7 @@ bool MessageFactory::command(string message, int out_in) {
 				else if (arg_str == this_user) {
 					storeMessage("             <SERVER> : You cannot timeout yourself.");
 					return 1;
-				}	
+				}
 				else if(_user.getPriviledges() <= arg_obj.getPriviledges()) {
 					storeMessage("             <SERVER> : You cannot timeout a superior or matching rank.");
 					return 1;
@@ -657,7 +659,7 @@ bool MessageFactory::command(string message, int out_in) {
 				else if (arg_str == this_user) {
 					storeMessage("             <SERVER> : You cannot untimeout yourself.");
 					return 1;
-				}	
+				}
 				// else if(_user.getPriviledges() <= arg_obj.getPriviledges()) {
 				// 	storeMessage("             <SERVER> : You cannot mute a superior or matching rank.");
 				// 	return 1;
@@ -705,7 +707,7 @@ bool MessageFactory::command(string message, int out_in) {
 
 
 	} //USER RECIEVED COMMAND
-	else if(out_in == IN) {		
+	else if(out_in == IN) {
 		switch(jj) {
 			case HELP:
 				//should never see
@@ -726,7 +728,7 @@ bool MessageFactory::command(string message, int out_in) {
 					storeMessage("             <SERVER> : Reason: " + arg_str2);
 				}
 
-				removeUser(arg_str);									
+				removeUser(arg_str);
 				return 1;
 
 
@@ -754,7 +756,7 @@ bool MessageFactory::command(string message, int out_in) {
 					cout << '\a';
 					if(arg_str != user_str) {storeMessage("             <SERVER> : You have been poked by " + user_str);}
 				}
-				return 1;	
+				return 1;
 
 
 
@@ -773,7 +775,7 @@ bool MessageFactory::command(string message, int out_in) {
 
 
 			case EXIT:
-				removeUser(arg_str);									
+				removeUser(arg_str);
 				return 1;
 
 
@@ -812,7 +814,7 @@ bool MessageFactory::command(string message, int out_in) {
 					// _messageQueue.push 				  		  ("             <SERVER> : " + user_str + " has unmuted " + arg_str + ".");
 				}
 				storeMessage("             <SERVER> : " + user_str + " has released " + arg_str + " from timeout.");
-				return 1;	
+				return 1;
 		}
 	}
 	return 1;

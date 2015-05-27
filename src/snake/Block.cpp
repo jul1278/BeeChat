@@ -5,7 +5,7 @@
  *
  */
 #include <cstdlib>
-#include "Block.h"
+#include "snake/Block.h"
 
 Block::Block(WINDOW **snake_scr) {
 	snake_win = snake_scr;

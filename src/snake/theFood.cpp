@@ -5,7 +5,7 @@
  *
  */
 
-#include "theFood.h"
+#include "snake/theFood.h"
 
 theFood::theFood(int *xlim, int *ylim, WINDOW **snake_scr) {
 	snake_win = snake_scr;

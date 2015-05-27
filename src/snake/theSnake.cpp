@@ -5,7 +5,7 @@
  *
  */
 
-#include "theSnake.h"
+#include "snake/theSnake.h"
 
 
 theSnake::theSnake(WINDOW **snake_scr) {
@@ -16,7 +16,7 @@ theSnake::theSnake(WINDOW **snake_scr) {
 }
 
 theSnake::theSnake() {
-	
+
 }
 
 theSnake::~theSnake() {
@@ -45,13 +45,13 @@ void theSnake::moveSnake() {
 	y.erase(y.end()-1);
 
 	// printSnake();
-}	
+}
 
 void theSnake::growSnake() {
 	// insert last element of value back()
 	x.push_back(x.back());
 	y.push_back(y.back());
-}	
+}
 
 bool theSnake::isSnake(int snake_x, int snake_y) {	//ignores head
 	for(int ii = 1; ii < x.size(); ii++) {
@@ -72,7 +72,7 @@ void theSnake::printSnake() {
 	}
 	mvwaddch(*snake_win, y.back(), x.back(), TAIL);
 	wattroff(*snake_win, COLOR_PAIR(2));
-}	
+}
 
 void theSnake::printScore() {
 	int score = x.size() - START_LENGTH;
