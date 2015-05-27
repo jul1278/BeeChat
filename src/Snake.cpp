@@ -43,10 +43,10 @@ bool Snake::userInput() {
 	if(c == 'p') {
 		if(Pause()) {return 1;}
 	}
-	// else if(c == KEY_RESIZE) {
-	// 	wgetch(snake_win);
-	// 	return 1;
-	// }
+	else if(c == KEY_RESIZE) {
+		wgetch(snake_win);
+		return 1;
+	}
 	else if(c == KEY_UP && _snake._direction != DOWN) {				//use setter (setDir), ensure you cant reverse
 		_snake._direction = UP;
 	}
@@ -205,7 +205,9 @@ bool Snake::Pause() {
 		mvwaddch(snake_win, endy, ii, PAUSE_BRICK);
 	}
 
+
 	// WAIT
+	nodelay(snake_win,0);
 	int c = 0;
 	while(c != 'p') {
 		c = wgetch(snake_win);
@@ -214,6 +216,7 @@ bool Snake::Pause() {
 			return 1;
 		}
 	}
+	nodelay(snake_win,1);
 	wclear(snake_win);
 	return 0;
 }
