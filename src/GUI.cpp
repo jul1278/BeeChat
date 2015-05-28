@@ -78,7 +78,14 @@ void GUI::printUsers() {
 }
 
 void GUI::printTimeout() {
+	mvwprintw(stdscr, 3,3, "YOU ARE IN TIMEOUT");
+	wrefresh(stdscr);
+}
 
+void GUI::printKick() {
+	mvwprintw(stdscr, 3,3, "YOU HAVE BEEN KICKED.");
+	wrefresh(stdscr);
+	sleep(3);
 }
 
 void GUI::showScreen(SCRN screen) {
@@ -173,7 +180,7 @@ void GUI::printChat(int offset) {
 	getmaxyx(*chat_win, row, col);
 	wclear(*chat_win);
     wborder(*chat_win, 	'|', '|', '-','-','+','+','+','+');
-	string fontcommands[] = {"/b{", "/i{", "/u{", "/c{", "/red{", "/green{", "/yellow{", "/blue{", "/magenta{", "/cyan{", "/white{"};
+	// string fontcommands[] = {"/b{", "/i{", "/u{", "/c{", "/red{", "/green{", "/yellow{", "/blue{", "/magenta{", "/cyan{", "/white{"};
 
 	string message;
 	int message_len;

@@ -36,7 +36,6 @@ void MessageFactory::dummyText() {
 	_chatlog.push_back("[05:30:52] : Tim      : Poop");
 	_chatlog.push_back("[05:30:19] : Feyre    : Uhh, what?");
 
-	_users.push_back(UserL("Feyre", SADMIN));
 	_users.push_back(UserL("Tim", REGULAR));
 	_users.push_back(UserL("Mike", REGULAR));
 	_users.push_back(UserL("Liam", SADMIN));
@@ -316,16 +315,15 @@ void MessageFactory::userInput() {
 
 
 bool MessageFactory::command(string message, int out_in) {
-	// message = message.substr(24); 		//bad to edit? maybe only give it the message part
-	Snake snakeGame;
 
 
 	// INITIALIZE VARIABLES
-	ostringstream oss;
 	int ii, score;
+	Snake snakeGame;
+	ostringstream oss;
 	string this_user = _user.getUser();
-	string commands[] = {"/help", "/kick", "/mute", "/unmute", "/poke", "/pm", "/exit", "/ignore", "/timeout", "/release", "/snake", "/test"};
-	string fontcommands[] = {"/b{", "/i{", "/u{", "/c{", "/red{", "/green{", "/yellow{", "/blue{", "/magenta{", "/cyan{", "/white{"};
+	// string commands[] = {"/help", "/kick", "/mute", "/unmute", "/poke", "/pm", "/exit", "/ignore", "/timeout", "/release", "/snake", "/test"};
+	// string fontcommands[] = {"/b{", "/i{", "/u{", "/c{", "/red{", "/green{", "/yellow{", "/blue{", "/magenta{", "/cyan{", "/white{"};
 	string command_str;
 	string user_str;
 	string arg_str;
@@ -339,7 +337,7 @@ bool MessageFactory::command(string message, int out_in) {
     ss >> user_str;				//user
     ss >> temp;					// :
     ss >> command_str;			//command
-    ss >> arg_str;				//arg 			WHAT IF NO ARG?
+    ss >> arg_str;				//arg
 
 	if(!ss.eof()) {
 		arg_str2 = "";
@@ -348,6 +346,7 @@ bool MessageFactory::command(string message, int out_in) {
 			arg_str2 += temp + " ";
 		}
 	}
+
 
     // INITIAL CHECK FOR COMMAND
 	if(command_str.substr(0,1) != "/") {return 0;}			//UPDATE LATER (incase text style changes (time:name:message));
@@ -370,7 +369,7 @@ bool MessageFactory::command(string message, int out_in) {
 
 	// CHECK USER IS ONLINE -- move to command specific if commands have arg1 as not user
 	UserL arg_obj;
-    int user_exists = 0;
+    bool user_exists = 0;
 	for(ii = 0; ii < _users.size(); ii++) {
 		if(arg_str == _users[ii].getUser()) {
 			user_exists = 1;
@@ -383,6 +382,28 @@ bool MessageFactory::command(string message, int out_in) {
 	if(out_in == OUT) {
 		switch(jj) {
 
+			case KICK:
+			case MUTE:
+			case UNMUTE:
+			case IGNORE:
+			case TIMEOUT:
+			case RELEASE:
+				if(arg_str == "all") {_messageQueue.push(message);}
+				else if(!Warning(commands[(int) jj], arg_str, arg_obj, user_exists, 1, 1)) {_messageQueue.push(message);}
+				return 1;
+
+			case POKE:
+				if(!Warning(commands[(int) jj], arg_str, arg_obj, user_exists, 0, 0)) {_messageQueue.push(message);}
+				return 1;
+
+			case PM:
+				if(!Warning(commands[(int) jj], arg_str, arg_obj, user_exists, 0, 0)) {
+					if(arg_str2 == "") {storeMessage("             <SERVER> : Please enter a message.");}
+					else {_messageQueue.push(message);}
+				}
+				return 1;
+
+
 			case HELP:
 				refresh();
 				_Gooey.showScreen(INFO);
@@ -390,291 +411,11 @@ bool MessageFactory::command(string message, int out_in) {
 				_Gooey.showScreen(CHAT);
 				return 1;
 
-
-
-			case KICK:
-				if(arg_str == "all") {
-					_messageQueue.push(message);
-					// _messageQueue.push("             <SERVER> : " + this_user + " has kicked " + arg_str + ".");
-				}
-				else if(!user_exists) {
-					if (arg_str=="")		{storeMessage("             <SERVER> : Please enter the target user.");}
-					else if (arg_str!="")	{storeMessage("             <SERVER> : " + arg_str + " is not online.");}
-					return 1;
-				}
-				else if(_user.getPriviledges() < ADMIN) {
-					storeMessage("             <SERVER> : Insufficient priviledges. (ADMIN only)");
-					return 1;
-				}
-				else if (arg_str == this_user) {
-					storeMessage("             <SERVER> : You have tried to, uhh.. kick yourself?");
-					return 1;
-				}
-				else if(_user.getPriviledges() <= arg_obj.getPriviledges()) {
-					storeMessage("             <SERVER> : You cannot kick a superior or matching rank.");
-					return 1;
-				}
-				else if(user_exists) {
-					_messageQueue.push(message);
-					// _messageQueue.push("             <SERVER> : " + this_user + " has kicked " + arg_str + ".");
-				}
-				return 1;
-
-
-
-				// you cant kick all
-
-
-			case MUTE:
-				//check_msg.Command(MUTE, user_exists, thi)
-				if(arg_str == "all") {
-					_messageQueue.push(message);
-				}
-				else if(!user_exists) {
-					if (arg_str=="")		{storeMessage("             <SERVER> : Please enter the target user.");}
-					else if (arg_str!="")	{storeMessage("             <SERVER> : " + arg_str + " is not online.");}
-					return 1;
-				}
-				else if(_user.getPriviledges() < ADMIN) {
-					storeMessage("             <SERVER> : Insufficient priviledges. (ADMIN only)");
-					return 1;
-				}
-				else if (arg_str == this_user) {
-					storeMessage("             <SERVER> : You cannot mute yourself.");
-					return 1;
-				}
-				else if(_user.getPriviledges() <= arg_obj.getPriviledges()) {
-					storeMessage("             <SERVER> : You cannot mute a superior or matching rank.");
-					return 1;
-				}
-				else if(user_exists) {
-					_messageQueue.push(message);
-				}
-				return 1;
-
-
-
-
-
-			case UNMUTE:
-				if(arg_str == "all") {
-					_messageQueue.push(message);
-				}
-				else if(!user_exists) {
-					if (arg_str=="")		{storeMessage("             <SERVER> : Please enter the target user.");}
-					else if (arg_str!="")	{storeMessage("             <SERVER> : " + arg_str + " is not online.");}
-					return 1;
-				}
-				else if(_user.getPriviledges() < ADMIN) {
-					storeMessage("             <SERVER> : Insufficient priviledges. (ADMIN only)");
-					return 1;
-				}
-				else if (arg_str == this_user) {
-					storeMessage("             <SERVER> : You cannot unmute yourself.");
-					return 1;
-				}
-				// else if(_user.getPriviledges() <= arg_obj.getPriviledges()) {
-				// 	storeMessage("             <SERVER> : You cannot mute a superior or matching rank.");
-				// 	return 1;
-				// }
-				else if(user_exists) {
-					_messageQueue.push(message);
-				}
-
-				return 1;
-
-
-
-
-
-
-
-
-
-			case POKE:
-				if(user_exists) {
-					_messageQueue.push(message);
-					if (arg_str == this_user) 	{storeMessage("             <SERVER> : You have uhh.. poked, yourself?");}
-					else 					{storeMessage("             <SERVER> : You have poked " + arg_str + "!");}
-				}
-				else if (arg_str=="")		{storeMessage("             <SERVER> : Please enter the target user.");}
-				else if (arg_str!="")		{storeMessage("             <SERVER> : " + arg_str + " is not online.");}
-				return 1;
-
-
-
-
-
-
-
-
-			case PM:
-				if(!user_exists) {
-					if (arg_str=="")		{storeMessage("             <SERVER> : Please enter the target user.");}
-					else if (arg_str!="")	{storeMessage("             <SERVER> : " + arg_str + " is not online.");}
-					return 1;
-				}
-				// else if(_user.getPriviledges() < ADMIN) {
-				// 	storeMessage("             <SERVER> : Insufficient priviledges. (ADMIN only)");
-				// 	return 1;
-				// }
-				else if (arg_str == this_user) {
-					storeMessage("             <SERVER> : You cannot pm yourself.");
-					return 1;
-				}
-				// else if(_user.getPriviledges() <= arg_obj.getPriviledges()) {
-				// 	storeMessage("             <SERVER> : You cannot mute a superior or matching rank.");
-				// 	return 1;
-				// }
-				else if(arg_str2 == "") {
-					storeMessage("             <SERVER> : Please enter a message.");
-				}
-				else {
-					_messageQueue.push(message);
-				}
-				return 1;
-
-
-
-
-
-
-
-
-
-
-
 			case EXIT:
 				_messageQueue.push(message);
 				endwin();
 				quit = 1;
 				return 1;
-
-
-
-
-
-
-
-
-
-
-
-
-			case IGNORE:
-				if(arg_str == "all") {
-					_messageQueue.push(message);
-				}
-				else if(!user_exists) {
-					if (arg_str=="")		{storeMessage("             <SERVER> : Please enter the target user.");}
-					else if (arg_str!="")	{storeMessage("             <SERVER> : " + arg_str + " is not online.");}
-					return 1;
-				}
-				else if(_user.getPriviledges() < ADMIN) {
-					storeMessage("             <SERVER> : Insufficient priviledges. (ADMIN only)");
-					return 1;
-				}
-				else if (arg_str == this_user) {
-					storeMessage("             <SERVER> : You cannot mute yourself.");
-					return 1;
-				}
-				else if(_user.getPriviledges() <= arg_obj.getPriviledges()) {
-					storeMessage("             <SERVER> : You cannot mute a superior or matching rank.");
-					return 1;
-				}
-				else if(user_exists) {
-					_messageQueue.push(message);
-				}
-
-				return 1;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			case TIMEOUT:
-				if(arg_str == "all") {
-					_messageQueue.push(message);
-				}
-				else if(!user_exists) {
-					if (arg_str=="")		{storeMessage("             <SERVER> : Please enter the target user.");}
-					else if (arg_str!="")	{storeMessage("             <SERVER> : " + arg_str + " is not online.");}
-					return 1;
-				}
-				else if(_user.getPriviledges() < ADMIN) {
-					storeMessage("             <SERVER> : Insufficient priviledges. (ADMIN only)");
-					return 1;
-				}
-				else if (arg_str == this_user) {
-					storeMessage("             <SERVER> : You cannot timeout yourself.");
-					return 1;
-				}
-				else if(_user.getPriviledges() <= arg_obj.getPriviledges()) {
-					storeMessage("             <SERVER> : You cannot timeout a superior or matching rank.");
-					return 1;
-				}
-				else if(user_exists) {
-					_messageQueue.push(message);
-				}
-
-				// if(!ss.eof()) {
-				// 	arg_str2 = "";
-				// 	while(!ss.eof()) {
-				// 		ss >> temp;
-				// 		arg_str2 += temp + " ";
-				// 	}
-				// 	_messageQueue.push 				  		  ("             <SERVER> : Reason: " + arg_str2);
-				// }
-				return 1;
-
-
-
-
-
-
-
-
-
-
-
-
-			case RELEASE:
-				if(arg_str == "all") {
-					_messageQueue.push(message);
-				}
-				else if(!user_exists) {
-					if (arg_str=="")		{storeMessage("             <SERVER> : Please enter the target user.");}
-					else if (arg_str!="")	{storeMessage("             <SERVER> : " + arg_str + " is not online.");}
-					return 1;
-				}
-				else if(_user.getPriviledges() < ADMIN) {
-					storeMessage("             <SERVER> : Insufficient priviledges. (ADMIN only)");
-					return 1;
-				}
-				else if (arg_str == this_user) {
-					storeMessage("             <SERVER> : You cannot untimeout yourself.");
-					return 1;
-				}
-				// else if(_user.getPriviledges() <= arg_obj.getPriviledges()) {
-				// 	storeMessage("             <SERVER> : You cannot mute a superior or matching rank.");
-				// 	return 1;
-				// }
-				else if(user_exists) {
-					_messageQueue.push(message);
-				}
-
-				return 1;
-
 
 			case SNAKE:
 				score = snakeGame.run();
@@ -685,24 +426,17 @@ bool MessageFactory::command(string message, int out_in) {
 				return 1;
 
 			case TEST:
+				dummyText();
 				testText();
 				_Gooey.printChat();
+				_Gooey.printUsers();
 				return 1;
-
 
 			default:
 				cout << '\a';
 				storeMessage("             <SERVER> : Command not recognized.");
 				return 1;
 		}
-
-
-
-
-
-
-
-
 
 
 
@@ -721,10 +455,8 @@ bool MessageFactory::command(string message, int out_in) {
 
 			case KICK:
 				if((arg_str == this_user) || ((arg_str == "all")&&(_user.getPriviledges() < ADMIN))) {
-					// show kick screen
-					// call kick function
+					_Gooey.printKick();
 					endwin();
-					// exit(EXIT_SUCCESS);
 					quit = 1;
 					return 1;
 				}
@@ -764,7 +496,6 @@ bool MessageFactory::command(string message, int out_in) {
 				return 1;
 
 
-
 			case PM:
 				if(arg_str == this_user) {
 					storeMessage("/yellow{/b{<" + user_str + "> : " + arg_str2 + "}}");
@@ -775,27 +506,14 @@ bool MessageFactory::command(string message, int out_in) {
 				return 1;
 
 
-
-
-
-
 			case EXIT:
 				removeUser(arg_str);
 				return 1;
 
 
-
-
-
-
 			case IGNORE:
 				// _messageQueue.push(message);
 				return 1;
-
-
-
-
-
 
 
 			case TIMEOUT:
@@ -811,7 +529,6 @@ bool MessageFactory::command(string message, int out_in) {
 				return 1;
 
 
-
 			case RELEASE:
 				if((arg_str == this_user) || ((arg_str == "all")&&(_user.getPriviledges() < ADMIN))) {
 					_user.setPriviledges(REGULAR);
@@ -825,3 +542,33 @@ bool MessageFactory::command(string message, int out_in) {
 	return 1;
 }
 
+
+
+
+
+
+
+
+
+
+bool MessageFactory::Warning(string command, string arg_str, UserL arg_obj, bool user_exists, bool admin_only, bool rank_matters) {
+	command = command.substr(1);
+	if(!user_exists) {
+		if (arg_str=="")		{storeMessage("             <SERVER> : Please enter the target user.");}
+		else if (arg_str!="")	{storeMessage("             <SERVER> : " + arg_str + " is not online.");}
+		return 1;
+	}
+	else if(_user.getPriviledges() < ADMIN && admin_only) {
+		storeMessage("             <SERVER> : Insufficient priviledges. (ADMIN only)");
+		return 1;
+	}
+	else if (arg_str == _user.getUser()) {
+		storeMessage("             <SERVER> : You have tried to, uhh.. " + command + " yourself?");
+		return 1;
+	}
+	else if(_user.getPriviledges() <= arg_obj.getPriviledges() && rank_matters) {
+		storeMessage("             <SERVER> : You cannot " + command + " a superior or matching rank.");
+		return 1;
+	}
+	return 0;
+}

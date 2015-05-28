@@ -21,7 +21,9 @@
 #define COM 3
 
 enum COMMAND {HELP, KICK, MUTE, UNMUTE, POKE, PM, EXIT, IGNORE, TIMEOUT, RELEASE, SNAKE, TEST, NONE = -1};
-const int NCOMMANDS = 12;
+const string commands[] = {"/help", "/kick", "/mute", "/unmute", "/poke", "/pm", "/exit", "/ignore", "/timeout", "/release", "/snake", "/test"};
+const int NCOMMANDS = sizeof(commands)/sizeof(*commands);
+// const int NCOMMANDS = 12;
 
 class MessageFactory
 {
@@ -40,6 +42,7 @@ public:
 	bool checkVulgar(string *message);
 	string upperCase(string message);
 	bool command(string message, int out_in);
+	bool Warning(string command, string arg_str, UserL arg_obj, bool user_exists, bool admin_only, bool rank_matters);
 
 	void dummyText();
 	void testText();

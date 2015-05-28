@@ -21,8 +21,11 @@ using std::queue;
 enum SCRN {INFO, SERV, CHAT};
 const int USERS_OFFSET	 = 3;	
 const int NEWLINE_OFFSET = 26;
-const int NFONTCOMMANDS	 = 11;
 const int MAX_HISTORY	 = 40;
+
+const string fontcommands[] = {"/b{", "/i{", "/u{", "/c{", "/red{", "/green{", "/yellow{", "/blue{", "/magenta{", "/cyan{", "/white{"};
+const int NFONTCOMMANDS	 = sizeof(fontcommands)/sizeof(*fontcommands);
+// const int NFONTCOMMANDS	 = 11;
 
 class GUI
 {
@@ -35,6 +38,7 @@ public:
 	void printServers(WINDOW *scr, int a);
 	void printUsers();
 	void printTimeout();
+	void printKick();
 	void showScreen(SCRN screen);
 
 	void printChat(int offset = 0);
