@@ -7,8 +7,6 @@
 
 #include "Windows.h"
 
-#define CHAT_SIZE 0.8
-
 Windows::Windows(WINDOW **info, WINDOW **chat, WINDOW **message, WINDOW **users) {
 	info_scr = info;
 	chat_win = chat;	// need to pass pointer to pointer

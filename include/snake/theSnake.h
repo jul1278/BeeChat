@@ -12,17 +12,18 @@
 #include "ncurses.h"		///< required for: visuals
 using std::vector;
 
-#define START_LENGTH 5		///< the initial length of the snake
+const int START_LENGTH = 5;		///< the initial length of the snake
 
-#define HEAD 'O'			///< the visuals of the snake head
-#define BODY '@'			///< the visuals of the snake body
-#define TAIL '.' 			///< the visuals of the snake tail
-#define PATH ' '			///< the visuals of the snake path
+const char HEAD = 'O';			///< the visuals of the snake head
+const char BODY = '@';			///< the visuals of the snake body
+const char TAIL = '.'; 			///< the visuals of the snake tail
+const char PATH = ' ';			///< the visuals of the snake path
 
-#define UP		-1			///< simply used to make code more readable
-#define DOWN	1			///< simply used to make code more readable
-#define LEFT	-2			///< simply used to make code more readable
-#define RIGHT	2			///< simply used to make code more readable
+enum DIR {UP = -1, DOWN = 1, LEFT = -2, RIGHT = 2};
+// #define UP		-1			///< simply used to make code more readable
+// #define DOWN	1			///< simply used to make code more readable
+// #define LEFT	-2			///< simply used to make code more readable
+// #define RIGHT	2			///< simply used to make code more readable
 
 class theSnake
 {
@@ -42,7 +43,7 @@ public:
 	WINDOW **snake_win;												///< 
 	vector<int> x;													///< 
 	vector<int> y;													///< 
-	int _direction;													///< 
+	DIR _direction;													///< 
 };
 
 #endif

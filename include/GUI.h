@@ -18,13 +18,11 @@ using std::string;
 using std::vector;
 using std::queue;
 
-#define INFO 0
-#define SERV 1
-#define CHAT 2
-#define USERS_OFFSET 3
-#define NEWLINE_OFFSET 26
-#define NFONTCOMMANDS 11
-#define MAX_HISTORY 40
+enum SCRN {INFO, SERV, CHAT};
+const int USERS_OFFSET	 = 3;	
+const int NEWLINE_OFFSET = 26;
+const int NFONTCOMMANDS	 = 11;
+const int MAX_HISTORY	 = 40;
 
 class GUI
 {
@@ -37,7 +35,7 @@ public:
 	void printServers(WINDOW *scr, int a);
 	void printUsers();
 	void printTimeout();
-	void showScreen(int a);
+	void showScreen(SCRN screen);
 
 	void printChat(int offset = 0);
 	void printMessage(string message, int message_lines, int *h_index, int *attempt, int *message_len, int *prev_len, int endline);

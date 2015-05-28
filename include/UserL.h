@@ -11,11 +11,7 @@
 #include <string>
 using std::string;
 
-#define TIMEDOUT   -1
-#define SPECTATOR	0
-#define REGULAR		1
-#define ADMIN		2
-#define SADMIN		3
+enum POWER {SPECTATOR, REGULAR, ADMIN, SADMIN, TIMEDOUT = -1};
 
 class UserL
 {

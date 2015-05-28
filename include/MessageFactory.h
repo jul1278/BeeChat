@@ -20,20 +20,8 @@
 #define IN 	1
 #define COM 3
 
-#define HELP 	1
-#define KICK 	2
-#define MUTE  	3
-#define UNMUTE  4
-#define POKE 	5
-#define PM 		6
-#define EXIT 	7
-#define IGNORE 	8
-#define TIMEOUT	9
-#define RELEASE 10
-#define SNAKE 	11
-#define TEST 	12
-
-#define NCOMMANDS 12
+enum COMMAND {HELP, KICK, MUTE, UNMUTE, POKE, PM, EXIT, IGNORE, TIMEOUT, RELEASE, SNAKE, TEST, NONE = -1};
+const int NCOMMANDS = 12;
 
 class MessageFactory
 {

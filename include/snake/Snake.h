@@ -16,9 +16,9 @@
 #include "theFood.h"	
 #include "Block.h"		
 
-#define STEP_VERT 50000		///< step constant for the vertical direction
-#define STEP_HORI 30000		///< step constant for the horizontal direction
-#define PAUSE_BRICK 'X'		///< the filler brick for pause screen
+const int STEP_VERT = 50000;		///< step constant for the vertical direction
+const int STEP_HORI = 30000;		///< step constant for the horizontal direction
+const char PAUSE_BRICK = 'X';		///< the filler brick for pause screen
 
 class Snake
 {

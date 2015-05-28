@@ -8,24 +8,24 @@
 #ifndef _THE_FOOD_H
 #define _THE_FOOD_H
 
-#include <vector>			///< required for:
-#include "ncurses.h"		///< required for:
-#include <cstdlib>			///< required for:
+#include <vector>					///< required for:
+#include "ncurses.h"				///< required for:
+#include <cstdlib>					///< required for:
 using std::vector;
 
-#define FOOD 'o'			///< the visuals for food
-#define SPAWN_CHANCE 30 	///< chance to spawn foor, range: 0->1000
-#define START_FOOD 5		///< food spawned at startup
-#define MAX_FOOD 10			///< maximum amount of food
+const char FOOD = 'o';				///< the visuals for food
+const int SPAWN_CHANCE = 30; 		///< chance to spawn foor, range: 0->1000
+const int START_FOOD = 5;			///< food spawned at startup
+const int MAX_FOOD = 10;			///< maximum amount of food
 
-#define AGE_1 60			///< steps until first age
-#define AGE_2 120			///< steps until second age
-#define AGE_3 200			///< steps until decay
-#define MAX_AGE 200			///< steps until decay
+const int AGE_1 = 60;				///< steps until first age
+const int AGE_2 = 120;				///< steps until second age
+const int AGE_3 = 200;				///< steps until decay
+const int MAX_AGE = 200;			///< steps until decay
 
-#define VAL_1 7				///< the amount of growth from age_1
-#define VAL_2 5				///< the amount of growth from age_2
-#define VAL_3 1				///< the amount of growth from age_3
+const int VAL_1 = 7;				///< the amount of growth from age_1
+const int VAL_2 = 5;				///< the amount of growth from age_2
+const int VAL_3 = 1;				///< the amount of growth from age_3
 
 class theFood
 {

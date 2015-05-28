@@ -16,6 +16,8 @@ using std::string;
 using std::vector;
 using std::queue;
 
+const double CHAT_SIZE = 0.8;
+
 class Windows
 {
 public:

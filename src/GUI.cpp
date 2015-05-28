@@ -81,8 +81,8 @@ void GUI::printTimeout() {
 
 }
 
-void GUI::showScreen(int a) {
-	switch(a) {
+void GUI::showScreen(SCRN screen) {
+	switch(screen) {
 		case INFO:
 			int row, col;
 			getmaxyx(*info_scr,row,col);

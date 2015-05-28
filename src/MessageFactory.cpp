@@ -70,6 +70,10 @@ void MessageFactory::testText() {
 	// CHECK WRAPPING
 	_chatlog.push_back("[05:30:12] : Feyre    : Oh hey, here is a really long message that should wrap nicely around the screen, or at least; i would like to hope so. :)");
 
+	// CHECK PRINTABLE
+	_chatlog.push_back("[05:30:12] : Feyre    : `1234567890-=[]\\;',./");
+	_chatlog.push_back("[05:30:12] : Feyre    : !@#$%^&*()_+{}|:\"<>?");
+
 }
 
 
@@ -318,7 +322,7 @@ bool MessageFactory::command(string message, int out_in) {
 
 	// INITIALIZE VARIABLES
 	ostringstream oss;
-	int ii, jj = 0, score;
+	int ii, score;
 	string this_user = _user.getUser();
 	string commands[] = {"/help", "/kick", "/mute", "/unmute", "/poke", "/pm", "/exit", "/ignore", "/timeout", "/release", "/snake", "/test"};
 	string fontcommands[] = {"/b{", "/i{", "/u{", "/c{", "/red{", "/green{", "/yellow{", "/blue{", "/magenta{", "/cyan{", "/white{"};
@@ -356,9 +360,10 @@ bool MessageFactory::command(string message, int out_in) {
 	}
 
 	// CHECK FOR COMMANDS
+	COMMAND jj = NONE;
 	for(ii = 0; ii < NCOMMANDS; ii++) {
 		if(command_str == commands[ii]) {
-			jj = ii+1;
+			jj = (COMMAND) ii;
 			break;
 		}
 	}

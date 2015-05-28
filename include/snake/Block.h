@@ -12,8 +12,8 @@
 #include "ncurses.h"							///< required for: 
 using std::vector;	
 
-#define BLOCKS 'x'								///< the visual for blocks
-#define START_BLOCKS 0							///< blacks spawned on startup
+const char BLOCKS = 'x';						///< the visual for blocks
+const int START_BLOCKS = 0;						///< blacks spawned on startup
 
 class Block
 {
