@@ -77,7 +77,6 @@ void MessageFactory::testText() {
 
 
 void MessageFactory::updateUsers() {
-	_users.clear();
 	_messageQueue.push("/pingRequest");
 }
 
@@ -120,7 +119,7 @@ bool MessageFactory::checkMessage() {
 }
 
 void MessageFactory::storeMessage(string message) {
-	if(message.find("[") == string::npos) {		//not sent from user
+	if(message.find("<") == string::npos) {		//not sent from user
 		command(message, COM);
 	}
 	else if(!command(message, IN)) {
@@ -560,6 +559,7 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 	else if(out_in == COM) {
 		switch(jj) {
 			case PING:
+				_users.clear();
 				oss.str("");
 			    oss << _user.getPriviledges();
 				_messageQueue.push("/pingBack " + _user.getUser() + " " + oss.str());

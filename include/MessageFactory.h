@@ -27,7 +27,13 @@ public:
 	MessageFactory(UserL user);							///< constructs the message factory object and initialises member variables.
 	MessageFactory();									///< constructs a temporary object
 	~MessageFactory();									///< deconstructs a message factory object
-				
+			
+	/** \brief called to try and collect user input.
+      * This method must be looped, and collects input
+      * a key at a time- userInput also sorts backspacing
+      * resizing, chat scrolling, checking printable chars
+      * priviledges, swearing and formatting.
+      */	
 	void userInput();									///< non blocking user input, must loop through- final message stored in message queue.
 	void updateUsers();									///< 
 	void removeUser(string user);						///< removes given specified user object from userlist.

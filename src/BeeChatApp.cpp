@@ -29,7 +29,7 @@ BeeChatApp::BeeChatApp( std::string username, byte usernameColor, bool userWants
     client->Connect( this->username, usernameColor );
     
     //ui = new LachlansUIThing();
-    UserL temp(username,SADMIN);
+    UserL temp(username,REGULAR);
     messageFactory = new MessageFactory(temp);
     //ui->PresentInfoScreen();
     
