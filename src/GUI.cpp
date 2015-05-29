@@ -26,6 +26,14 @@ GUI::~GUI() {
 }
 
 
+
+
+
+
+
+
+
+
 // const char *INFO_ASCII[] = {" _____       __      ",
 // 						  "|_   _|     / _|     ", 
 // 						  "  | | _ __ | |_ ___  ", 
@@ -61,6 +69,12 @@ const char *TIME_OUT[] = {"___________.___   _____  ___________________   ____ _
 						  "  |____|   |___\\____|__  /_______  /\\_______  /______/   |____|   ",
 						  "                       \\/        \\/         \\/                    "};
 
+
+
+
+
+
+
 void GUI::printAscii(WINDOW *scr, const char *graphics[], int sizey, int sizex, int starty, int startx) {
 	int ii;
 	for(ii = 0; ii < sizey; ii++) {
@@ -83,16 +97,17 @@ void GUI::printUsers() {
 	mvwprintw(*users_win,1,1, "Main Server");
 
 	for(ii = 0; ii < (*_users).size(); ii++) {
+		// IF USER IS ADMIN, PRINT IN MAGENTA
 		if((*_users)[ii].getPriviledges() == ADMIN) {
 			wattron(*users_win, COLOR_PAIR(5));
 		}
+		// IF USER IS SUPER ADMIN, PRINT IN CYAN
 		else if((*_users)[ii].getPriviledges() == SADMIN) {
 			wattron(*users_win, COLOR_PAIR(6));
 		}
+		// IF USER IS YOU, PRINT IN REVERSE
 		if((*_users)[ii].getUser() == (*_user).getUser()) {
 			wattron(*users_win, A_REVERSE);
-			// mvwprintw(*users_win,ii+2,USERS_OFFSET, (*_users)[ii].getUser().c_str());
-			// wattroff(*users_win, A_REVERSE);
 		}
 		mvwprintw(*users_win,ii+2,USERS_OFFSET, (*_users)[ii].getUser().c_str());
 		wattrset(*users_win, A_NORMAL);
@@ -128,13 +143,13 @@ void GUI::showScreen(SCRN screen) {
 			printAscii(*info_scr, BEE_ASCII, 6, 39, (int)(row*0.1), (col-39)/2);
 			mvwprintw(*info_scr, row-20,  4, "/b{TEXT}  --  bold font");
 			mvwprintw(*info_scr, row-19,  4, "/u{TEXT}  --  underlined font");
-			mvwprintw(*info_scr, row-18, 4, 	"/i{TEXT}  --  italic font (not currently implemented)");
-			mvwprintw(*info_scr, row-17, 4, 	"/c{TEXT}  --  placeholder");
-			mvwprintw(*info_scr, row-16, 4, 	"/colour{TEXT}  --  coloured font (red, green, blue, yellow, magenta, cyan, white)");
+			mvwprintw(*info_scr, row-18, 4, "/i{TEXT}  --  italic font (not currently implemented)");
+			mvwprintw(*info_scr, row-17, 4, "/c{TEXT}  --  placeholder");
+			mvwprintw(*info_scr, row-16, 4, "/colour{TEXT}  --  coloured font (red, green, blue, yellow, magenta, cyan, white)");
 
-			mvwprintw(*info_scr, row-12, 4, 	"/help                           --  reopens this screen");
-			mvwprintw(*info_scr, row-11, 4, 	"/kick    <user/all> <reason*>   --  kicks user");
-			mvwprintw(*info_scr, row-10, 4, 	"/mute    <user/all> <reason*>   --  mutes user");
+			mvwprintw(*info_scr, row-12, 4, "/help                           --  reopens this screen");
+			mvwprintw(*info_scr, row-11, 4, "/kick    <user/all> <reason*>   --  kicks user");
+			mvwprintw(*info_scr, row-10, 4, "/mute    <user/all> <reason*>   --  mutes user");
 			mvwprintw(*info_scr, row-9, 4, 	"/unmute  <user/all>             --  unmutes user");
 			mvwprintw(*info_scr, row-8, 4, 	"/poke    <user>                 --  pokes user");
 			mvwprintw(*info_scr, row-7, 4, 	"/pm      <user> <message>       --  sends user a private message");
@@ -147,7 +162,7 @@ void GUI::showScreen(SCRN screen) {
 			break;
 
 		case SERV:
-			// printServers(servers_scr);
+			// USED WHEN SERVERS IS IMPLEMENTED
 			break;
 
 		case CHAT:
@@ -208,34 +223,42 @@ void GUI::showScreen(SCRN screen) {
 
 
 void GUI::printChat(int offset) {
+	// IF USER IS TIMED OUT, DONT PRIT
 	if(_user->isTimedout()) {
 		return;
 	}
 
+	// INITIALIZE VARIABLES
 	int row, col;
 	getmaxyx(*chat_win, row, col);
 	wclear(*chat_win);
     wborder(*chat_win, 	'|', '|', '-','-','+','+','+','+');
-	// string fontcommands[] = {"/b{", "/i{", "/u{", "/c{", "/red{", "/green{", "/yellow{", "/blue{", "/magenta{", "/cyan{", "/white{"};
-
 	string message;
 	int message_len;
 
+	// TRUNCATE CHATLOG IF PAST MAXSIZE
 	while(_chatlog->size() > MAX_HISTORY) {
 		_chatlog->erase(_chatlog->begin());
 	}
 
+	// INITIALIZE MORE VARIABLES
 	int ii;
     int m_index;
     int message_lines = 0;
 
+
+    // CALCULATE NUMBER OF LINES NEEDED TO DISPLAY CHAT
+    // BASE ON ESTIMATED AMOUNT OF LINES (lim).
+    // THIS IS BECAUSE OF FONT COMMANDS TAKING UP ROOM AND POSSIBLE WRAPPIGN
 	int lim = (*_chatlog).size()-row+2-offset;
 	if (lim < 0) {lim = 0;}
  	for(m_index = lim; m_index < (*_chatlog).size()-offset; m_index++) {
 
+ 		// CALC message and its length
  		message = (*_chatlog)[m_index];
 		message_len = (*_chatlog)[m_index].size();
 
+		// TRY AND FIND FONT COMMAND, subtract from length if found
 		for(ii = 0; ii < NFONTCOMMANDS; ii++) {
 			int font_loc = 1;
 			int font_size = fontcommands[ii].size();
@@ -245,6 +268,7 @@ void GUI::printChat(int offset) {
 			}
 		}
 
+		// IF IT NEEDS TO WRAP, CALCULATE WRAPS NEEDED
 		if(message_len>col-2) {
 		message_lines++;
 		message_len -= col-4;
@@ -255,6 +279,14 @@ void GUI::printChat(int offset) {
  	}
 
 
+
+
+
+
+
+
+ 	// PRINT AND APPLY NESTED FONT COMMANDS
+
  	int h_index = 1;
 	int attempt = 0;
 	int jj, command_found;
@@ -262,7 +294,7 @@ void GUI::printChat(int offset) {
 		message = (*_chatlog)[m_index];
 		message_len = (*_chatlog)[m_index].size();
 
-
+		// IF NO COMMANDS:
 		if(message.find("/") == string::npos) {														// if no /
 			int prev_len = 0;
 			printMessage(message, message_lines, &h_index, &attempt, &message_len, &prev_len, 1);			// print
@@ -274,12 +306,14 @@ void GUI::printChat(int offset) {
 			vector<int> current_atr; //wanted stack, but cant check if already in stack (QUEUE = FILA)
 			current_atr.reserve(10);
 
+
+			// WHILE COMMAND OPENER / CLOSER STILL THERE:
 			while((message.find("/") != string::npos) || (message.find("}") != string::npos)) {
+
+				// CALCULATE WHICH IS CLOSER (open/closer)
 				command_found = 0;
 				int slash_shorter = 0;
 				int bracket_shorter = 0;
-				// int loc_b = 
-				// int loc_s = 
 				if((message.find("/") != string::npos) && (message.find("}") != string::npos)) {
 					if(message.find("/") < message.find("}")) {
 						font_loc = message.find("/");
@@ -300,12 +334,13 @@ void GUI::printChat(int offset) {
 				}
 
 
+				// IF THE OPENER IS CLOSER, APPLY FONT:
 				if(slash_shorter) {										// look for command
 					for(ii = 0; ii < NFONTCOMMANDS; ii++) {	
 						int font_size = fontcommands[ii].size();
 
 						if(message.substr(font_loc,font_size).find(fontcommands[ii]) != string::npos) {	// if command,
-							//if command found
+							// IF COMMAND FOUND
 							command_found = 1;
 							
 							//print all before
@@ -473,6 +508,15 @@ void GUI::printChat(int offset) {
 	wrefresh(*chat_win);
 }
 
+
+
+// THIS FUNCTION IS USED TO PRIT EACH INDIVIDUAL MESSAGE:
+// ITS COMPLICATED BECAUSE IT NEEDS TO KEEP TRACK OF previous messages
+// it checks if it needs to wrap
+// if so, it wraps, then continues to wrap while it needs too
+// then it prints the remainder
+
+// its more complex because of the .. - 
 void GUI::printMessage(string message, int message_lines, int *h_index, int *attempt, int *message_len, int *prev_len, int endline) {
 	int row, col;
 	getmaxyx(*chat_win, row, col);

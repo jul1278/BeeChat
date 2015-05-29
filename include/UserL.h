@@ -24,11 +24,11 @@ public:
 	int getSwears();								///< returns the swear count
 	void incSwears();								///< incriments the swear count
 	int getPriviledges();							///< returns the users power
-	// void setPriviledges(int type);					///< sets the users power
-	bool isMuted();
-	bool isTimedout();
-	void setMute(bool mute);
-	void setTimeout(bool timeout);
+	// void setPriviledges(int type);				///< sets the users power
+	bool isMuted();									///< true if muted
+	bool isTimedout();								///< true if timedout
+	void setMute(bool mute);						///< sets mute
+	void setTimeout(bool timeout);					///< sets timeout
 
 private:
 	bool _muted;

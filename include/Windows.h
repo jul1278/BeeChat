@@ -31,7 +31,7 @@ public:
 	void initScreen();				///< initializes ncurses settings
 	void initWindows();				///< initializes display screens
 	void resize();					///< resizes the chat screen
-	bool checkMin();
+	bool checkMin();				///< checks minimum terminal size, true if too small
 
 private:
 	WINDOW **info_scr;				///< the splash screen

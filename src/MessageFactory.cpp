@@ -460,6 +460,7 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 
 
 			case HELP:
+				// DISPLAY HELP AND CHECK FOR RESIZE/LIMITS. (would have made func if had time)
 				refresh();
 				_Gooey.showScreen(INFO);
 				while(int c = wgetch(info_scr) != '\n') {
@@ -483,6 +484,7 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 				return 1;
 
 			case SNAKE:
+				// RUN SNAKE, TRY AND RESIZE, PRIT SCORE
 				score = snakeGame.run();
 				_Win.resize();
 				if(_Win.checkMin()) {
@@ -497,10 +499,10 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 
 			case TEST:
 				updateUsers();
-				// dummyText();
-				// testText();
-				// _Gooey.printChat();
-				// _Gooey.printUsers();
+				dummyText();
+				testText();
+				_Gooey.printChat();
+				_Gooey.printUsers();
 				return 1;
 
 			default:
@@ -520,7 +522,7 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 	else if(out_in == IN) {
 		switch(jj) {
 			case HELP:
-				//should never see
+				// SHOULDN't SEE
 				return 1;
 
 
@@ -583,7 +585,7 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 
 
 			case IGNORE:
-				// _messageQueue.push(message);
+				// NOT YET IMPLEMENTED
 				return 1;
 
 
@@ -591,7 +593,6 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 				if((arg_str == this_user) || ((arg_str == "all")&&(_user.getPriviledges() < ADMIN))) {
 					_user.setTimeout(1);
 					_Gooey.printTimeout();
-					// _messageQueue.push 				  		  ("             <SERVER> : " + user_str + " has unmuted " + arg_str + ".");
 				}
 				storeMessage("             <SERVER> : " + user_str + " has put " + arg_str + " in timeout.");
 				if(arg_str2 != "") {
@@ -602,14 +603,8 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 
 			case RELEASE:
 				if((arg_str == this_user) || ((arg_str == "all")&&(_user.getPriviledges() < ADMIN))) {
-					// raw();
-					// nodelay(stdscr,0);
-					// while(wgetch(stdscr) != '\n');
-					// nodelay(stdscr,1);
-
 					_user.setTimeout(0);
 					_Gooey.showScreen(CHAT);
-					// _messageQueue.push 				  		  ("             <SERVER> : " + user_str + " has unmuted " + arg_str + ".");
 				}
 				storeMessage("             <SERVER> : " + user_str + " has released " + arg_str + " from timeout.");
 				return 1;

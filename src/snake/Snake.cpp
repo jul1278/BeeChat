@@ -129,6 +129,8 @@ void Snake::printEnd() {
 	// 3,xlim-3 	 -> ylim-3,xlim-3
 	// ylim-3,xlim-4 -> ylim-3,2
 	// ylim-4,2      -> 3,2
+
+	// DISPLAYS MATHAMATICALLY CALCULATED SQUARE SPIRAL ANIMATION
 	for(int loop = 0; loop < y_lim/2+1; loop++) {
 		for(int ii = 1+loop; ii < x_lim-1-loop; ii++) {
 			mvwaddch(snake_win, 1+loop, ii, BODY);
@@ -206,7 +208,7 @@ bool Snake::Pause() {
 	}
 
 
-	// WAIT
+	// WAIT, RETURN IF CHANGED SCREEN SIZE
 	nodelay(snake_win,0);
 	int c = 0;
 	while(c != 'p') {
