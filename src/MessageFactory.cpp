@@ -257,6 +257,7 @@ void MessageFactory::userInput() {
 			wprintw(message_win,message_str_g.c_str());
 			wrefresh(message_win);
 		}
+		// IF UP, INCRIMENT CHAT OFFSET IF POSSIBLE
 		else if(c == KEY_UP) {
 			getmaxyx(chat_win, row, col);
 			int lim = _chatlog.size()-row+2;
@@ -266,18 +267,23 @@ void MessageFactory::userInput() {
 				_Gooey.printChat(offset_g);
 			}
 		}
+		// IF DOWN, DECREMENT CHAT OFFSET IF POSSIBLE
 		else if(c == KEY_DOWN) {
 			if(offset_g > 0) {
 				offset_g--;
 				_Gooey.printChat(offset_g);
 			}
 		}
+		// IF NOTHING ENTERED, RETURN
 		else if(c == ERR) {return;}
+		// IF MESSAGE HAS REACHED ITS LIMIT, RETURN
 		else if(message_str_g.size() >= (int)(col*0.8)) {return;}
+		// IF NON PRINTABLE CHAR, MESSAGE USER
 		else if(!isprint(c)) {
 			storeMessage("             <SERVER> : You have entered a non printable character.");
 			wmove(message_win, row/2, (int)(col*0.1)+message_str_g.length());
 		}
+		// ELSE, CONSTRUCT MESSAGE
 		else {
 			message_str_g += c;
 			waddch(message_win,c);
@@ -286,7 +292,9 @@ void MessageFactory::userInput() {
 		return;
 	}
 
+	// ONLY MAKES IT HERE IF THE MESSAGE IS COMPLETE:
 
+	// IF MUTED, ERASE MESSAGE.
 	if(_user.isMuted()) {
 		message_str_g = "";
 		wclear(message_win);	//MAYBE: write own clear function that wont clear border.
@@ -295,6 +303,7 @@ void MessageFactory::userInput() {
 		return;
 	}
 
+	// PROFANITY FILTER, AND WARNINGS
 	int swore = checkVulgar(&message_str_g);
 	if(swore) {
 		if(_user.getSwears() >= 5) {
@@ -302,14 +311,20 @@ void MessageFactory::userInput() {
 			_Gooey.printKick();
 			message_str_g = "/exit";
 		}
+		else if(_user.getSwears() >= 4) {
+			storeMessage("             <SERVER> : This is your final warning, swear again and you will be kicked.");
+		}
+		else if(_user.getSwears() >= 3) {
+			storeMessage("             <SERVER> : Please refrain from profanity.");
+		}
 	}
 
 
-	// pad username
+	// PAD USERNAME
 	string user_str = _user.getUser();
 	user_str.append(8 - user_str.length(), ' ');
 
-	// time
+	// CONSTRUCT TIME
 	time_t timer;
 	time(&timer);
 	struct tm * timeinfo;
@@ -319,27 +334,17 @@ void MessageFactory::userInput() {
 
 	string DATA_str = time_str + " : " + user_str + " : " + message_str_g;
 
+	// CLEAR MESSAGE WIDOW
 	wclear(message_win);	//MAYBE: write own clear function that wont clear border.
     wborder(message_win, 	'|', '|', '-','-','+','+','+','+');
 	wrefresh(message_win);
 
-	//if not null
+	// IF NOT A COMMAND, SEND TO ALL USERS
 	if(!command(DATA_str, OUT)) {
 		_messageQueue.push(DATA_str);
 	}
 
-	if(swore) {
-		if(_user.getSwears() >= 4) {
-			storeMessage("             <SERVER> : This is your final warning, swear again and you will be kicked.");
-		}
-		else if(_user.getSwears() >= 3) {
-			storeMessage("             <SERVER> : Please refrain from profanity.");
-		}
-	}
-
-
-
-
+	// ONCE ALL IS DONE, CLEAR THE GLOBAL MESSAGE_STR
 	message_str_g = "";
 }
 
