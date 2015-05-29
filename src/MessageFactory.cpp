@@ -11,6 +11,7 @@
 using namespace std;
 
 MessageFactory::MessageFactory(UserL user) {
+
 	_chatlog.reserve(100);
 	_users.reserve(15);
 	// dummyText();
@@ -20,6 +21,25 @@ MessageFactory::MessageFactory(UserL user) {
 	_users.push_back(user);
 	_Win = Windows(&info_scr, &chat_win, &message_win, &users_win);
 	_Gooey = GUI(&_user, &_users, &_chatlog, &info_scr, &chat_win, &message_win, &users_win);
+
+	if(_Win.checkMin()) {
+		quit = 1;
+		return;
+	}
+
+	_Gooey.showScreen(INFO);
+	while(int c = wgetch(info_scr) != '\n') {
+		if(c == KEY_RESIZE) {
+			wgetch(info_scr);
+			_Win.resize();
+			if(_Win.checkMin()) {
+				quit = 1;
+				return;
+			}
+			_Gooey.showScreen(INFO);
+		}
+	}
+	_Gooey.showScreen(CHAT);
 	updateUsers();
 }
 
@@ -201,6 +221,10 @@ void MessageFactory::userInput() {
 		if(c == KEY_RESIZE) {
 			c = wgetch(message_win);
 			_Win.resize();
+			if(_Win.checkMin()) {
+				quit = 1;
+				return;
+			}
 			getmaxyx(message_win, row, col);
 			_Gooey.showScreen(CHAT);
 			if(message_str_g.size() >= (int)(col*0.8)) {
@@ -420,7 +444,17 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 			case HELP:
 				refresh();
 				_Gooey.showScreen(INFO);
-				wgetch(info_scr);
+				while(int c = wgetch(info_scr) != '\n') {
+					if(c == KEY_RESIZE) {
+						wgetch(info_scr);
+						_Win.resize();
+						if(_Win.checkMin()) {
+							quit = 1;
+							return 1;
+						}
+						_Gooey.showScreen(INFO);
+					}
+				}
 				_Gooey.showScreen(CHAT);
 				return 1;
 
@@ -433,6 +467,10 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 			case SNAKE:
 				score = snakeGame.run();
 				_Win.resize();
+				if(_Win.checkMin()) {
+					quit = 1;
+					return 1;
+				}
 				_Gooey.showScreen(CHAT);
 				oss.str("");
 				oss << score;
@@ -522,7 +560,7 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 
 
 			case EXIT:
-				removeUser(arg_str);
+				removeUser(user_str);
 				return 1;
 
 

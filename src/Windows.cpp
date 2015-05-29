@@ -80,8 +80,17 @@ void Windows::resize() {
 	wrefresh(*chat_win);										
 	wrefresh(*message_win);									
 	wrefresh(*users_win);									
+}
 
-
-	// showScreen(CHAT, 0);
+bool Windows::checkMin() {
+	int row, col;
+	getmaxyx(stdscr,row,col);
+	if((row < 30) || (col < 90)) {
+		endwin();
+		cout << "The minimum terminal size for this program is 30x90 (y,x).\n";
+		cout << "Current terminal size is " << row << ", " << col << ".\n";
+		return 1;
+	}
+	return 0;
 }
 

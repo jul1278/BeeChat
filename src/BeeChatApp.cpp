@@ -16,7 +16,7 @@
 //---------------------------------------------------------------------
 BeeChatApp::BeeChatApp( std::string username, byte usernameColor, bool userWantsToBeServer )
 {
-    
+    quit = 0;
     this->username = username;
     
 
@@ -31,6 +31,7 @@ BeeChatApp::BeeChatApp( std::string username, byte usernameColor, bool userWants
     //ui = new LachlansUIThing();
     UserL temp(username,ADMIN);
     messageFactory = new MessageFactory(temp);
+    if(messageFactory->quit) {quit = 1;}
     //ui->PresentInfoScreen();
     
     
@@ -53,9 +54,6 @@ BeeChatApp::~BeeChatApp()
 //---------------------------------------------------------------------
 int BeeChatApp::Run()
 {
-    
-    int quit = 1;
-    
     // TODO: ask the UI if the user wants to quit
     messageFactory->userInput();
     
@@ -107,6 +105,7 @@ int BeeChatApp::Run()
     server->Run();
     
     // TODO: set quit to 1 if we're quitting
+    // Continue until message queue is cleared
     if(!messageFactory->checkMessage()) {
         return !(messageFactory->quit);
     }

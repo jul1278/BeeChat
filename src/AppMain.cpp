@@ -37,7 +37,7 @@ int main( int argc, char** argv )
         }
 
         BeeChatApp* beeChatApp = new BeeChatApp( settings.username().c_str(), 0x01, settings.isServer());
-
+        if(beeChatApp->quit) {return 1;}
         //debug code
         // {
         //     settings.dump();

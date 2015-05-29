@@ -123,17 +123,17 @@ void Server::HandleLogonMessage(Message* message)
     memcpy( (void*)chatMessage->messageText, (void*)alertMessageString.c_str(), alertMessageString.length() );
 
 
-    if ( users.empty() == false ) {
-    	std::cout << "Users online: ";
+    // if ( users.empty() == false ) {
+    // 	std::cout << "Users online: ";
 
-	    std::list<User>::iterator it; 
+	   //  std::list<User>::iterator it; 
 
-	    for ( it = users.begin(); it != users.end(); it++ ) {
+	   //  for ( it = users.begin(); it != users.end(); it++ ) {
 
-	    	std::cout << it->username << ", "; 
-	    }
-	    std::cout << std::endl; 
-    }
+	   //  	std::cout << it->username << ", "; 
+	   //  }
+	   //  std::cout << std::endl; 
+    // }
     
 	// TODO: message alert "user has logged on."
     outMessageQueue.push( alertMessage );

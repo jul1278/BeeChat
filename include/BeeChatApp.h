@@ -32,7 +32,7 @@ public:
     
     BeeChatApp(std::string username, byte usernameColor, bool userWantsServer);
     ~BeeChatApp();
-    
+    int quit;
     int Run();
 
 };

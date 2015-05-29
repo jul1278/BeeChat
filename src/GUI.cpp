@@ -15,9 +15,6 @@ GUI::GUI(UserL *user, vector<UserL> *users, vector<string> *chatlog, WINDOW **in
 	chat_win = chat;
 	users_win = users_scr;
 	message_win = message;
-	showScreen(INFO);
-	wgetch(*info_scr);
-	showScreen(CHAT);
 }
 
 GUI::GUI() {
