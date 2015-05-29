@@ -56,14 +56,21 @@ void GUI::printServers(WINDOW *scr, int a) {
 }
 
 void GUI::printUsers() {
+	if(_user->isTimedout()) {
+		return;
+	}
+
 	int ii;
 	wclear(*users_win);
     wborder(*users_win, 	'|', '|', '-','-','+','+','+','+');
 	mvwprintw(*users_win,1,1, "Main Server");
 
 	for(ii = 0; ii < (*_users).size(); ii++) {
-		if((*_users)[ii].getPriviledges() > REGULAR) {
+		if((*_users)[ii].getPriviledges() == ADMIN) {
 			wattron(*users_win, COLOR_PAIR(5));
+		}
+		else if((*_users)[ii].getPriviledges() == SADMIN) {
+			wattron(*users_win, COLOR_PAIR(6));
 		}
 		if((*_users)[ii].getUser() == (*_user).getUser()) {
 			wattron(*users_win, A_REVERSE);
@@ -71,8 +78,7 @@ void GUI::printUsers() {
 			// wattroff(*users_win, A_REVERSE);
 		}
 		mvwprintw(*users_win,ii+2,USERS_OFFSET, (*_users)[ii].getUser().c_str());
-		wattroff(*users_win, A_REVERSE);
-		wattroff(*users_win, COLOR_PAIR(5));
+		wattrset(*users_win, A_NORMAL);
 	}
 	wrefresh(*users_win);
 }
@@ -176,6 +182,10 @@ void GUI::showScreen(SCRN screen) {
 
 
 void GUI::printChat(int offset) {
+	if(_user->isTimedout()) {
+		return;
+	}
+
 	int row, col;
 	getmaxyx(*chat_win, row, col);
 	wclear(*chat_win);

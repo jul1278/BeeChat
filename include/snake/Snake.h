@@ -12,9 +12,9 @@
 #include <stdlib.h>     		///< required for: 
 #include <time.h>				///< required for: seed
 #include <unistd.h>				///< required for: random
-#include "theSnake.h"	
-#include "theFood.h"	
-#include "Block.h"		
+#include "theSnake.h"			///< required for: the snake
+#include "theFood.h"			///< required for: food
+#include "Block.h"				///< required for: blocks
 
 const int STEP_VERT = 50000;	///< step constant for the vertical direction
 const int STEP_HORI = 30000;	///< step constant for the horizontal direction
