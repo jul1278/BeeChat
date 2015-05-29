@@ -9,7 +9,7 @@
 #define _THE_FOOD_H
 
 #include <vector>					///< required for:
-#include "ncurses.h"				///< required for:
+#include <ncurses.h>				///< required for:
 #include <cstdlib>					///< required for:
 using std::vector;
 

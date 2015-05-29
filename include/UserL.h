@@ -8,7 +8,7 @@
 #ifndef _USERL_H
 #define _USERL_H
 
-#include <string>
+#include <string>									///< required for: string operations
 using std::string;
 
 enum POWER {SPECTATOR, REGULAR, ADMIN, SADMIN, TIMEDOUT = -1};
@@ -16,20 +16,20 @@ enum POWER {SPECTATOR, REGULAR, ADMIN, SADMIN, TIMEDOUT = -1};
 class UserL
 {
 public:
-	UserL(string username, int priviledges);
-	UserL();
-	~UserL();
+	UserL(string username, int priviledges);		///< constructs a User object with given username and power
+	UserL();										///< constructs a temporary User object
+	~UserL();										///< deconstructs a User object
 
-	string getUser();
-	int getSwears();
-	void incSwears();
-	int getPriviledges();
-	void setPriviledges(int type);
+	string getUser();								///< returns the stored username
+	int getSwears();								///< returns the swear count
+	void incSwears();								///< incriments the swear count
+	int getPriviledges();							///< returns the users power
+	void setPriviledges(int type);					///< sets the users power
 
 private:
-	int _swearjar;
-	int _priviledges;
-	string _username;
+	int _swearjar;									///< a count of each message the user has sworn in
+	int _priviledges;								///< a measure of the users power/priviledges
+	string _username;								///< the operators username
 };
 
 

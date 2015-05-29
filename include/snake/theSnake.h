@@ -8,8 +8,8 @@
 #ifndef _THE_SNAKE_H
 #define _THE_SNAKE_H
 
-#include <vector>			///< required for: 
-#include "ncurses.h"		///< required for: visuals
+#include <vector>				///< required for: 
+#include <ncurses.h>			///< required for: visuals
 using std::vector;
 
 const int START_LENGTH = 5;		///< the initial length of the snake
@@ -19,18 +19,15 @@ const char BODY = '@';			///< the visuals of the snake body
 const char TAIL = '.'; 			///< the visuals of the snake tail
 const char PATH = ' ';			///< the visuals of the snake path
 
+/// simply used to make code more readable
 enum DIR {UP = -1, DOWN = 1, LEFT = -2, RIGHT = 2, STILL = 0};
-// #define UP		-1			///< simply used to make code more readable
-// #define DOWN	1			///< simply used to make code more readable
-// #define LEFT	-2			///< simply used to make code more readable
-// #define RIGHT	2			///< simply used to make code more readable
 
 class theSnake
 {
 public:
-	theSnake();														///<
-	~theSnake();													///<
-	theSnake(WINDOW **snake_scr);									///<
+	theSnake(WINDOW **snake_scr);									///< constructs and initializes a snake object
+	theSnake();														///< constructs a temporary snake object
+	~theSnake();													///< deconstructs a snake object
 
 	void setupSnake(vector<int> block_x, vector<int> block_y);		///<
 	bool isSnake(int snake_x, int snake_y);							///<

@@ -8,10 +8,10 @@
 #ifndef _FACTORY_H
 #define _FACTORY_H
 
-#include "GUI.h"				///< required for: 
-#include "Windows.h"			///< required for: 
-// #include "UserL.h"			///< included in:  GUI.h
-//#include "Snake.h"			///< included in:  source file
+#include "GUI.h"				///< required for: print functions
+#include "Windows.h"			///< required for: ncurses functions
+// #include "UserL.h"			///< included in: GUI.h
+//#include "Snake.h"			///< included in: source file
 #include <sstream>				///< required for: streams
 #include <iostream>				///< required for: cout (ding)
 // #include <stdlib.h>			///< required for: 

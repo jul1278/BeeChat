@@ -170,7 +170,6 @@ string MessageFactory::upperCase(string message) {
 
 string message_str_g ="";
 int offset = 0;
-// int offset = 0; // link with gUI
 
 void MessageFactory::userInput() {
 	if(_user.getPriviledges() == TIMEDOUT) {return;}
@@ -254,10 +253,13 @@ void MessageFactory::userInput() {
 	if(swore) {
 		if(_user.getSwears() >= 5) {
 			//kick user (remove from other clients)
-			endwin();
+			// endwin();
 			// exit(EXIT_SUCCESS);
-			quit = 1;
-			return;
+			// quit = 1;
+			_messageQueue.push("             <SERVER> : " + _user.getUser() + " has been kicked due to swearing.");
+			_Gooey.printKick();
+			message_str_g = "/exit";
+			// return;
 		}
 		else if(_user.getSwears() >= 4) {
 			storeMessage("             <SERVER> : This is your final warning, swear again and you will be kicked.");
@@ -317,7 +319,6 @@ void MessageFactory::userInput() {
 
 bool MessageFactory::command(string message, MESS_DIR out_in) {
 
-
 	// INITIALIZE VARIABLES
 	int ii, score;
 	Snake snakeGame;
@@ -331,10 +332,12 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 
 	// EXTRACT TOKENS
 	stringstream ss(message);
-    ss >> temp;					//time
-    ss >> temp;					// :
-    ss >> user_str;				//user
-    ss >> temp;					// :
+	if(out_in != COM) {
+	    ss >> temp;					//time
+	    ss >> temp;					// :
+	    ss >> user_str;				//user
+	    ss >> temp;					// :
+	}
     ss >> command_str;			//command
     ss >> arg_str;				//arg
 
@@ -500,7 +503,7 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 					storeMessage("/yellow{/b{<" + user_str + "> : " + arg_str2 + "}}");
 				}
 				else if (user_str == this_user) {
-					storeMessage("/cyan{/b{<" + user_str + "> : " + arg_str2 + "}}");
+					storeMessage("/cyan{/b{<" + arg_str + "> : " + arg_str2 + "}}");
 				}
 				return 1;
 
@@ -538,6 +541,24 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 				return 1;
 		}
 	}
+
+
+
+
+
+	// else if(out_in == COM) {
+	// 	switch(jj) {
+	// 		case HELP:
+
+
+
+
+
+
+
+	// 	}
+	// }
+
 	return 1;
 }
 

@@ -9,7 +9,7 @@
 #define _BLOCK_H
 
 #include <vector>								///< required for: 
-#include "ncurses.h"							///< required for: 
+#include <ncurses.h>							///< required for: 
 using std::vector;	
 
 const char BLOCKS = 'x';						///< the visual for blocks
