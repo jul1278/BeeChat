@@ -29,7 +29,7 @@ BeeChatApp::BeeChatApp( std::string username, byte usernameColor, bool userWants
     client->Connect( this->username, usernameColor );
     
     //ui = new LachlansUIThing();
-    UserL temp(username,REGULAR);
+    UserL temp(username,ADMIN);
     messageFactory = new MessageFactory(temp);
     //ui->PresentInfoScreen();
     
@@ -107,7 +107,11 @@ int BeeChatApp::Run()
     server->Run();
     
     // TODO: set quit to 1 if we're quitting
-    
-    return !(messageFactory->quit);
+    if(!messageFactory->checkMessage()) {
+        return !(messageFactory->quit);
+    }
+    else {
+        return 1;
+    }
 }
 

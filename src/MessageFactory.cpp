@@ -20,6 +20,7 @@ MessageFactory::MessageFactory(UserL user) {
 	_users.push_back(user);
 	_Win = Windows(&info_scr, &chat_win, &message_win, &users_win);
 	_Gooey = GUI(&_user, &_users, &_chatlog, &info_scr, &chat_win, &message_win, &users_win);
+	updateUsers();
 }
 
 MessageFactory::MessageFactory() {
@@ -119,14 +120,12 @@ bool MessageFactory::checkMessage() {
 }
 
 void MessageFactory::storeMessage(string message) {
-	if(message.find("<") == string::npos) {		//not sent from user
+	if(message.find(":") == string::npos) {		//not sent from user
 		command(message, COM);
 	}
 	else if(!command(message, IN)) {
 		_chatlog.push_back(message);
-		if(_user.getPriviledges() != TIMEDOUT) {
-			_Gooey.printChat();
-		}
+		_Gooey.printChat();
 	}
 }
 
@@ -180,7 +179,10 @@ string message_str_g ="";
 int offset = 0;
 
 void MessageFactory::userInput() {
-	if(_user.getPriviledges() == TIMEDOUT) {return;}
+	if(_user.isTimedout()) {
+		wgetch(message_win);
+		return;
+	}
 
 
 	int row, col;
@@ -236,7 +238,7 @@ void MessageFactory::userInput() {
 			}
 		}
 		else if(c == ERR) {return;}
-		// else if(message_str_g.size() >= (int)(col*0.8)) {return;}
+		else if(message_str_g.size() >= (int)(col*0.8)) {return;}
 		else if(!isprint(c)) {
 			storeMessage("             <SERVER> : You have entered a non printable character.");
 			wmove(message_win, row/2, (int)(col*0.1)+message_str_g.length());
@@ -250,7 +252,8 @@ void MessageFactory::userInput() {
 	}
 
 
-	if(_user.getPriviledges() == 0) {
+	if(_user.isMuted()) {
+		message_str_g = "";
 		wclear(message_win);	//MAYBE: write own clear function that wont clear border.
 	    wborder(message_win, 	'|', '|', '-','-','+','+','+','+');
 		wrefresh(message_win);
@@ -483,7 +486,7 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 
 			case MUTE:
 				if((arg_str == this_user) || ((arg_str == "all")&&(_user.getPriviledges() < ADMIN))) {
-					_user.setPriviledges(SPECTATOR);
+					_user.setMute(1);
 				}
 				storeMessage("             <SERVER> : " + user_str + " has muted " + arg_str + ".");
 				if(arg_str2 != "") {
@@ -494,7 +497,7 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 
 			case UNMUTE:
 				if((arg_str == this_user) || ((arg_str == "all")&&(_user.getPriviledges() < ADMIN))) {
-					_user.setPriviledges(REGULAR);
+					_user.setMute(0);
 				}
 				storeMessage("             <SERVER> : " + user_str + " has unmuted " + arg_str + ".");
 				return 1;
@@ -530,7 +533,7 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 
 			case TIMEOUT:
 				if((arg_str == this_user) || ((arg_str == "all")&&(_user.getPriviledges() < ADMIN))) {
-					_user.setPriviledges(TIMEDOUT);
+					_user.setTimeout(1);
 					_Gooey.printTimeout();
 					// _messageQueue.push 				  		  ("             <SERVER> : " + user_str + " has unmuted " + arg_str + ".");
 				}
@@ -543,8 +546,13 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 
 			case RELEASE:
 				if((arg_str == this_user) || ((arg_str == "all")&&(_user.getPriviledges() < ADMIN))) {
-					_user.setPriviledges(REGULAR);
-					_Gooey.printChat();
+					// raw();
+					// nodelay(stdscr,0);
+					// while(wgetch(stdscr) != '\n');
+					// nodelay(stdscr,1);
+
+					_user.setTimeout(0);
+					_Gooey.showScreen(CHAT);
 					// _messageQueue.push 				  		  ("             <SERVER> : " + user_str + " has unmuted " + arg_str + ".");
 				}
 				storeMessage("             <SERVER> : " + user_str + " has released " + arg_str + " from timeout.");
