@@ -24,8 +24,8 @@ public:
 
 	void setupBlocks(int xlim, int ylim);		///< 
 	void spawnBlock(int snake_x, int snake_y);	///< 
-	void printBlocks();							///< 
 	bool isBlock(int snake_x, int snake_y);		///< 
+	void printBlocks();							///< 
 
 // private:
 	WINDOW **snake_win;							///< 

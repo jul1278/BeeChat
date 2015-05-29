@@ -17,8 +17,8 @@
 // #include <stdlib.h>			///< required for: 
 
 enum MESS_DIR {OUT, IN, COM};
-enum COMMAND {HELP, KICK, MUTE, UNMUTE, POKE, PM, EXIT, IGNORE, TIMEOUT, RELEASE, SNAKE, TEST, NONE = -1};
-const string commands[] = {"/help", "/kick", "/mute", "/unmute", "/poke", "/pm", "/exit", "/ignore", "/timeout", "/release", "/snake", "/test"};
+enum COMMAND {HELP, KICK, MUTE, UNMUTE, POKE, PM, EXIT, IGNORE, TIMEOUT, RELEASE, SNAKE, TEST, PING, PINGB, NONE = -1};
+const string commands[] = {"/help", "/kick", "/mute", "/unmute", "/poke", "/pm", "/exit", "/ignore", "/timeout", "/release", "/snake", "/test", "/pingRequest", "/pingBack"};
 const int NCOMMANDS = sizeof(commands)/sizeof(*commands);
 
 class MessageFactory
@@ -31,6 +31,7 @@ public:
 	void userInput();									///< non blocking user input, must loop through- final message stored in message queue.
 	void updateUsers();									///< 
 	void removeUser(string user);						///< removes given specified user object from userlist.
+	void addUser(string username, int priviledges);		///< removes given specified user object from userlist.
 				
 	string getMessage();								///< withdraws the first message placed in the message queue, if none, returns ""
 	bool checkMessage();								///< returns true if message in queue, else returns false

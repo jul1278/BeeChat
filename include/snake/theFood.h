@@ -36,10 +36,10 @@ public:
 
 	void growFood(vector<int> snake_x, vector<int> snake_y, vector<int> block_x, vector<int> block_y);		///< food cant spawn on snake blocks or walls
 	void setupFood(vector<int> snake_x, vector<int> snake_y, vector<int> block_x, vector<int> block_y);		///< 
+	bool isFood(int snake_x, int snake_y);																	///< 
+	int eatFood(int snake_x, int snake_y);																	///< 
 	void printFood();																						///< check to spawn food + update new food only
 	void ageFood();																							///< 
-	int eatFood(int snake_x, int snake_y);																	///< 
-	bool isFood(int snake_x, int snake_y);																	///< 
 
 // private:
 	WINDOW **snake_win;		///< 

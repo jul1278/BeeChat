@@ -77,7 +77,8 @@ void MessageFactory::testText() {
 
 
 void MessageFactory::updateUsers() {
-
+	_users.clear();
+	_messageQueue.push("/pingRequest");
 }
 
 
@@ -100,6 +101,11 @@ void MessageFactory::removeUser(string user) {
 	_Gooey.printUsers();
 }
 
+void MessageFactory::addUser(string username, int priviledges) {	
+	_users.push_back(UserL(username, priviledges));
+	_Gooey.printUsers();
+}
+
 
 string MessageFactory::getMessage() {
 	if(_messageQueue.empty()) {return "";}
@@ -114,7 +120,10 @@ bool MessageFactory::checkMessage() {
 }
 
 void MessageFactory::storeMessage(string message) {
-	if(!command(message, IN)) {
+	if(message.find("[") == string::npos) {		//not sent from user
+		command(message, COM);
+	}
+	else if(!command(message, IN)) {
 		_chatlog.push_back(message);
 		if(_user.getPriviledges() != TIMEDOUT) {
 			_Gooey.printChat();
@@ -423,15 +432,17 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 				score = snakeGame.run();
 				_Win.resize();
 				_Gooey.showScreen(CHAT);
+				oss.str("");
 				oss << score;
 				_messageQueue.push("/green{             <SERVER> : " + user_str + " just reached a score of " + oss.str() + " on snake.}");
 				return 1;
 
 			case TEST:
-				dummyText();
-				testText();
-				_Gooey.printChat();
-				_Gooey.printUsers();
+				updateUsers();
+				// dummyText();
+				// testText();
+				// _Gooey.printChat();
+				// _Gooey.printUsers();
 				return 1;
 
 			default:
@@ -546,18 +557,19 @@ bool MessageFactory::command(string message, MESS_DIR out_in) {
 
 
 
-	// else if(out_in == COM) {
-	// 	switch(jj) {
-	// 		case HELP:
+	else if(out_in == COM) {
+		switch(jj) {
+			case PING:
+				oss.str("");
+			    oss << _user.getPriviledges();
+				_messageQueue.push("/pingBack " + _user.getUser() + " " + oss.str());
+				return 1;
 
-
-
-
-
-
-
-	// 	}
-	// }
+			case PINGB:
+				addUser(arg_str, atoi(arg_str2.c_str()));
+				return 1;
+		}
+	}
 
 	return 1;
 }
