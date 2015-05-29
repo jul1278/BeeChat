@@ -54,6 +54,13 @@ const char *BEEN_KICKED[] = {"__________                        ____  __.__     
 						 	 " |______  /\\___  >\\___  >___|  / |____|__ \\__|\\___  >__|_ \\\\___  >____ | ",
 						 	 "        \\/     \\/     \\/     \\/          \\/       \\/     \\/    \\/     \\/ "};
 
+const char *TIME_OUT[] = {"___________.___   _____  ___________________   ____ ______________",
+						  "\\__    ___/|   | /     \\ \\_   _____/\\_____  \\ |    |   \\__    ___/",
+						  "  |    |   |   |/  \\ /  \\ |    __)_  /   |   \\|    |   / |    |   ",
+						  "  |    |   |   /    Y    \\|        \\/    |    \\    |  /  |    |   ",
+						  "  |____|   |___\\____|__  /_______  /\\_______  /______/   |____|   ",
+						  "                       \\/        \\/         \\/                    "};
+
 void GUI::printAscii(WINDOW *scr, const char *graphics[], int sizey, int sizex, int starty, int startx) {
 	int ii;
 	for(ii = 0; ii < sizey; ii++) {
@@ -94,21 +101,21 @@ void GUI::printUsers() {
 }
 
 void GUI::printTimeout() {
-	mvwprintw(stdscr, 3,3, "YOU ARE IN TIMEOUT");
-	// int row, col;
-	// getmaxyx(*info_scr,row,col);
-	// printAscii(*info_scr, BEE_ASCII, 6, 39, (int)(row*0.1), (col-39)/2);
+	curs_set(0);
+	int row, col;
+	getmaxyx(stdscr,row,col);
+	printAscii(stdscr, TIME_OUT, 6, 66, (int)(row*0.1), (col-66)/2);
 	wrefresh(stdscr);
 }
 
 void GUI::printKick() {
-	mvwprintw(stdscr, 3,3, "YOU HAVE BEEN KICKED.");
+	curs_set(0);
 	int row, col;
 	getmaxyx(stdscr,row,col);
-	printAscii(stdscr, YOU_HAVE, 6, 54, (col-6)/2, (col-54)/2);
-	printAscii(stdscr, BEEN_KICKED, 6, 73, (col-6)/2, (col-73)/2);
+	printAscii(stdscr, YOU_HAVE, 6, 54, 3, (col-54)/2);
+	printAscii(stdscr, BEEN_KICKED, 6, 73, 11, (col-73)/2);
 	refresh();
-	endwin();
+	// endwin();
 	sleep(3);
 }
 

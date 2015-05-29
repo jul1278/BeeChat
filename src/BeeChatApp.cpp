@@ -90,7 +90,7 @@ int BeeChatApp::Run()
     // TRY TO RUN SERVER
     server->Run();
     
-    
+
     // Continue until message queue is cleared
     if(!messageFactory->checkMessage()) {
         return !(messageFactory->quit);
