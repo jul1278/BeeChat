@@ -148,7 +148,7 @@ void Server::HandleLogoffMessage(struct Message* message)
 		return; 
 	}
 
-	struct LogoffMessage* logoffMessage = (LogoffMessage*) message->messageData; 
+	struct LogoffMessage* logoffMessage = (LogoffMessage*)&message->messageData; 
 
 	std::list<User>::iterator it; 
 
@@ -170,8 +170,7 @@ void Server::HandleLogoffMessage(struct Message* message)
     alertMessageString += " has logged off.";
     
     memcpy( (void*)chatMessage->messageText, (void*)alertMessageString.c_str(), alertMessageString.length() );
-    
-    // TODO: message alert "user has logged on."
+
     outMessageQueue.push( alertMessage );
 }
 //---------------------------------------------------------------------------------

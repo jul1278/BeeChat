@@ -64,6 +64,8 @@ enum ExceptionType
         //notify user, discard message, continue
       //unrecognized input type of any kind
         //notify user, discard message, continue
+      //error in printing user's message to screen
+  eET_GUI_print_error,      
 
     //command issues
       //server has disconnected unexpectedly
