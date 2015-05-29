@@ -10,7 +10,7 @@
 
 theSnake::theSnake(WINDOW **snake_scr) {
 	snake_win = snake_scr;
-	_direction = RIGHT;
+	_direction = STILL;
 	x.reserve(50);
 	y.reserve(50);
 }
@@ -32,6 +32,9 @@ void theSnake::setupSnake(vector<int> block_x, vector<int> block_y) {
 }
 
 void theSnake::moveSnake() {
+	if(_direction == STILL) {
+		return;
+	}
 	if(_direction == UP || _direction == DOWN) {
 		x.insert(x.begin(),x.front());
 		y.insert(y.begin(),y.front()+_direction);

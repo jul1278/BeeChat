@@ -102,6 +102,7 @@ void MessageFactory::removeUser(string user) {
 
 
 string MessageFactory::getMessage() {
+	if(_messageQueue.empty()) {return "";}
 	string message = _messageQueue.front();
 	_messageQueue.pop();
 	return message;
@@ -314,7 +315,7 @@ void MessageFactory::userInput() {
 
 
 
-bool MessageFactory::command(string message, int out_in) {
+bool MessageFactory::command(string message, MESS_DIR out_in) {
 
 
 	// INITIALIZE VARIABLES
@@ -322,8 +323,6 @@ bool MessageFactory::command(string message, int out_in) {
 	Snake snakeGame;
 	ostringstream oss;
 	string this_user = _user.getUser();
-	// string commands[] = {"/help", "/kick", "/mute", "/unmute", "/poke", "/pm", "/exit", "/ignore", "/timeout", "/release", "/snake", "/test"};
-	// string fontcommands[] = {"/b{", "/i{", "/u{", "/c{", "/red{", "/green{", "/yellow{", "/blue{", "/magenta{", "/cyan{", "/white{"};
 	string command_str;
 	string user_str;
 	string arg_str;

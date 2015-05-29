@@ -19,7 +19,7 @@ const char BODY = '@';			///< the visuals of the snake body
 const char TAIL = '.'; 			///< the visuals of the snake tail
 const char PATH = ' ';			///< the visuals of the snake path
 
-enum DIR {UP = -1, DOWN = 1, LEFT = -2, RIGHT = 2};
+enum DIR {UP = -1, DOWN = 1, LEFT = -2, RIGHT = 2, STILL = 0};
 // #define UP		-1			///< simply used to make code more readable
 // #define DOWN	1			///< simply used to make code more readable
 // #define LEFT	-2			///< simply used to make code more readable
