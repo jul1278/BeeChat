@@ -7,30 +7,33 @@
 
 #include "MessageFactory.h"
 #include "snake/Snake.h"
-
 using namespace std;
 
 MessageFactory::MessageFactory(UserL user) {
-
+	// RESERVE ROOM IN LOCAL VECTORS
 	_chatlog.reserve(100);
 	_users.reserve(15);
-	// dummyText();
 	quit = 0;
 
+	// INITIALIZE MEMBER VARIABLES
 	_user = user;
 	_users.push_back(user);
 	_Win = Windows(&info_scr, &chat_win, &message_win, &users_win);
 	_Gooey = GUI(&_user, &_users, &_chatlog, &info_scr, &chat_win, &message_win, &users_win);
 
+	// ENSURE SCREEN IS LARGE ENOUGH
 	if(_Win.checkMin()) {
 		quit = 1;
 		return;
 	}
 
+	// DISPLAY SPLASH SCREEN
 	_Gooey.showScreen(INFO);
-	while(int c = wgetch(info_scr) != '\n') {
+	nodelay(info_scr,0);
+	int c = 0;
+	while(c != '\n') {
+		c = wgetch(info_scr);
 		if(c == KEY_RESIZE) {
-			wgetch(info_scr);
 			_Win.resize();
 			if(_Win.checkMin()) {
 				quit = 1;
@@ -39,6 +42,8 @@ MessageFactory::MessageFactory(UserL user) {
 			_Gooey.showScreen(INFO);
 		}
 	}
+
+	// DISPLAY CHAT SCREEN
 	_Gooey.showScreen(CHAT);
 	updateUsers();
 }
@@ -150,9 +155,9 @@ void MessageFactory::storeMessage(string message) {
 }
 
 bool MessageFactory::checkVulgar(string *message) {
-	int ii, jj = 0;
 	string badwords[] =  {"cunt",		"fucker", "fuck", "dick"    , "slut"  , "shit", "ass", "cock"  , "pussy" , "fag"   , "bitch"         , "wanker"   , "whore"};
 	string goodwords[] = {"croissant", 	"Tucker", "duck", "wee-wee" , "muppet", "poop", "bum", "donger", "kitten", "wizard", "b with an itch", "gentleman", "loon"};
+	int ii, jj = 0;
 	int size = 13;
 	int loc;
 
@@ -167,9 +172,10 @@ bool MessageFactory::checkVulgar(string *message) {
 }
 
 string MessageFactory::upperCase(string message) {
-	for (string::iterator it = message.begin(); it != message.end(); ++ it)
-    *it = toupper(*it);
-  return message;
+	for (string::iterator it = message.begin(); it != message.end(); ++ it) {
+		*it = toupper(*it);
+	}
+	return message;
 }
 
 
@@ -196,28 +202,33 @@ string MessageFactory::upperCase(string message) {
 
 
 string message_str_g ="";
-int offset = 0;
+int offset_g = 0;
 
 void MessageFactory::userInput() {
+	// ENSURE USER IS ALOWED TO TALK	
 	if(_user.isTimedout()) {
 		wgetch(message_win);
 		return;
 	}
 
-
+	// INITIALIZE VARLIABLES
 	int row, col;
+	char time_char[11];
 	getmaxyx(message_win, row, col);
 	wmove(message_win, row/2, (int)(col*0.1));
 	wprintw(message_win,message_str_g.c_str());
 
-	char time_char[11];
-
-	string temp = "";
+	// TURN CURSOR AND NO DELAY ON
 	curs_set(1);
 	nodelay(message_win,1);
+
+
+
+
 	int c = wgetch(message_win);
 
 	if(c != '\n') {
+		// IF RESIZED - CHECK LIMITS, REPRINT SCREEN.
 		if(c == KEY_RESIZE) {
 			c = wgetch(message_win);
 			_Win.resize();
@@ -237,6 +248,7 @@ void MessageFactory::userInput() {
 			wrefresh(message_win);
 			return;
 		}
+		// IF BACKSPACED - remove char, reprint screen.
 		else if(c == KEY_BACKSPACE) {
 			message_str_g = message_str_g.substr(0,message_str_g.size()-1);
 			wclear(message_win);
@@ -244,21 +256,20 @@ void MessageFactory::userInput() {
 			wmove(message_win, row/2, (int)(col*0.1));
 			wprintw(message_win,message_str_g.c_str());
 			wrefresh(message_win);
-			// sleep(2);
 		}
 		else if(c == KEY_UP) {
 			getmaxyx(chat_win, row, col);
 			int lim = _chatlog.size()-row+2;
 			if(lim < 0) {lim = 0;}
-			if(offset < lim) {
-				offset++;
-				_Gooey.printChat(offset);
+			if(offset_g < lim) {
+				offset_g++;
+				_Gooey.printChat(offset_g);
 			}
 		}
 		else if(c == KEY_DOWN) {
-			if(offset > 0) {
-				offset--;
-				_Gooey.printChat(offset);
+			if(offset_g > 0) {
+				offset_g--;
+				_Gooey.printChat(offset_g);
 			}
 		}
 		else if(c == ERR) {return;}
@@ -287,20 +298,9 @@ void MessageFactory::userInput() {
 	int swore = checkVulgar(&message_str_g);
 	if(swore) {
 		if(_user.getSwears() >= 5) {
-			//kick user (remove from other clients)
-			// endwin();
-			// exit(EXIT_SUCCESS);
-			// quit = 1;
 			_messageQueue.push("             <SERVER> : " + _user.getUser() + " has been kicked due to swearing.");
 			_Gooey.printKick();
 			message_str_g = "/exit";
-			// return;
-		}
-		else if(_user.getSwears() >= 4) {
-			storeMessage("             <SERVER> : This is your final warning, swear again and you will be kicked.");
-		}
-		else if(_user.getSwears() >= 3) {
-			storeMessage("             <SERVER> : Please refrain from profanity.");
 		}
 	}
 
@@ -327,6 +327,19 @@ void MessageFactory::userInput() {
 	if(!command(DATA_str, OUT)) {
 		_messageQueue.push(DATA_str);
 	}
+
+	if(swore) {
+		if(_user.getSwears() >= 4) {
+			storeMessage("             <SERVER> : This is your final warning, swear again and you will be kicked.");
+		}
+		else if(_user.getSwears() >= 3) {
+			storeMessage("             <SERVER> : Please refrain from profanity.");
+		}
+	}
+
+
+
+
 	message_str_g = "";
 }
 

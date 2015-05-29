@@ -26,20 +26,33 @@ GUI::~GUI() {
 }
 
 
-const char *GRAPHICS[] = {" _____       __      ",
-						  "|_   _|     / _|     ", 
-						  "  | | _ __ | |_ ___  ", 
-						  "  | || '_ \\|  _/ _ \\ ", 
-						  " _| || | | | || (_) |", 
-						  " \\___/_| |_|_| \\___/ "};   
+// const char *INFO_ASCII[] = {" _____       __      ",
+// 						  "|_   _|     / _|     ", 
+// 						  "  | | _ __ | |_ ___  ", 
+// 						  "  | || '_ \\|  _/ _ \\ ", 
+// 						  " _| || | | | || (_) |", 
+// 						  " \\___/_| |_|_| \\___/ "};   
 						  
-// const chat *GRAPHICS[] = 
-// "______           _____ _           _   "
-// "| ___ \\         /  __ \\ |         | |  "
-// "| |_/ / ___  ___| /  \\/ |__   __ _| |_ "
-// "| ___ \\/ _ \\/ _ \\ |   | '_ \\ / _` | __|"
-// "| |_/ /  __/  __/ \\__/\\ | | | (_| | |_ "
-// "\\____/ \\___|\\___|\\____/_| |_|\\__,_|\\__|"
+const char *BEE_ASCII[] = {"______           _____ _           _   ",
+						  "| ___ \\         /  __ \\ |         | |  ",
+						  "| |_/ / ___  ___| /  \\/ |__   __ _| |_ ",
+						  "| ___ \\/ _ \\/ _ \\ |   | '_ \\ / _` | __|",
+						  "| |_/ /  __/  __/ \\__/\\ | | | (_| | |_ ",
+						  "\\____/ \\___|\\___|\\____/_| |_|\\__,_|\\__|"};
+
+const char *YOU_HAVE[] = {"_____.___.                ___ ___                     ",
+						  "\\__  |   | ____  __ __   /   |   \\_____ ___  __ ____  ",
+						  " /   |   |/  _ \\|  |  \\ /    ~    \\__  \\\\  \\/ // __ \\ ",
+						  " \\____   (  <_> )  |  / \\    Y    // __ \\\\   /\\  ___/ ",
+						  " / ______|\\____/|____/   \\___|_  /(____  /\\_/  \\___  >",
+						  " \\/                            \\/      \\/          \\/ "};
+
+const char *BEEN_KICKED[] = {"__________                        ____  __.__        __              .___",
+						 	 "\\______   \\ ____   ____   ____   |    |/ _|__| ____ |  | __ ____   __| _/",
+						 	 " |    |  _// __ \\_/ __ \\ /    \\  |      < |  |/ ___\\|  |/ // __ \\ / __ | ",
+						 	 " |    |   \\  ___/\\  ___/|   |  \\ |    |  \\|  \\  \\___|    <\\  ___// /_/ | ",
+						 	 " |______  /\\___  >\\___  >___|  / |____|__ \\__|\\___  >__|_ \\\\___  >____ | ",
+						 	 "        \\/     \\/     \\/     \\/          \\/       \\/     \\/    \\/     \\/ "};
 
 void GUI::printAscii(WINDOW *scr, const char *graphics[], int sizey, int sizex, int starty, int startx) {
 	int ii;
@@ -82,12 +95,20 @@ void GUI::printUsers() {
 
 void GUI::printTimeout() {
 	mvwprintw(stdscr, 3,3, "YOU ARE IN TIMEOUT");
+	// int row, col;
+	// getmaxyx(*info_scr,row,col);
+	// printAscii(*info_scr, BEE_ASCII, 6, 39, (int)(row*0.1), (col-39)/2);
 	wrefresh(stdscr);
 }
 
 void GUI::printKick() {
 	mvwprintw(stdscr, 3,3, "YOU HAVE BEEN KICKED.");
-	wrefresh(stdscr);
+	int row, col;
+	getmaxyx(stdscr,row,col);
+	printAscii(stdscr, YOU_HAVE, 6, 54, (col-6)/2, (col-54)/2);
+	printAscii(stdscr, BEEN_KICKED, 6, 73, (col-6)/2, (col-73)/2);
+	refresh();
+	endwin();
 	sleep(3);
 }
 
@@ -96,7 +117,8 @@ void GUI::showScreen(SCRN screen) {
 		case INFO:
 			int row, col;
 			getmaxyx(*info_scr,row,col);
-			printAscii(*info_scr, GRAPHICS, 6, 21, (int)(row*0.1), (col-21)/2);
+			// printAscii(*info_scr, BEE_ASCII, 6, 21, (int)(row*0.1), (col-21)/2);
+			printAscii(*info_scr, BEE_ASCII, 6, 39, (int)(row*0.1), (col-39)/2);
 			mvwprintw(*info_scr, row-20,  4, "/b{TEXT}  --  bold font");
 			mvwprintw(*info_scr, row-19,  4, "/u{TEXT}  --  underlined font");
 			mvwprintw(*info_scr, row-18, 4, 	"/i{TEXT}  --  italic font (not currently implemented)");

@@ -6,10 +6,8 @@
 #include "Server.h"
 #include "Client.h"
 #include "MessageFactory.h"
-//#include "UI.h"
 #include <string>
 
-// BeeChatApp 
 class BeeChatApp
 {
 private:
@@ -29,7 +27,6 @@ private:
 
 public: 
 
-    
     BeeChatApp(std::string username, byte usernameColor, bool userWantsServer);
     ~BeeChatApp();
     int quit;

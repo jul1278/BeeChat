@@ -55,11 +55,13 @@ BeeChatApp::~BeeChatApp()
 int BeeChatApp::Run()
 {
     // TODO: ask the UI if the user wants to quit
+    // TODO: has the user typed anything in?
+
     messageFactory->userInput();
     
-    // TODO: has the user typed anything in?
     client->Connect( this->username, 0x01 );
 
+    // TRY TO SEND MESSAGE
     if(messageFactory->checkMessage()) {
         std::string message_str = messageFactory->getMessage();
 
@@ -70,41 +72,25 @@ int BeeChatApp::Run()
         client->PassMessage(&message);
     }
     
-    // client is only going to tell us about chat messages,
-    // it will handle other messages internally
+    // TRY TO RECIEVE MESSAGE    
     if ( client->IsUnreadMessage() ) {
-        
         struct Message message; 
-        
         client->GetLatestMessage( &message );
         
-        
-        
-        //TODO: how do we decide what to do with the message?
         if ( message.messageType == CHAT_MESSAGE ) {
-            
             struct ChatMessage* chatMessage = (struct ChatMessage*) message.messageData;
-            
             std::string chatMessageString(chatMessage->messageText);
-            
             messageFactory->storeMessage(chatMessageString);
-
-            // std::cout << this->username << " Received : " << chatMessageString << std::endl;
-            
-        } else {
-            
-        }
-        
-        
-        // TODO: post message to the screen if we got one
-        
+        } 
+        // else {
+        //
+        // }
     }
     
-    // TODO: check the client if there's a new active user list to display
-
+    // TRY TO RUN SERVER
     server->Run();
     
-    // TODO: set quit to 1 if we're quitting
+    
     // Continue until message queue is cleared
     if(!messageFactory->checkMessage()) {
         return !(messageFactory->quit);

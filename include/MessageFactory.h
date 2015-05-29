@@ -16,10 +16,18 @@
 #include <iostream>				///< required for: cout (ding)
 // #include <stdlib.h>			///< required for: 
 
+
+
+
 enum MESS_DIR {OUT, IN, COM};
 enum COMMAND {HELP, KICK, MUTE, UNMUTE, POKE, PM, EXIT, IGNORE, TIMEOUT, RELEASE, SNAKE, TEST, PING, PINGB, NONE = -1};
 const string commands[] = {"/help", "/kick", "/mute", "/unmute", "/poke", "/pm", "/exit", "/ignore", "/timeout", "/release", "/snake", "/test", "/pingRequest", "/pingBack"};
 const int NCOMMANDS = sizeof(commands)/sizeof(*commands);
+
+
+
+
+
 
 class MessageFactory
 {
@@ -35,7 +43,7 @@ public:
       * priviledges, swearing and formatting.
       */	
 	void userInput();									///< non blocking user input, must loop through- final message stored in message queue.
-	void updateUsers();									///< 
+	void updateUsers();									///< sends a ping request to all other users, which send back there details
 	void removeUser(string user);						///< removes given specified user object from userlist.
 	void addUser(string username, int priviledges);		///< removes given specified user object from userlist.
 				
